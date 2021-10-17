@@ -1,9 +1,9 @@
-<template>
-  <div class="appLayer">
-    <Layout>
-      <router-view />
-    </Layout>
-  </div>
+<template lang="pug">
+
+.appLayer
+  Layout
+    router-view
+
 </template>
 
 <script lang="ts">

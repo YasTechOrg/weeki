@@ -1,8 +1,8 @@
-<template>
-  <div class="appLayer">
+<template lang="pug">
 
+#home
+  | Home
 
-  </div>
 </template>
 
 <script lang="ts">
