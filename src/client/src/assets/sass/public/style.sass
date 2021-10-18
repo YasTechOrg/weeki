@@ -1,0 +1,26 @@
+#loader-wrapper
+  z-index: 999999
+  background-color: white
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+
+  img
+    height: 90px!important
+    width: 90px!important
+
+#loader-wrapper.h
+  animation: hide 0.5s linear forwards
+
+@keyframes hide
+
+  0%
+    opacity: 1
+
+  100%
+    overflow: hidden
+    opacity: 0
+    display: none
+    visibility: hidden

@@ -1,24 +1,43 @@
+<!--suppress ALL -->
 <template lang="pug">
 
-#loader-wrapper
+#loader-wrapper.d-flex.align-items-center.justify-content-center
+
+  img( src="../assets/animations/main_loader.svg" alt="Weeki" )
 
 .layout
 
-  header
+  header.w-100.bg-white( v-if="layout !== 'account'" )
 
-  main
+    .inner
 
-    section( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
+      .desktop.d-flex.justify-content-between.align-items-center
 
-      slot
+        .left
 
-    section( v-if="layout === 'account'"  data-account )
+          img( src="../assets/img/images/brand/logo.png" )
 
-      slot
+        .right
 
-    section( v-if="layout === 'dashboard'"  data-dashboard )
+      .mobile.d-none.row
 
-      slot
+        .p_left
+
+        .p_center
+
+        .p_right
+
+  section( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
+
+    slot
+
+  section( v-if="layout === 'account'"  data-account )
+
+    slot
+
+  section( v-if="layout === 'dashboard'"  data-dashboard )
+
+    slot
 
   footer
 
@@ -29,6 +48,47 @@
 import { Options, Vue } from 'vue-class-component'
 
 @Options({
+
+  // App Watchers
+  watch: {
+
+    // Set Layout Title
+    $route: {
+      immediate: true,
+      async handler(to)
+      {
+        // Set Title
+        document.title = to.meta.title || `Weeki`
+
+        // Is Router Loaded
+        if (typeof this.$route.name !== 'undefined')
+        {
+
+          // Set Title
+          document.title = to.meta.title || `${ this.$route.name } | Weeki`
+
+          // Show Loading
+          document.getElementById("loader-wrapper")!.classList.remove("h")
+
+          // Load Page
+          await this.load()
+
+          // Hide Loading
+          document.getElementById("loader-wrapper")!.classList.add("h")
+        }
+      }
+    },
+  },
+
+  // App Methods
+  methods: {
+
+    // On App Load
+    async load()
+    {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    },
+  },
 
   // App Computed Variables
   computed: {
@@ -42,3 +102,7 @@ import { Options, Vue } from 'vue-class-component'
 })
 export default class Layout extends Vue {}
 </script>
+
+<style src="../assets/sass/layout/header.sass" lang="sass"/>
+
+<style src="../assets/sass/layout/surface.sass" lang="sass"/>
