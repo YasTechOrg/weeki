@@ -7,6 +7,24 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     component: Home,
     meta: { layout: "surface" },
+  },
+  {
+    path: '/about',
+    name: 'About Us',
+    component: Home,
+    meta: { layout: "surface" },
+  },
+  {
+    path: '/contact',
+    name: 'Contact Us',
+    component: Home,
+    meta: { layout: "surface" },
+  },
+  {
+    path: '/faq',
+    name: 'FAQ',
+    component: Home,
+    meta: { layout: "surface" },
   }
 ]
 

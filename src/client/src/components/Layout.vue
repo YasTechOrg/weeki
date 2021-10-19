@@ -9,15 +9,32 @@
 
   header.w-100.bg-white( v-if="layout !== 'account'" )
 
-    .inner
+    .inner.gm
 
       .desktop.d-flex.justify-content-between.align-items-center
 
-        .left
+        .left.d-flex.align-items-center
 
-          img( src="../assets/img/images/brand/logo.png" )
+          img.cursor-pointer.logo( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
 
-        .right
+          .d-flex.flex-nowrap
+
+            router-link.text-decoration-none(
+              v-for="item in home_menu"
+              :key="item"
+              :to="item.path"
+              active-class="ac"
+            ) {{ item.name }}
+
+        .right.d-flex.align-items-center.justify-content-end
+
+          .search
+
+          .nt
+
+          .language
+
+          .account
 
       .mobile.d-none.row
 
@@ -48,6 +65,19 @@
 import { Options, Vue } from 'vue-class-component'
 
 @Options({
+
+  // App Variables
+  data()
+  {
+    return {
+      home_menu: [
+        { name : "Home", path: "/" },
+        { name : "About", path: "/about" },
+        { name : "Contact", path: "/contact" },
+        { name : "Faq", path: "/faq" }
+      ]
+    }
+  },
 
   // App Watchers
   watch: {
@@ -88,6 +118,12 @@ import { Options, Vue } from 'vue-class-component'
     {
       await new Promise(resolve => setTimeout(resolve, 1000))
     },
+
+    // Go To Route
+    goTo(route: string)
+    {
+      this.$router.push(route)
+    }
   },
 
   // App Computed Variables
