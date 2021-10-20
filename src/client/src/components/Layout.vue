@@ -42,11 +42,18 @@
 
       .mobile.d-none.row
 
-        .p_left
+        .col-4.d-flex.align-items-center.justify-content-start
+          img.cursor-pointer( src="../assets/img/icons/icon_menu.svg" alt="menu" )
 
-        .p_center
+        .col-4.d-flex.justify-content-center
+          img.m-auto.cursor-pointer.logo( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
 
-        .p_right
+        .col-4.d-flex.align-items-center.justify-content-end
+          .account.btn-group( v-if="checkAuth" )
+            WeekiProfile( v-if="userInfo['name'] != null" :name="userInfo['name']" )
+            WeekiProfile( :name="userInfo['firstname']" v-else )
+
+          WeekiIconBtn( icon="icons/icon_login_white.svg" @click="goTo('/account/login')" v-else )
 
   section( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
 
@@ -67,7 +74,7 @@
       .col-md-3.p-0.d-flex.flex-column.justify-content-start
 
         .logo
-          img.logo_design.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
+          img.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
 
         .language
 
@@ -144,9 +151,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import { mapGetters } from 'vuex'
 import WeekiButton from "@/components/elements/WeekiButton.vue"
 import WeekiProfile from "@/components/elements/WeekiProfile.vue"
-import { mapGetters } from 'vuex'
+import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 @Options({
@@ -154,7 +162,8 @@ import { mapGetters } from 'vuex'
   // App Components
   components: {
     WeekiButton,
-    WeekiProfile
+    WeekiProfile,
+    WeekiIconBtn
   },
 
   // App Variables
