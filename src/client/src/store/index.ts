@@ -37,5 +37,10 @@ export default createStore({
     {
       return `Bearer ${state.at}`
     },
+
+    checkAuth: state =>
+    {
+      return !(state.at == null || state.at.length === 0 || typeof state.at === "undefined" || state.userData === null || Object.keys(state.userData).length === 0)
+    },
   },
 })
