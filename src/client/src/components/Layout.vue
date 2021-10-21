@@ -69,84 +69,86 @@
 
   footer(  v-if="layout !== 'account'" )
 
-    .content.row.m-0
+    .inner.gm
 
-      .col-md-3.p-0.d-flex.flex-column.justify-content-start
+      .content.row.m-0
 
-        .logo
-          img.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
+        .col-md-3.p-0.d-flex.flex-column.justify-content-start
 
-        .language
+          .logo
+            img.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
 
-        .contact.mt-24.d-flex.align-items-center
-          img.mr-16( src="../assets/img/icons/icon_phone.svg" alt="phone" )
-          p.m-0 +49 1514 689615
+          .language
 
-        .contact.mt-24.d-flex.align-items-center
-          img.mr-16( src="../assets/img/icons/icon_mail.svg" alt="mail" )
-          p.m-0 info@weeki.de
+          .contact.mt-24.d-flex.align-items-center
+            img.mr-16( src="../assets/img/icons/icon_phone.svg" alt="phone" )
+            p.m-0 +49 1514 689615
 
-      .col-md-9.p-0.row.m-0
+          .contact.mt-24.d-flex.align-items-center
+            img.mr-16( src="../assets/img/icons/icon_mail.svg" alt="mail" )
+            p.m-0 info@weeki.de
 
-        .col-sm-6.p-0.row.m-0
+        .col-md-9.p-0.row.m-0
 
-          .col-6.p-0.d-flex.flex-column.justify-content-start
+          .col-sm-6.p-0.row.m-0
 
-            p.mb-16.fw-bolder Company
+            .col-6.p-0.d-flex.flex-column.justify-content-start
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/" ) Home
+              p.mb-16.fw-bolder Company
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/" ) About Us
+              router-link.mb-0.mt-16.text-decoration-none( to="/" ) Home
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/" ) Contact Us
+              router-link.mb-0.mt-16.text-decoration-none( to="/" ) About Us
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/" ) FAQ
+              router-link.mb-0.mt-16.text-decoration-none( to="/" ) Contact Us
 
-          .col-6.p-0.d-flex.flex-column.justify-content-start
+              router-link.mb-0.mt-16.text-decoration-none( to="/" ) FAQ
 
-            p.mb-16.fw-bolder Main Tools
+            .col-6.p-0.d-flex.flex-column.justify-content-start
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/planning" ) Planning
+              p.mb-16.fw-bolder Main Tools
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/messages" ) Messages
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/planning" ) Planning
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/email" ) E-Mail
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/messages" ) Messages
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/contacts" ) My Contacts
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/email" ) E-Mail
 
-        .col-sm-6.p-0.row.m-0
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/contacts" ) My Contacts
 
-          .col-6.p-0.d-flex.flex-column.justify-content-start
+          .col-sm-6.p-0.row.m-0
 
-            p.mb-16.fw-bolder Main Process
+            .col-6.p-0.d-flex.flex-column.justify-content-start
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/products/add" ) Add Products
+              p.mb-16.fw-bolder Main Process
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/orders/send" ) Send Orders
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/products/add" ) Add Products
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/claim" ) Claim
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/orders/send" ) Send Orders
 
-          .col-6.p-0.d-flex.flex-column.justify-content-start
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/claim" ) Claim
 
-            p.mb-16.fw-bolder Playful And Functional
+            .col-6.p-0.d-flex.flex-column.justify-content-start
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/blog" ) Blog
+              p.mb-16.fw-bolder Playful And Functional
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/newspapers" ) News Papers
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/blog" ) Blog
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/weather" ) Weather
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/newspapers" ) News Papers
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/traffic" ) Traffic
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/weather" ) Weather
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/dob" ) Date Of Births
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/traffic" ) Traffic
 
-            router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/game" ) Game
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/dob" ) Date Of Births
 
-    .copyright
+              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/game" ) Game
 
-      .line.w-100
+      .copyright
 
-      p.mt-24.mb-0.text-center @ {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙
+        .line.w-100
+
+        p.mt-24.mb-0.text-center @ {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙
 </template>
 
 <script lang="ts">
