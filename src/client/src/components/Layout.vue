@@ -61,7 +61,9 @@
 
   section( v-if="layout === 'account'"  data-account )
 
-    slot
+    div( :class="{ 'log' : $route.path === '/account/login' || $route.path === '/account/forgot', 'reg' : $route.path === '/account/register' }" )
+
+      slot
 
   section( v-if="layout === 'dashboard'"  data-dashboard )
 
@@ -253,3 +255,4 @@ export default class Layout extends Vue {}
 <style src="../assets/sass/layout/header.sass" lang="sass"></style>
 <style src="../assets/sass/layout/footer.sass" lang="sass"></style>
 <style src="../assets/sass/layout/surface.sass" lang="sass"></style>
+<style src="../assets/sass/layout/account.sass" lang="sass"></style>
