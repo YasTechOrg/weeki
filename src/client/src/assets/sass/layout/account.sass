@@ -1,0 +1,34 @@
+section[data-account]
+  height: 100%
+  width: 100%
+  position: absolute
+
+  > div
+    background-color: whitesmoke
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    border-radius: 10px
+    text-align: center
+    box-shadow: 0 0 5px 2px #d4d4d4
+    padding: 40px 24px!important
+
+  > div.log
+    width: 432px
+
+  > div.reg
+    width: 636px
+
+@media screen and (max-width: 600px)
+
+  section[data-account] > div
+    width: 100% !important
+    height: 100% !important
+    position: unset!important
+    top: unset!important
+    left: unset!important
+    transform: unset!important
+    box-shadow: unset!important
+    border-radius: unset!important
+    margin: auto!important
