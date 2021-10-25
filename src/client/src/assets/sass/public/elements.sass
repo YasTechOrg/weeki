@@ -1,0 +1,73 @@
+input::-ms-reveal,
+input::-ms-clear,
+input::-ms-backdrop,
+input::-webkit-calendar-picker-indicator
+  display: none!important
+
+input::-webkit-calendar-picker-indicator
+  opacity: 0!important
+
+.custom_weeki_input
+  box-shadow: none!important
+  border-color: #E4E4E4
+
+.custom_weeki_input:focus
+  border-color: #E4E4E4
+
+.is-valid
+  border-color: #198754!important
+
+.is-invalid
+  border-color: #dc3545!important
+
+.custom_input_sh_position
+  position: absolute
+  top: 0
+  right: 0
+  width: fit-content
+  height: 100%
+  padding: 1rem .75rem
+  cursor: pointer!important
+  border: 1px solid transparent
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+.weekiNormalModal
+
+  > .modal-dialog
+    top: 50% !important
+    transform: translate(0, -50%)!important
+    max-width: 600px
+
+    > .modal-content
+      box-shadow: 0 3px 10px #00000029!important
+      border-radius: 4px!important
+      border: none!important
+      outline: none!important
+      background-color: #F5F5F5
+      height: 100%!important
+
+      > .modal-body
+        padding: 24px!important
+
+        > .nm-header
+          margin-bottom: 24px!important
+
+          > .nm-close
+            cursor: pointer!important
+
+          > .nm-title
+            font-size: 16px
+
+@media screen and (max-width: 576px)
+
+  .weekiNormalModal > .modal-dialog
+    max-width: 100%!important
+
+@media screen and (max-width: 575px)
+
+  .modal-fullscreen-sm-down
+    height: 100% !important
