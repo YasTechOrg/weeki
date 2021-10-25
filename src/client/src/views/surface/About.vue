@@ -16,15 +16,13 @@
 
     .col-md-6.img.p-0.d-flex.justify-content-center.align-items-center.orderFirst
 
-      img.w-100.h-auto( src="../assets/img/images/about_01.svg" alt="a_01" )
-
-
+      img.w-100.h-auto( src="../../assets/img/images/about_01.svg" alt="a_01" )
 
   .mt-80.row.m-0
 
     .col-md-6.img.p-0.d-flex.justify-content-center.align-items-center.orderFirst
 
-      img.w-100.h-auto( src="../assets/img/images/about_02.svg" alt="a_02" )
+      img.w-100.h-auto( src="../../assets/img/images/about_02.svg" alt="a_02" )
 
     .col-md-6.text.p-0.d-flex.justify-content-center.align-items-center.orderLast
 
@@ -49,7 +47,7 @@
 
     .col-md-6.img.p-0.d-flex.justify-content-center.align-items-center.orderFirst
 
-      img.w-100.h-auto( src="../assets/img/images/about_03.svg" alt="a_03" )
+      img.w-100.h-auto( src="../../assets/img/images/about_03.svg" alt="a_03" )
 
   .mt-80.mb-80
 
@@ -59,7 +57,7 @@
 
       Slide.faq_carousel( v-for="item in 20" :key="item" )
 
-        img.w-100( src="../assets/img/images/brand/logo.png" alt="Weeki" )
+        img.w-100( src="../../assets/img/images/brand/logo.png" alt="Weeki" )
 
 </template>
 
@@ -97,4 +95,4 @@ import { Carousel, Slide } from "vue3-carousel"
 export default class About extends Vue {}
 </script>
 
-<style scoped src="../assets/sass/page/about.sass" lang="sass"></style>
+<style scoped src="../../assets/sass/page/about.sass" lang="sass"></style>

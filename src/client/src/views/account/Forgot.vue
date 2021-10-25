@@ -1,7 +1,7 @@
 <template lang="pug">
 
-#home
-  | Home
+#forgot
+  | Forgot
   ui-button( raised ) Click Me!!
 
 </template>
@@ -13,5 +13,5 @@ import { Options, Vue } from 'vue-class-component'
   components: {
   },
 })
-export default class Home extends Vue {}
+export default class Forgot extends Vue {}
 </script>

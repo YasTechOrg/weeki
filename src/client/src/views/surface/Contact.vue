@@ -11,15 +11,15 @@
 
       .icons.d-flex.flex-column
 
-        img( src="../assets/img/icons/icon_phone2_gray.svg" alt="phone" )
+        img( src="../../assets/img/icons/icon_phone2_gray.svg" alt="phone" )
 
-        img( src="../assets/img/icons/icon_mail_gray.svg" alt="mail" )
+        img( src="../../assets/img/icons/icon_mail_gray.svg" alt="mail" )
 
-        img( src="../assets/img/icons/icon_fax_gray.svg" alt="fax" )
+        img( src="../../assets/img/icons/icon_fax_gray.svg" alt="fax" )
 
-        img( src="../assets/img/icons/icon_post_gray.svg" alt="zip code" )
+        img( src="../../assets/img/icons/icon_post_gray.svg" alt="zip code" )
 
-        img( src="../assets/img/icons/icon_location_gray.svg" alt="location" )
+        img( src="../../assets/img/icons/icon_location_gray.svg" alt="location" )
 
       .titles.d-flex.flex-column
 
@@ -47,7 +47,7 @@
 
   .col-md-6.p-0.d-flex.align-items-center.justify-content-end.orderFirst
 
-    img( src="../assets/img/images/contact_01.svg" alt="contact" )
+    img( src="../../assets/img/images/contact_01.svg" alt="contact" )
 </template>
 
 <script lang="ts">
@@ -60,4 +60,4 @@ import { Options, Vue } from 'vue-class-component'
 export default class Contact extends Vue {}
 </script>
 
-<style scoped src="../assets/sass/page/contact.sass" lang="sass"></style>
+<style scoped src="../../assets/sass/page/contact.sass" lang="sass"></style>
