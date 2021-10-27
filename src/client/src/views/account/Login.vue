@@ -13,6 +13,8 @@
 
   form( method="post" action="/api/controller/account/login" )
 
+    input( :value="require('@/csrfManager').getToken()" name="_csrf" hidden )
+
     WeekiEmailInput( label="Email Address" name="email" )
 
     WeekiPasswordInput( label="Password" name="password" )

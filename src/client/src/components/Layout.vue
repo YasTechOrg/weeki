@@ -256,3 +256,4 @@ export default class Layout extends Vue {}
 <style src="../assets/sass/layout/footer.sass" lang="sass"></style>
 <style src="../assets/sass/layout/surface.sass" lang="sass"></style>
 <style src="../assets/sass/layout/account.sass" lang="sass"></style>
+<style src="../assets/sass/layout/dashboard.sass" lang="sass"></style>

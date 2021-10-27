@@ -6,6 +6,7 @@ import About from "@/views/surface/About.vue"
 import Forgot from "@/views/account/Forgot.vue"
 import Register from "@/views/account/Register.vue"
 import Login from "@/views/account/Login.vue"
+import Dashboard from "@/views/dashboard/Dashboard.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -49,7 +50,13 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Forgot',
     component: Forgot,
     meta: { layout: "account" },
-  }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: { layout: "dashboard", id: "dashboard" }
+  },
 ]
 
 const router = createRouter({
