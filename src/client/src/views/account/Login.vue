@@ -80,7 +80,7 @@ import { showToast, Types } from '@/toastManager'
     // Check If Logout Response
     if (this.res === "logout")
     {
-      // this.$store.commit("removeAuth")
+      this.$store.commit("removeAuth")
       location.href = "/account/login"
     }
 
