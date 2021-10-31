@@ -7,5 +7,11 @@ module.exports = {
                 'balm-ui-css': 'balm-ui/dist/balm-ui.css'
             }
         }
+    },
+    pages: {
+        index: {
+            entry: 'src/main.ts',
+            title: 'Weeki',
+        },
     }
 }
