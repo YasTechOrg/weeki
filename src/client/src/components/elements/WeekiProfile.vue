@@ -26,7 +26,31 @@ import { Options, Vue } from 'vue-class-component'
   name: "WeekiProfile",
 
   // Element Props
-  props: ["name"],
+  props: ["info"],
+
+  // Element Compoted Variables
+  computed: {
+
+    // User Name
+    name()
+    {
+      if (this.info === null || Object(this.info).length === 0)
+      {
+        return " "
+      }
+      else
+      {
+        if(this.info["name"] != null)
+        {
+          return this.info["name"]
+        }
+        else
+        {
+          return this.info["firstname"]
+        }
+      }
+    }
+  }
 })
 export default class WeekiProfile extends Vue {}
 </script>
