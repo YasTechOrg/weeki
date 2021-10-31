@@ -32,6 +32,8 @@ class UserService
 
         user.rate = mutableMapOf()
 
+        user.access = mutableListOf()
+
         user.favoriteChats = mutableListOf()
 
         user.socketId = hexConvertor.encode(user.email)
