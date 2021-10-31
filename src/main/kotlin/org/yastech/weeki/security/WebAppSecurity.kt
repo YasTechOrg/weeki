@@ -58,6 +58,9 @@ class WebAppSecurity
             // ACCESS WEBSOCKET
             .antMatchers("/wst/**").permitAll()
 
+            // ACCESS TO AUTH APIS AND CONTROLLERS
+            .antMatchers("/api/rest/account/**").permitAll()
+
         // APPLY AUTH FILTER
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
     }
