@@ -35,7 +35,7 @@ class AccountController
 )
 {
     @PostMapping("/login")
-    fun userControllerLogin(@RequestParam email: String, @RequestParam password: String): String
+    fun login(@RequestParam email: String, @RequestParam password: String): String
     {
         return if (userService.exist(email))
         {
@@ -75,7 +75,7 @@ class AccountController
     }
 
     @PostMapping("/register")
-    fun userControllerRegister(@ModelAttribute("user") user: User, bindingResult: BindingResult): String
+    fun register(@ModelAttribute("user") user: User, bindingResult: BindingResult): String
     {
         return if (!userService.exist(user.email))
         {
@@ -92,6 +92,7 @@ class AccountController
                 while (true)
                 {
                     val notification: Notification? = company.notifications!!.find { it.id == "$id$counter" }
+
                     if (notification != null)
                     {
                         counter++
@@ -134,7 +135,7 @@ class AccountController
     }
 
     @PostMapping("/forgot")
-    fun userControllerForgot(@RequestParam email: String, httpServletRequest: HttpServletRequest): String
+    fun forgot(@RequestParam email: String, httpServletRequest: HttpServletRequest): String
     {
         return if (userService.exist(email))
         {
@@ -160,7 +161,7 @@ class AccountController
 
     // Change Password
     @PostMapping("/forgot/do")
-    fun userControllerDoForgot(@RequestParam token: String, @RequestParam password: String, @RequestParam c_password: String): String
+    fun doForgot(@RequestParam token: String, @RequestParam password: String, @RequestParam c_password: String): String
     {
         return if(password == c_password)
         {
