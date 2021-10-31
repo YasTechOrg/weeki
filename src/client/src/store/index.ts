@@ -5,7 +5,8 @@ export default createStore({
   state: {
     userData: {},
     at: "",
-    at_time: ""
+    at_time: "",
+    d_menu: "open"
   },
 
   plugins: [createPersistedState()],
@@ -29,6 +30,11 @@ export default createStore({
     {
       state.userData = data
     },
+
+    changeDashboardMenuState(state, ms)
+    {
+      state.d_menu = ms
+    }
   },
 
   getters: {
@@ -40,7 +46,7 @@ export default createStore({
 
     checkAuth: state =>
     {
-      return !(state.at == null || state.at.length === 0 || typeof state.at === "undefined" || state.userData === null || Object.keys(state.userData).length === 0)
+      return !(state.at == null || state.at.length === 0 || typeof state.at === "undefined" || state.userData === null)
     },
   },
 })
