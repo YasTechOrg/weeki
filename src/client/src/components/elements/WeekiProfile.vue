@@ -22,9 +22,6 @@ import { Options, Vue } from 'vue-class-component'
     }
   },
 
-  // Element Name
-  name: "WeekiProfile",
-
   // Element Props
   props: ["info"],
 
@@ -52,6 +49,7 @@ import { Options, Vue } from 'vue-class-component'
     }
   }
 })
+
 export default class WeekiProfile extends Vue {}
 </script>
 

@@ -11,9 +11,6 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
 
-  // Element Name
-  name: "weekiIconBtn",
-
   // Element Props
   props: ["icon", "type"],
 })

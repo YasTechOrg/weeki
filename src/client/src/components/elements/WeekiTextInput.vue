@@ -29,9 +29,6 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
 
-  // Element Name
-  name: "WeekiTextInput",
-
   // Element Props
   props: ["label", "value", "name", "icon", "list", "type", "mb", "req", "autoComplete"],
 
@@ -68,5 +65,6 @@ import { Options, Vue } from 'vue-class-component'
     }
   }
 })
+
 export default class WeekiTextInput extends Vue {}
 </script>

@@ -23,9 +23,6 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
 
-  // Element Name
-  name: "WeekiOptionalDropDown",
-
   // Element Props
   props: ["label", "value", "name", "mb", "sl"],
 
@@ -45,5 +42,6 @@ import { Options, Vue } from 'vue-class-component'
     },
   }
 })
+
 export default class WeekiOptionalDropDown extends Vue {}
 </script>

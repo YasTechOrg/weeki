@@ -23,9 +23,6 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
 
-  // Element Name
-  name: "WeekiNormalDropDown",
-
   // Element Props
   props: ["label", "value", "name", "list", "mb"],
 

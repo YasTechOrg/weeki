@@ -4,6 +4,12 @@ section
 .logo
   height: 40px!important
 
+.swal2-loading, .swal2-loader
+  margin: 0!important
+
+.swal2-popup .swal2-styled:focus
+  box-shadow: none !important
+
 #loader-wrapper
   z-index: 999999
   background-color: white
@@ -20,9 +26,15 @@ section
 #loader-wrapper.h
   animation: hide 0.5s linear forwards
 
-
 .cursor-pointer
   cursor: pointer!important
+
+.unselectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
 
 .gm
   max-width: 1440px

@@ -9,12 +9,10 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
 
-  // Element Name
-  name: "WeekiButton",
-
   // Element Props
   props: ["text", "type"],
 })
+
 export default class WeekiButton extends Vue {}
 </script>
 

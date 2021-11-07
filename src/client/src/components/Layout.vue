@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <template lang="pug">
 
 #loader-wrapper.d-flex.align-items-center.justify-content-center
@@ -163,7 +162,6 @@
 
               a.d-flex.align-items-center.justify-content-start.text-decoration-none.mt-24.cursor-pointer(
                 v-if="index === 3"
-                active-class="menu_item_active"
                 @mouseenter="toggleActiveClass($event.target, null)"
                 @mouseleave="toggleActiveClass($event.target, null)"
                 @click="logoutUser"
@@ -323,7 +321,7 @@ import { showToast, Types } from "@/toastManager"
           { name: "My Products", icon: "inbox", path: "/dashboard/products/self", id: "my_products" },
           { name: "Bookmarks", icon: "bookmark", path: "/dashboard/bookmarks", id: "bookmarks" },
           { name: "Send Orders", icon: "featured_play_list", path: "/dashboard/orders/send", id: "orders_send" },
-          { name: "Recieved Orders", icon: "move_to_inbox", path: "/dashboard/orders/received", id: "orders_received" },
+          { name: "Received Orders", icon: "move_to_inbox", path: "/dashboard/orders/received", id: "orders_received" },
           { name: "Claim", icon: "restore_page", path: "/dashboard/claim", id: "claim" },
         ],
         [
@@ -419,10 +417,10 @@ import { showToast, Types } from "@/toastManager"
 
                 this.$store.commit("setUserData", value.data)
 
+                this.$store.commit("getTasks")
+
                 if (this.layout === 'dashboard')
                 {
-                  document.head.append("<meta name=\"robots\" content=\"noindex\">")
-
                   if(this.userInfo["access"].includes(this.$route.meta["id"]))
                   {
                     location.href = "/dashboard?res=da"

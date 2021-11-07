@@ -20,9 +20,6 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
 
-  // Element Name
-  name: "WeekiButton",
-
   // Element Props
   props: ["label", "value", "name", "req"],
 

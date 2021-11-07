@@ -1,19 +1,32 @@
-<!--suppress ALL -->
 <template lang="pug">
 
-#dashboard
+#dashboard.row.m-0
 
+  .col-md-6.pr-12.d-flex.flex-column.justify-content-start.align-items-center.p-0
+
+    TasksWidget
+
+    NotificationsWidget.mt-16
+
+  .col-md-6.pr-12.d-flex.flex-column.justify-content-start.align-items-center.p-0
+
+    ChatWidget
 
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import TasksWidget from "@/components/widgets/TasksWidget.vue"
+import NotificationsWidget from "@/components/widgets/NotificationsWidget.vue"
+import ChatWidget from "@/components/widgets/ChatWidget.vue"
 
 @Options({
 
   // Page Components
   components: {
-
+    TasksWidget,
+    NotificationsWidget,
+    ChatWidget
   },
 
   // Page Variables

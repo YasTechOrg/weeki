@@ -21,7 +21,7 @@
 
           p.m-0.fw-bolder.nm-title {{ title }}
 
-          p.m-0.nm-close.material-icons-round.md-16( data-bs-dismiss="modal" ) clear
+          p.m-0.nm-close.material-icons-round.md-16.fw-bold( data-bs-dismiss="modal" ) clear
 
         .nm-content
 
@@ -39,9 +39,6 @@ import { Options, Vue } from 'vue-class-component'
   {
     document.body.appendChild(document.getElementById('WeekiNormalModal_' + this.name)!)
   },
-
-  // Element Name
-  name: "WeekiNormalModal",
 
   // Element Props
   props: ["name", "title", "maxWidth", "maxHeight", "scrollable", "height", "mfs"],
@@ -93,5 +90,6 @@ import { Options, Vue } from 'vue-class-component'
     }
   }
 })
+
 export default class WeekiNormalModal extends Vue {}
 </script>

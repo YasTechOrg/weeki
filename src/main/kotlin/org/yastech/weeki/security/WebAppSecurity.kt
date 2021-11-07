@@ -59,7 +59,7 @@ class WebAppSecurity
             .antMatchers("/wst/**").permitAll()
 
             // ACCESS TO AUTH APIS AND CONTROLLERS
-            .antMatchers("/api/rest/account/**").permitAll()
+            .antMatchers("/api/rest/account/**").authenticated()
 
         // APPLY AUTH FILTER
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
