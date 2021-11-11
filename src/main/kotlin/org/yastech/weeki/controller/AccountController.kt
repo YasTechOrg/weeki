@@ -11,6 +11,7 @@ import org.yastech.weeki.data.ForgotGenerator
 import org.yastech.weeki.data.HexConvertor
 import org.yastech.weeki.data.PasswordEncoder
 import org.yastech.weeki.data.USERS
+import org.yastech.weeki.dispatcher.NotificationsDispatcher
 import org.yastech.weeki.model.Notification
 import org.yastech.weeki.security.JWTUtils
 import org.yastech.weeki.security.UserAuthenticator
@@ -29,8 +30,8 @@ class AccountController
     private var userAuthenticator: UserAuthenticator,
     private var jwtUtils: JWTUtils,
     private var forgotGenerator: ForgotGenerator,
-    /*private var emailSender: EmailSender,
-    private var notificationsDispatcher: NotificationsDispatcher,*/
+    /*private var emailSender: EmailSender,*/
+    private var notificationsDispatcher: NotificationsDispatcher,
     private var hexConvertor: HexConvertor
 )
 {
@@ -117,10 +118,10 @@ class AccountController
 
                 userService.update(company)
 
-                /*notificationsDispatcher.send(
+                notificationsDispatcher.send(
                     company.socketId!!,
                     newNotification
-                )*/
+                )
                 "redirect:/account/login?res=d_reg_emp"
             }
             else

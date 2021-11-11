@@ -3,7 +3,8 @@ import createPersistedState from "vuex-persistedstate"
 import axios from "axios"
 import { getToken } from "@/csrfManager"
 import Swal from "sweetalert2"
-// const schedule = require('node-schedule')
+/* eslint @typescript-eslint/no-var-requires: "off" */
+const schedule = require('node-schedule')
 
 const store = createStore({
   state: {
@@ -18,6 +19,11 @@ const store = createStore({
   plugins: [createPersistedState()],
 
   mutations: {
+
+    setNotifications(state, data)
+    {
+      state.notifications = data
+    },
 
     setAuth(state, token)
     {
@@ -131,6 +137,15 @@ const store = createStore({
           })
     },
 
+    disableNotificationsSchedule()
+    {
+      const all: any[] = Object.values(schedule.scheduledJobs)
+
+      for (let i = 0; i < all.length; i++) all[i].cancel()
+
+      console.log(Object.values(schedule.scheduledJobs))
+    },
+
     getTasks(state)
     {
       // Get User Tasks
@@ -164,27 +179,27 @@ const store = createStore({
                 date.setMinutes(Number(time.split(":")[1]))
                 date.setSeconds(0)
                 date.setMilliseconds(0)
-
-
-                /*schedule.scheduleJob(date, function()
+                schedule.scheduleJob(date, function()
                 {
                   const bodyFormData = new FormData()
                   bodyFormData.append("content", `you should ${title} at ${time}`)
                   bodyFormData.append("type", "notification")
 
                   axios.post(
-                      "/api/rest/account/notification/add",
+                      "/api/rest/account/notifications/add",
                       bodyFormData,
                       {
                         headers: {
-                          "Content-Type": "multipart/form-data",
-                          "Authorization": require('@/authManager').getAuth()
+                          "_csrf" : getToken() as any,
+                          "Authorization": `Bearer ${state.at}`
                         }
                       }
                   )
-                      .then(() => {})
+                      .then(() => {
+                        //
+                      })
                       .catch(reason => console.log(reason))
-                })*/
+                })
               }
             }
           })

@@ -37,5 +37,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "consistent-this": [ 2, "t",  "*" ]
 }

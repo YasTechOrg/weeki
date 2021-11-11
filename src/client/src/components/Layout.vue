@@ -266,14 +266,16 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import { mapGetters } from 'vuex'
+import {Options, Vue} from 'vue-class-component'
+import {mapGetters} from 'vuex'
 import WeekiButton from "@/components/elements/WeekiButton.vue"
 import WeekiProfile from "@/components/elements/WeekiProfile.vue"
 import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
 import axios from "axios"
 import { getToken } from '@/csrfManager'
 import { showToast, Types } from "@/toastManager"
+import SockJS from "sockjs-client"
+import Stomp from "webstomp-client"
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 @Options({
@@ -297,6 +299,8 @@ import { showToast, Types } from "@/toastManager"
         { name : "Contact", path: "/contact" },
         { name : "Faq", path: "/faq" }
       ],
+
+      unSeenNotification: false,
 
       userInfo: { firstname: "", lastname: "", name: "", access: [] },
 
@@ -361,6 +365,9 @@ import { showToast, Types } from "@/toastManager"
           // Show Loading
           document.getElementById("loader-wrapper")!.classList.remove("h")
 
+          // Disable All Schedule
+          this.$store.commit("disableNotificationsSchedule")
+
           // Load Page
           await this.load()
 
@@ -377,7 +384,6 @@ import { showToast, Types } from "@/toastManager"
     // On App Load
     async load()
     {
-      await new Promise(resolve => setTimeout(resolve, 500))
 
       if (this.checkAuth)
       {
@@ -411,7 +417,7 @@ import { showToast, Types } from "@/toastManager"
                   "Authorization": this.getAuth
                 }
               })
-              .then(value =>
+              .then(async value =>
               {
                 resolve(value.data)
 
@@ -421,7 +427,7 @@ import { showToast, Types } from "@/toastManager"
 
                 if (this.layout === 'dashboard')
                 {
-                  if(this.userInfo["access"].includes(this.$route.meta["id"]))
+                  if (this.userInfo["access"].includes(this.$route.meta["id"]))
                   {
                     location.href = "/dashboard?res=da"
                   }
@@ -430,7 +436,7 @@ import { showToast, Types } from "@/toastManager"
                     location.href = "/dashboard?res=da_nu"
                   }
 
-                  window.scrollTo(0,0)
+                  window.scrollTo(0, 0)
 
                   switch (this.$route.query.res)
                   {
@@ -458,6 +464,57 @@ import { showToast, Types } from "@/toastManager"
                       showToast("System : An error occurred while edit a task!", Types.ERROR)
                       break
                   }
+
+                  // Get Notifications
+                  await this.getNotifications()
+                  const seenNotifications: boolean[] = []
+
+                  for (const item in this.notifications)
+                  {
+                    seenNotifications.push(item["seen"])
+                  }
+
+                  if (seenNotifications.includes(false))
+                  {
+                    this.unSeenNotification = true
+                  }
+
+                  // Define this
+                  const t = this
+
+                  // Connect To Socket Server
+                  this.socket = new SockJS(location.origin + "/wst", [], {
+                    sessionId: function ()
+                    {
+                      return t.userInfo["socketId"]
+                    }
+                  })
+
+                  // Define Stomp Client
+                  this.stompClient = Stomp.over(this.socket)
+
+                  // Disable Stomp Logging
+                  this.stompClient.debug = () => {
+                    //
+                  }
+
+                  // Connect Stomp
+                  this.stompClient.connect({}, () =>
+                  {
+
+                    // Subscribe Stomp
+                    this.stompClient.subscribe('/user/notifications/get', function (response)
+                    {
+                      // Show Notification
+                      showToast(JSON.parse(response.body).content, Types.INFO)
+
+                      t.getNotifications()
+                      t.unSeenNotification = true
+                    }, {
+                      "_csrf" : getToken() as any,
+                      "Authorization": this.getAuth
+                    })
+                  })
                 }
               })
               .catch((err) =>
@@ -493,6 +550,36 @@ import { showToast, Types } from "@/toastManager"
     logoutUser()
     {
       this.$router.push("/account/login?res=logout")
+    },
+
+    // Get All Notifications
+    async getNotifications()
+    {
+
+      // Await Request
+      this.$store.commit("setNotifications", await new Promise(resolve =>
+      {
+
+        // Send Request
+        axios
+
+            // Send
+            .get("/api/rest/account/notifications/get", {
+              headers: {
+                "_csrf" : getToken() as any,
+                "Authorization": this.getAuth
+              }
+            })
+
+            // On Success
+            .then(value =>
+            {
+              resolve(value.data)
+            })
+
+            // On Error
+            .catch(reason => console.log(reason))
+      }))
     },
 
     // Toggle Dashboard Menu Active Class
@@ -574,6 +661,11 @@ import { showToast, Types } from "@/toastManager"
     dashboardMenu()
     {
       return this.$store.state.d_menu
+    },
+
+    notifications()
+    {
+      return this.$store.state.notifications
     }
   }
 })

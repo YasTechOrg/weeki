@@ -24,7 +24,7 @@
 
       .nt_time.d-flex.align-items-center.justify-content-center
 
-        p.m-0 {{ timeCalc(notifications['time']) }}
+        p.m-0 {{ timeCalc(notification['time']) }}
 
 </template>
 
@@ -60,13 +60,17 @@ import moment from 'moment'
     {
       return this.$store.state.notifications.slice().reverse()
     },
+  },
+
+  // Widget Methods
+  methods: {
 
     // Calculate Time
     timeCalc(time): string
     {
       return moment().from(new Date(time), true)
     },
-  },
+  }
 })
 
 export default class NotificationsWidget extends Vue {}

@@ -422,7 +422,6 @@ import Swal from 'sweetalert2'
           .querySelector("#WeekiNormalModal_tasks_edit > div > div > div > .nm-content > div.row > div:last-child > span")!
       const input = document!
           .querySelector("#WeekiNormalModal_tasks_edit > div > div > div > .nm-content > div.row > div:last-child > input")! as HTMLInputElement
-      console.log(this.tasks[index].notification)
       if (this.tasks[index].notification === false)
       {
         btn.classList.remove("true")
