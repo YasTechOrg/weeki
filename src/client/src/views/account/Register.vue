@@ -233,6 +233,8 @@ import WeekiOptionalDropDown from "@/components/elements/WeekiOptionalDropDown.v
 import WeekiNormalDropDown from "@/components/elements/WeekiNormalDropDown.vue"
 import WeekiPasswordInput from "@/components/elements/WeekiPasswordInput.vue"
 import { showToast, Types } from '@/toastManager'
+import axios from "axios"
+import { getToken } from "@/csrfManager"
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 @Options({
@@ -268,9 +270,9 @@ import { showToast, Types } from '@/toastManager'
   mounted()
   {
     // Get All Companies
-    /*axios
-        .get("/api/rest/account/getAll/company")
-        .then(value => this.allCompanies = value.data)*/
+    axios
+        .get("/api/rest/account/company/all", { headers: { "_csrf" : getToken() as any, } })
+        .then(value => this.allCompanies = value.data)
 
     // User Is Exist
     if (this.res === "exi")

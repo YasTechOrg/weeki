@@ -45,5 +45,3 @@ import ChatWidget from "@/components/widgets/ChatWidget.vue"
 })
 export default class Dashboard extends Vue {}
 </script>
-
-<style scoped src="../../assets/sass/page/dashboard.sass" lang="sass"></style>

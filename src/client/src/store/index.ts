@@ -66,7 +66,7 @@ const store = createStore({
       })
 
       axios.post(
-          "/api/rest/account/tasks/tick",
+          "/api/rest/tasks/tick",
           bodyFormData,
           {
             headers: {
@@ -115,7 +115,7 @@ const store = createStore({
                 }
               })
               axios.post(
-                  "/api/rest/account/tasks/delete",
+                  "/api/rest/tasks/delete",
                   bodyFormData,
                   {
                     headers: {
@@ -142,8 +142,6 @@ const store = createStore({
       const all: any[] = Object.values(schedule.scheduledJobs)
 
       for (let i = 0; i < all.length; i++) all[i].cancel()
-
-      console.log(Object.values(schedule.scheduledJobs))
     },
 
     getTasks(state)
@@ -152,7 +150,7 @@ const store = createStore({
       axios
 
           // Send Request
-          .get("/api/rest/account/tasks/get", {
+          .get("/api/rest/tasks/get", {
                 headers: {
                   "_csrf" : getToken() as any,
                   "Authorization": `Bearer ${state.at}`
@@ -186,7 +184,7 @@ const store = createStore({
                   bodyFormData.append("type", "notification")
 
                   axios.post(
-                      "/api/rest/account/notifications/add",
+                      "/api/rest/notifications/add",
                       bodyFormData,
                       {
                         headers: {

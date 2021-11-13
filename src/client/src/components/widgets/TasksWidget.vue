@@ -301,7 +301,7 @@ import Swal from 'sweetalert2'
       bodyFormData.append("date", this.tasks[this.update.index]["date"])
 
       axios.post(
-          "/api/rest/account/tasks/update",
+          "/api/rest/tasks/update",
           bodyFormData,
           {
             headers : {
@@ -331,7 +331,7 @@ import Swal from 'sweetalert2'
       bodyFormData.append("importance", inputs[3].value)
 
       axios.post(
-          "/api/rest/account/tasks/add",
+          "/api/rest/tasks/add",
           bodyFormData,
           {
             headers : {

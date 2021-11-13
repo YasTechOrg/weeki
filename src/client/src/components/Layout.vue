@@ -564,7 +564,7 @@ import Stomp from "webstomp-client"
         axios
 
             // Send
-            .get("/api/rest/account/notifications/get", {
+            .get("/api/rest/notifications/get", {
               headers: {
                 "_csrf" : getToken() as any,
                 "Authorization": this.getAuth
