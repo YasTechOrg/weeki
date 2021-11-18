@@ -48,18 +48,29 @@
           > .accept:hover, > .reject:hover
             box-shadow: 0 0 5px 1px rgba(93, 93, 93, 0.35)
 
-        > .employee:last-child > div > ul > li
-          font-size: 12px!important
+        > .employee:last-child > div > ul
+          box-shadow: 0 0 6px #0000001a!important
+          border-radius: 0 0 4px 4px!important
+          border: none!important
 
-          > a
-            color: black
+          > li
 
-            > span
-              color: #A0A0A0!important
+            > a
+              line-height: 15px!important
 
-          > a:active
-            background-color: unset!important
-            color: #53933C!important
+              > span
+                color: #A0A0A0
+
+            > a.active
+              background-color: unset!important
+              color: #53933C!important
+
+              > span
+                color: #53933C!important
+
+            > a:active
+              background-color: unset!important
+              color: #53933C!important
 
       > .employee:hover
         background-color: white
@@ -68,4 +79,111 @@
         > .na_employee:last-child
           display: block!important
 
+#WeekiNormalModal_employee_profile > div > div > div > .nm-content
 
+  > .nf > img
+    height: 70px
+    width: 70px
+    background-color: transparent
+
+  > .content
+
+    > div:first-child
+
+      > div:first-child > div:last-child
+
+        > p
+          font-size: 14px!important
+          margin-bottom: 8px!important
+          line-height: 14px!important
+
+        > div
+          height: 15px!important
+
+          > img
+            height: 15px!important
+            width: 15px!important
+
+      > div:last-child
+
+        > div
+
+          > p
+            color: #6E6E6E!important
+            text-decoration: underline!important
+            font-size: 14px!important
+
+          > p:after
+            content: 'whats your rate?'
+
+    > div:last-child > div
+
+      > img
+        width: 16px!important
+        height: 16px!important
+
+      > p
+        font-size: 14px!important
+        line-height: 14px!important
+
+#WeekiNormalModal_employee_access_edit > div > div > div > .nm-content > div > div > div
+
+  > div:hover
+    background-color: #E4E4E4!important
+    border-radius: 4px
+
+  > div > p
+    font-size: 14px!important
+    color: #101010!important
+    margin-left: 4px!important
+
+#WeekiNormalModal_employee_rate > div > div > div > .nm-content
+
+  > p
+    font-size: 14px!important
+    line-height: 14px!important
+    color: #6E6E6E!important
+
+  > .he > p
+    font-size: 14px!important
+    line-height: 14px!important
+
+  > .st
+
+    > img
+      width: 32px
+      height: 32px
+      margin-right: 8px
+      margin-left: 8px
+
+    > img:first-child
+      margin-left: 0!important
+
+    > img:last-child
+      margin-right: 0!important
+
+@media screen and (max-width: 769px)
+
+  #employee > div
+
+    > div > .employee
+      padding: 12px 0!important
+
+    > p
+      font-size: 16px!important
+
+    > div > .employee > div.na_employee:last-child > div > div
+      max-width: 53px!important
+      max-height: 24px!important
+
+  #WeekiNormalModal_employee_access_edit > div > div > div > .nm-content > button
+    width: 100%!important
+
+  #WeekiNormalModal_employee_profile > div > div > div > .nm-content > .content > div:first-child > div:last-child > div > p:after
+    content: 'Your Rate?'!important
+
+@media screen and (max-width: 575px)
+
+  #WeekiNormalModal_employee_access_edit > div > div > div > .nm-content > div > div > div > div
+    padding: 6px 16px!important
+    border-radius: unset!important

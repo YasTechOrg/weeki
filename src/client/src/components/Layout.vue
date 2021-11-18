@@ -139,7 +139,7 @@
 
               p.mb-0( v-if="dashboardMenu === 'open'" ) {{ item.name }}
 
-            .menu_items.pl-16
+            .menu_items.pl-16( v-if="typeof this.userInfo['access'] !== 'undefined' && this.userInfo['access'] != null" )
 
               router-link.d-flex.align-items-center.justify-content-start.text-decoration-none.mt-24(
                 v-for="link in dashboard_menu(index)"
@@ -266,7 +266,7 @@
 </template>
 
 <script lang="ts">
-import {Options, Vue} from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component'
 import {mapGetters} from 'vuex'
 import WeekiButton from "@/components/elements/WeekiButton.vue"
 import WeekiProfile from "@/components/elements/WeekiProfile.vue"
@@ -301,8 +301,6 @@ import Stomp from "webstomp-client"
       ],
 
       unSeenNotification: false,
-
-      userInfo: { firstname: "", lastname: "", name: "", access: [] },
 
       dashboard_menu_titles: [
         { name: "Main Tools", icon: "icon_setting_gray" },
@@ -365,6 +363,8 @@ import Stomp from "webstomp-client"
           // Show Loading
           document.getElementById("loader-wrapper")!.classList.remove("h")
 
+          await new Promise(resolve => setTimeout(resolve, 1000))
+
           // Disable All Schedule
           this.$store.commit("disableNotificationsSchedule")
 
@@ -408,128 +408,125 @@ import Stomp from "webstomp-client"
           this.goTo("/dashboard")
         }
 
-        this.userInfo = await new Promise(resolve =>
-        {
-          axios
-              .get("/api/rest/account/user/get", {
-                headers: {
-                  "_csrf" : getToken() as any,
-                  "Authorization": this.getAuth
-                }
-              })
-              .then(async value =>
+        axios
+            .get("/api/rest/account/user/get", {
+              headers: {
+                "_csrf" : getToken() as any,
+                "Authorization": this.getAuth
+              }
+            })
+            .then(async value =>
+            {
+              await this.$store.commit("setUserData", value.data)
+
+              await this.$store.commit("getTasks")
+            })
+            .catch((err) =>
+            {
+              console.log(err)
+              this.$store.commit("removeAuth")
+
+              showToast("System : Your login has expired", Types.WARNING)
+
+              if (this.layout === 'dashboard')
               {
-                resolve(value.data)
-
-                this.$store.commit("setUserData", value.data)
-
-                this.$store.commit("getTasks")
-
-                if (this.layout === 'dashboard')
-                {
-                  if (this.userInfo["access"].includes(this.$route.meta["id"]))
-                  {
-                    location.href = "/dashboard?res=da"
-                  }
-                  else if (this.$route.meta["id"] === "employee" && this.userInfo["role"] === "NORMAL_USER")
-                  {
-                    location.href = "/dashboard?res=da_nu"
-                  }
-
-                  window.scrollTo(0, 0)
-
-                  switch (this.$route.query.res)
-                  {
-                    case "add_task_comp":
-                      showToast("System : Task added successfully!", Types.SUCCESS)
-                      break
-
-                    case "add_task_err":
-                      showToast("System : An error occurred while add new task!", Types.ERROR)
-                      break
-
-                    case "da":
-                      showToast("System : Your access to this page has been restricted by your boss!", Types.ERROR)
-                      break
-
-                    case "da_nu":
-                      showToast("System : Normal Users don't have access to the employee page", Types.ERROR)
-                      break
-
-                    case "update_task_comp":
-                      showToast("System : Task edited successfully!", Types.SUCCESS)
-                      break
-
-                    case "update_task_err":
-                      showToast("System : An error occurred while edit a task!", Types.ERROR)
-                      break
-                  }
-
-                  // Get Notifications
-                  await this.getNotifications()
-                  const seenNotifications: boolean[] = []
-
-                  for (const item in this.notifications)
-                  {
-                    seenNotifications.push(item["seen"])
-                  }
-
-                  if (seenNotifications.includes(false))
-                  {
-                    this.unSeenNotification = true
-                  }
-
-                  // Define this
-                  const t = this
-
-                  // Connect To Socket Server
-                  this.socket = new SockJS(location.origin + "/wst", [], {
-                    sessionId: function ()
-                    {
-                      return t.userInfo["socketId"]
-                    }
-                  })
-
-                  // Define Stomp Client
-                  this.stompClient = Stomp.over(this.socket)
-
-                  // Disable Stomp Logging
-                  this.stompClient.debug = () => {
-                    //
-                  }
-
-                  // Connect Stomp
-                  this.stompClient.connect({}, () =>
-                  {
-
-                    // Subscribe Stomp
-                    this.stompClient.subscribe('/user/notifications/get', function (response)
-                    {
-                      // Show Notification
-                      showToast(JSON.parse(response.body).content, Types.INFO)
-
-                      t.getNotifications()
-                      t.unSeenNotification = true
-                    }, {
-                      "_csrf" : getToken() as any,
-                      "Authorization": this.getAuth
-                    })
-                  })
-                }
-              })
-              .catch((err) =>
+                this.goTo("/account/login?res=expi")
+              }
+            })
+            .finally(async () =>
+            {
+              if (this.layout === 'dashboard')
               {
-                console.log(err)
-                this.$store.commit("removeAuth")
-
-                showToast("System : Your login has expired", Types.WARNING)
-
-                if (this.layout === 'dashboard')
+                if (this.userInfo["access"].includes(this.$route.meta["id"]))
                 {
-                  this.goTo("/account/login?res=expi")
+                  location.href = "/dashboard?res=da"
                 }
-              })
-        })
+                else if (this.$route.meta["id"] === "employee" && this.userInfo["role"] === "NORMAL_USER")
+                {
+                  location.href = "/dashboard?res=da_nu"
+                }
+
+                window.scrollTo(0, 0)
+
+                switch (this.$route.query.res)
+                {
+                  case "add_task_comp":
+                    showToast("System : Task added successfully!", Types.SUCCESS)
+                    break
+
+                  case "add_task_err":
+                    showToast("System : An error occurred while add new task!", Types.ERROR)
+                    break
+
+                  case "da":
+                    showToast("System : Your access to this page has been restricted by your boss!", Types.ERROR)
+                    break
+
+                  case "da_nu":
+                    showToast("System : Normal Users don't have access to the employee page", Types.ERROR)
+                    break
+
+                  case "update_task_comp":
+                    showToast("System : Task edited successfully!", Types.SUCCESS)
+                    break
+
+                  case "update_task_err":
+                    showToast("System : An error occurred while edit a task!", Types.ERROR)
+                    break
+                }
+
+                // Get Notifications
+                await this.getNotifications()
+                const seenNotifications: boolean[] = []
+
+                for (const item in this.notifications)
+                {
+                  seenNotifications.push(item["seen"])
+                }
+
+                if (seenNotifications.includes(false))
+                {
+                  this.unSeenNotification = true
+                }
+
+                // Define this
+                const t = this
+
+                // Connect To Socket Server
+                this.socket = new SockJS(location.origin + "/wst", [], {
+                  sessionId: function ()
+                  {
+                    return t.userInfo["socketId"]
+                  }
+                })
+
+                // Define Stomp Client
+                this.stompClient = Stomp.over(this.socket)
+
+                // Disable Stomp Logging
+                this.stompClient.debug = () => {
+                  //
+                }
+
+                // Connect Stomp
+                this.stompClient.connect({}, () =>
+                {
+
+                  // Subscribe Stomp
+                  this.stompClient.subscribe('/user/notifications/get', function (response)
+                  {
+                    // Show Notification
+                    showToast(JSON.parse(response.body).content, Types.INFO)
+
+                    t.getNotifications()
+                    t.unSeenNotification = true
+                  }, {
+                    "_csrf" : getToken() as any,
+                    "Authorization": this.getAuth
+                  })
+                })
+              }
+            })
       }
       else
       {
@@ -666,6 +663,12 @@ import Stomp from "webstomp-client"
     notifications()
     {
       return this.$store.state.notifications
+    },
+
+    // Get User Data
+    userInfo()
+    {
+      return this.$store.state.userData
     }
   }
 })

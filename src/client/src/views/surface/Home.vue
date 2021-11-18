@@ -2,7 +2,6 @@
 
 #home
   | Home
-  ui-button( raised ) Click Me!!
 
 </template>
 

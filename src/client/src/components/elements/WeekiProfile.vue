@@ -31,7 +31,7 @@ import { Options, Vue } from 'vue-class-component'
     // User Name
     name()
     {
-      if (this.info === null || Object(this.info).length === 0)
+      if (this.info === null || Object(this.info).length === 0 || typeof this.info["firstname"] === "undefined")
       {
         return " "
       }
