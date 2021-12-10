@@ -5,12 +5,14 @@ import org.yastech.weeki.data.JWTParser
 import org.yastech.weeki.data.SecureGenerator
 import org.yastech.weeki.data.USERS
 import org.yastech.weeki.model.MoreSecureUser
+import org.yastech.weeki.model.SecureContact
 import org.yastech.weeki.model.SecureUser
 import org.yastech.weeki.model.SellerDetail
 import org.yastech.weeki.security.JWTUtils
 import org.yastech.weeki.service.UserService
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import javax.servlet.http.HttpServletRequest
 
@@ -96,5 +98,15 @@ class AccountRestController
         )
         user.contacts!!.remove(id)
         userService.update(user)
+    }
+
+    @GetMapping("/contact/get")
+    fun getContacts(request: HttpServletRequest): Flux<SecureContact>
+    {
+        return secureGenerator.generateSecureContact(
+            userService.get(
+                jwtUtils.getUserNameFromJwtToken(jwtParser.parse(request)!!)
+            ).contacts!!.map { userService.get(it) }.toFlux()
+        )
     }
 }
