@@ -1,10 +1,7 @@
 package org.yastech.weeki.data
 
 import org.springframework.stereotype.Service
-import org.yastech.weeki.model.EmployeeSecureProfile
-import org.yastech.weeki.model.EmployeeSecureUser
-import org.yastech.weeki.model.MoreSecureUser
-import org.yastech.weeki.model.SecureUser
+import org.yastech.weeki.model.*
 import org.yastech.weeki.service.UserService
 import org.yastech.weeki.table.User
 import reactor.core.publisher.Flux
@@ -61,6 +58,33 @@ class SecureGenerator
             user.phoneNumber,
             user.rate
         )
+    }
+
+    fun generateSecureContact(users: Flux<User>): Flux<SecureContact>
+    {
+        return users.map {
+            SecureContact(
+                it.email,
+                it.firstname,
+                it.lastname,
+                when (it.role)
+                {
+                    USERS.COMPANY ->
+                    {
+                        it.name!!
+                    }
+                    USERS.EMPLOYEE ->
+                    {
+                        userService.get(it.company!!).name!!
+                    }
+                    else ->
+                    {
+                        "User"
+                    }
+                },
+                it.role
+            )
+        }
     }
 
     fun generateSecureUserByFlux(users: Flux<User>): Flux<SecureUser>
