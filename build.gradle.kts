@@ -14,11 +14,17 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 repositories {
     mavenCentral()
 }
+configurations {
+    implementation {
+        exclude(module = "spring-boot-starter-tomcat")
+    }
+}
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:2.5.6")
     implementation("org.springframework.boot:spring-boot-starter-security:2.5.6")
     implementation("org.springframework.security:spring-security-messaging:5.5.1")
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-web:2.5.6")
     implementation("org.springframework.boot:spring-boot-starter-webflux:2.5.6")
     implementation("org.springframework.boot:spring-boot-starter-websocket:2.5.6")
