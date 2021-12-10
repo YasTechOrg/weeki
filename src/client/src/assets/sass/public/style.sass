@@ -173,3 +173,55 @@ select:focus,
 ::-webkit-scrollbar-thumb
   background: #C2c2c2!important
   border-radius: 7px!important
+
+#WeekiNormalModal_user_profile > div > div > div > .nm-content
+
+  > .nf > img
+    height: 70px
+    width: 70px
+    background-color: transparent
+
+  > .content
+
+    > div:first-child
+
+      > div:first-child > div:last-child
+
+        > p
+          font-size: 14px!important
+          margin-bottom: 8px!important
+          line-height: 14px!important
+
+        > div
+          height: 15px!important
+
+          > img
+            height: 15px!important
+            width: 15px!important
+
+      > div:last-child
+
+        > div
+
+          > p
+            color: #6E6E6E!important
+            text-decoration: underline!important
+            font-size: 14px!important
+
+          > p:after
+            content: 'whats your rate?'
+
+    > div:last-child > div
+
+      > img
+        width: 16px!important
+        height: 16px!important
+
+      > p
+        font-size: 14px!important
+        line-height: 14px!important
+
+@media screen and (max-width: 769px)
+
+  #WeekiNormalModal_user_profile > div > div > div > .nm-content > .content > div:first-child > div:last-child > div > p:after
+    content: 'Your Rate?'!important

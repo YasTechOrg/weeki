@@ -25,6 +25,7 @@ export default class WeekiBorderedIconBtn extends Vue {}
   padding: 8px 20px
   font-size: 12px!important
   color: #68B64D
+  transition: 0.2s
 
 .weekiBorderedIconBtn:hover
   background-color: #68B64D!important

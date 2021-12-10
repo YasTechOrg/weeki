@@ -14,7 +14,7 @@
 
       > .employee
         padding: 12px
-        border-bottom: 1px solid #E4E4E4
+        transition: background-color 0.2s
 
         > div:first-child > div
 
@@ -74,57 +74,14 @@
 
       > .employee:hover
         background-color: white
-        border: none
+        border: none!important
+        border-radius: 4px
 
         > .na_employee:last-child
           display: block!important
 
-#WeekiNormalModal_employee_profile > div > div > div > .nm-content
-
-  > .nf > img
-    height: 70px
-    width: 70px
-    background-color: transparent
-
-  > .content
-
-    > div:first-child
-
-      > div:first-child > div:last-child
-
-        > p
-          font-size: 14px!important
-          margin-bottom: 8px!important
-          line-height: 14px!important
-
-        > div
-          height: 15px!important
-
-          > img
-            height: 15px!important
-            width: 15px!important
-
-      > div:last-child
-
-        > div
-
-          > p
-            color: #6E6E6E!important
-            text-decoration: underline!important
-            font-size: 14px!important
-
-          > p:after
-            content: 'whats your rate?'
-
-    > div:last-child > div
-
-      > img
-        width: 16px!important
-        height: 16px!important
-
-      > p
-        font-size: 14px!important
-        line-height: 14px!important
+      > .employee:not(:last-child)
+        border-bottom: 1px solid #E4E4E4
 
 #WeekiNormalModal_employee_access_edit > div > div > div > .nm-content > div > div > div
 

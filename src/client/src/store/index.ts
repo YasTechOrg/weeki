@@ -4,6 +4,7 @@ import axios from "axios"
 import { getToken } from "@/csrfManager"
 import Swal from "sweetalert2"
 /* eslint @typescript-eslint/no-var-requires: "off" */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const schedule = require('node-schedule')
 
 const store = createStore({
@@ -13,12 +14,65 @@ const store = createStore({
     at_time: "",
     d_menu: "open",
     tasks: [],
-    notifications: []
+    notifications: [],
+    profileModal: {},
+    profileModalCo: {},
+    profileModalStars: {},
   },
 
   plugins: [createPersistedState()],
 
   mutations: {
+
+    setProfileModal(state, id)
+    {
+      store.commit("clearProfileModal")
+
+      axios
+          .get(`/api/rest/employee/get/${ id }`, {
+            headers: {
+              "_csrf" : getToken() as any,
+              "Authorization": store.getters.getAuth
+            }
+          })
+
+          .then(value =>
+          {
+            axios
+
+                .get("/api/rest/account/sd/" + value.data["company"], {
+                  headers: {
+                    "_csrf" : getToken() as any,
+                  }
+                })
+
+                .then(value2 =>
+                {
+                  state.profileModalCo = value2.data
+                  state.profileModal = value.data
+
+                  const rates = value.data["rate"]
+
+                  state.profileModalStars = Object.keys(rates).includes(state.userData['email']) ? rates[state.userData['email']] : 0
+                })
+
+                .catch(reason2 => console.log(reason2))
+          })
+
+          .catch(reason => console.log(reason))
+    },
+
+    setProfileModalStars(state, num)
+    {
+      state.profileModalStars = num
+    },
+
+    clearProfileModal(state)
+    {
+      state.profileModal = {}
+      state.profileModalCo = {}
+      state.profileModalStars = null as any
+    },
 
     setNotifications(state, data)
     {
@@ -204,7 +258,112 @@ const store = createStore({
 
           // On Error
           .catch(reason => console.log(reason))
-    }
+    },
+
+    addToContacts(state, { id, url })
+    {
+      Swal.fire({
+        padding: "60px",
+        width: 153,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen()
+        {
+          Swal.showLoading()
+        }
+      })
+
+      const bodyFormData = new FormData()
+      bodyFormData.append("id", id)
+
+      axios.post(
+          "/api/rest/account/contact/add",
+          bodyFormData,
+          {
+            headers: {
+              "_csrf" : getToken() as any,
+              "Authorization": store.getters.getAuth
+            }
+          }
+      )
+          .then(() =>
+          {
+            location.href = `${ url }?res=ac_done`
+          })
+          .catch(() =>
+          {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
+          })
+    },
+
+    removeFromContacts(state, { id, url, promise })
+    {
+      if (promise)
+      {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          reverseButtons: true,
+          confirmButtonColor: '#68B64D',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes'
+        })
+            .then((result) =>
+            {
+              if (result.isConfirmed)
+              {
+                removeContact(id, url)
+              }
+            })
+      }
+      else
+      {
+        removeContact(id, url)
+      }
+    },
+
+    submitUserStars(state, { id, url, stars })
+    {
+      Swal.fire({
+      padding: "60px",
+      width: 153,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen()
+      {
+        Swal.showLoading()
+      }
+    })
+      const bodyFormData = new FormData()
+      bodyFormData.append("id", id)
+      bodyFormData.append("rate", stars)
+
+      axios.post(
+          "/api/rest/account/stars/update",
+          bodyFormData,
+          {
+            headers: {
+              "_csrf" : getToken() as any,
+              "Authorization": store.getters.getAuth
+            }
+          }
+      )
+          .then(() => location.href = `${ url }?res=us_done`)
+          .catch(() =>
+          {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
+          })
+    },
   },
 
   getters: {
@@ -220,5 +379,45 @@ const store = createStore({
     },
   },
 })
+
+function removeContact(id, url)
+{
+  Swal.fire({
+    padding: "60px",
+    width: 153,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen()
+    {
+      Swal.showLoading()
+    }
+  })
+
+  const bodyFormData = new FormData()
+  bodyFormData.append("id", id)
+
+  axios.post(
+      "/api/rest/account/contact/remove",
+      bodyFormData,
+      {
+        headers: {
+          "_csrf" : getToken() as any,
+          "Authorization": store.getters.getAuth
+        }
+      }
+  )
+      .then(() =>
+      {
+        location.href = `${ url }?res=ac_done`
+      })
+      .catch(() =>
+      {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+        })
+      })
+}
 
 export default store

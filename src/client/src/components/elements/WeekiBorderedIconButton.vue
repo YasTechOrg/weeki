@@ -29,6 +29,7 @@ export default class WeekiBorderedIconButton extends Vue {}
   padding: 8px 20px!important
   font-size: 12px!important
   color: #68B64D
+  transition: 0.2s
 
   > img
     margin-right: 8px!important

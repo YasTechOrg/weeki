@@ -145,8 +145,6 @@
                 v-for="link in dashboard_menu(index)"
                 :key="link"
                 active-class="menu_item_active"
-                @mouseenter="toggleActiveClass($event.target, link.path)"
-                @mouseleave="toggleActiveClass($event.target, link.path)"
                 :to="link.path"
               )
 
@@ -162,8 +160,6 @@
 
               a.d-flex.align-items-center.justify-content-start.text-decoration-none.mt-24.cursor-pointer(
                 v-if="index === 3"
-                @mouseenter="toggleActiveClass($event.target, null)"
-                @mouseleave="toggleActiveClass($event.target, null)"
                 @click="logoutUser"
               )
 
@@ -263,14 +259,134 @@
         .line.w-100
 
         p.mt-24.mb-0.text-center @ {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙
+
+WeekiNormalModal(
+  v-if="checkPage(['employee', 'my_contacts'])"
+  name="user_profile"
+  title="Profile"
+  max-width="588px"
+  max-height="73%"
+  scrollable="true"
+  mfs="true"
+  height="unset"
+)
+
+  .nf.d-flex.justify-content-center.align-items-center.pt-12.pb-12( v-if="Object.keys(getProfileModalData).length === 0" )
+
+    img( src="../assets/animations/main_loader.svg" alt="Loading..." )
+
+  .content( v-else )
+
+    .d-flex.justify-content-between.align-items-center
+
+      .d-flex.justify-content-start.align-items-center
+
+        WeekiProfile.profile( :info="getProfileModalData" )
+
+        .d-flex.flex-column.justify-content-center.align-items-start.pl-16
+
+          p.fw-bolder {{ getProfileModalData['firstname'] }} {{ getProfileModalData['lastname'] }}
+
+          .d-flex( v-if="Object.keys(getProfileModalData['rate']).length === 0" )
+
+            img( src="../assets/img/icons/icon_empty_star.svg" v-for="i in 5" :key="i" :class="{ 'mr-8' : i !== getStars }"  alt="s" )
+
+          .d-flex( v-else-if="getStars === 5" )
+
+            img( src="../assets/img/icons/icon_star.svg" v-for="i in 5" :key="i" :class="{ 'mr-8' : i !== getStars }"  alt="s" )
+
+          .d-flex( v-else )
+
+            img( src="../assets/img/icons/icon_star.svg" v-for="i in getStars" :key="i" :class="{ 'mr-8' : i !== 5 }"  alt="s" )
+            img( src="../assets/img/icons/icon_empty_star.svg" v-for="i in 5 - getStars" :key="i" :class="{ 'mr-8' : i !== 5 }"  alt="s" )
+
+      .d-flex.justify-content-end.align-items-center
+
+        .d-flex.flex-column.justify-content-center.align-items-end
+
+          img.cursor-pointer(
+            src="../assets/img/icons/icon_addUser_gray.svg"
+            v-if="!userInfo['contacts'].includes(getProfileModalData['email'])"
+            @click="addToContacts(getProfileModalData['email'])"
+            alt="Add To Contacts"
+          )
+
+          img.cursor-pointer(
+            src="../assets/img/icons/icon_removeUser_gray.svg"
+            @click="removeFromContacts(getProfileModalData['email'])"
+            alt="Remove From Contacts"
+            v-else
+          )
+
+          p.mb-0.mt-12.cursor-pointer(
+            data-bs-target="#WeekiNormalModal_user_profile_rate"
+            data-bs-toggle="modal"
+          )
+
+    .pl-40.mt-20
+
+      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
+        img( src="../assets/img/icons/icon_phone.svg" alt="phone number" )
+        p.mb-0.ml-16 {{ getProfileModalData["phoneNumber"] }}
+
+      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
+        img( src="../assets/img/icons/icon_mail.svg" alt="email" )
+        p.mb-0.ml-16 {{ getProfileModalData["email"] }}
+
+      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
+        img( src="../assets/img/icons/icon_company.svg" alt="company" )
+        p.mb-0.ml-16 {{ getProfileModalCompany["companyName"] }}
+
+      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
+        img( src="../assets/img/icons/icon_location.svg" alt="location" )
+        p.mb-0.ml-16 {{ getProfileModalData["address"] }}
+
+WeekiNormalModal(
+  v-if="checkPage(['employee', 'my_contacts'])"
+  name="user_profile_rate"
+  title="Rate"
+  max-width="380px"
+  max-height="73%"
+  scrollable="true"
+  mfs="true"
+  height="unset"
+)
+
+  p.mb-24 what's your rate?
+
+  .he.d-flex.justify-content-start.align-items-center.mb-12
+
+    WeekiProfile.employee( :info="getProfileModalData" )
+
+    p.ml-16.mb-0.fw-bolder {{ getProfileModalData['firstname'] }} {{ getProfileModalData['lastname'] }}
+
+  .st.d-flex.justify-content-around.justify-content-center.mb-24
+
+    img.cursor-pointer.unselectable(
+      src="../assets/img/icons/icon_star_big.svg"
+      v-for="(i, index) in getSelfStars"
+      @click="setProfileModalStars(index + 1)"
+      :key="i" alt="s"
+    )
+
+    img.cursor-pointer.unselectable(
+      src="../assets/img/icons/icon_empty_star_big.svg"
+      v-for="(i, index) in (5 - getSelfStars)"
+      @click="setProfileModalStars(getSelfStars + (index + 1))"
+      :key="i" alt="s"
+    )
+
+  WeekiButton.float-end( text="Confirm" @click="submitUserStars" )
+
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import WeekiButton from "@/components/elements/WeekiButton.vue"
 import WeekiProfile from "@/components/elements/WeekiProfile.vue"
 import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
+import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import axios from "axios"
 import { getToken } from '@/csrfManager'
 import { showToast, Types } from "@/toastManager"
@@ -278,13 +394,16 @@ import SockJS from "sockjs-client"
 import Stomp from "webstomp-client"
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 @Options({
 
   // App Components
   components: {
     WeekiButton,
     WeekiProfile,
-    WeekiIconBtn
+    WeekiIconBtn,
+    WeekiNormalModal
   },
 
   // App Variables
@@ -363,8 +482,6 @@ import Stomp from "webstomp-client"
           // Show Loading
           document.getElementById("loader-wrapper")!.classList.remove("h")
 
-          await new Promise(resolve => setTimeout(resolve, 1000))
-
           // Disable All Schedule
           this.$store.commit("disableNotificationsSchedule")
 
@@ -384,7 +501,6 @@ import Stomp from "webstomp-client"
     // On App Load
     async load()
     {
-
       if (this.checkAuth)
       {
         const d: any = this.$store.state.at_time
@@ -418,7 +534,7 @@ import Stomp from "webstomp-client"
             .then(async value =>
             {
               await this.$store.commit("setUserData", value.data)
-
+              await this.$store.commit("clearProfileModal")
               await this.$store.commit("getTasks")
             })
             .catch((err) =>
@@ -490,6 +606,7 @@ import Stomp from "webstomp-client"
                 }
 
                 // Define this
+                // eslint-disable-next-line @typescript-eslint/no-this-alias
                 const t = this
 
                 // Connect To Socket Server
@@ -579,18 +696,6 @@ import Stomp from "webstomp-client"
       }))
     },
 
-    // Toggle Dashboard Menu Active Class
-    toggleActiveClass(t: any, path: string)
-    {
-      if (typeof path !== "undefined")
-      {
-        if(path !== this.$route.path)
-        {
-          t.classList.toggle("menu_item_active")
-        }
-      }
-    },
-
     dashboard_menu(index): any[]
     {
       const master = this.dm[index]
@@ -638,7 +743,35 @@ import Stomp from "webstomp-client"
       {
         this.$store.commit("changeDashboardMenuState", "close")
       }
-    }
+    },
+
+    // Remove From Contacts
+    removeFromContacts(id: string)
+    {
+      this.$store.commit("removeFromContacts", { id : id, url : this.$route.path, promise : false })
+    },
+
+    // Add To Contacts
+    addToContacts(id: string)
+    {
+      this.$store.commit("addToContacts", { id : id, url : this.$route.path })
+    },
+
+    // Check Page
+    checkPage(ids: string[]): boolean
+    {
+      return ids.includes(this.$route.meta['id'])
+    },
+
+    submitUserStars()
+    {
+      this.$store.commit("submitUserStars", { id : this.getProfileModalData["email"], url : this.$route.path, stars : this.$store.state.profileModalStars })
+    },
+
+    setProfileModalStars(value)
+    {
+      this.$store.commit("setProfileModalStars", value)
+    },
   },
 
   // App Computed Variables
@@ -660,6 +793,21 @@ import Stomp from "webstomp-client"
       return this.$store.state.d_menu
     },
 
+    getProfileModalData()
+    {
+      return this.$store.state.profileModal
+    },
+
+    getProfileModalCompany()
+    {
+      return this.$store.state.profileModalCo
+    },
+
+    getProfileModalStars()
+    {
+      return this.$store.state.profileModalStars
+    },
+
     notifications()
     {
       return this.$store.state.notifications
@@ -669,9 +817,58 @@ import Stomp from "webstomp-client"
     userInfo()
     {
       return this.$store.state.userData
-    }
+    },
+
+    // Get Stars
+    getStars()
+    {
+      if (this.getProfileModalData["rate"] !== null && typeof this.getProfileModalData["rate"] !== "undefined")
+      {
+        const size: any[] = Object.values(this.getProfileModalData["rate"])
+        let num = 0
+        for (let i = 0; i < size.length; i++)
+        {
+          num = num + size[i]
+        }
+        return Math.round(num / size.length)
+      }
+      else
+      {
+        return 0
+      }
+    },
+
+    // Get Stars
+    getSelfStars(): number
+    {
+      if (this.getProfileModalData["rate"] !== null && typeof this.getProfileModalData["rate"] !== "undefined")
+      {
+        if (this.getProfileModalStars == null)
+        {
+          const users = Object.keys(this.getProfileModalData["rate"])
+
+          if (users.includes(this.userInfo["email"]))
+          {
+            return this.getProfileModalData["rate"][this.userInfo["email"]]
+          }
+          else
+          {
+            return 0
+          }
+        }
+        else
+        {
+          return this.getProfileModalStars
+        }
+      }
+      else
+      {
+        return 0
+      }
+    },
   }
 })
+
 export default class Layout extends Vue {}
 </script>
 

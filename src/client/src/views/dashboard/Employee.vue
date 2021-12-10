@@ -69,7 +69,7 @@
               li
                 a.dropdown-item.d-flex.align-items-center.cursor-pointer(
                   @click="completeEmployee(user['email'])"
-                  data-bs-target="#WeekiNormalModal_employee_profile"
+                  data-bs-target="#WeekiNormalModal_user_profile"
                   data-bs-toggle="modal"
                 )
                   span.material-icons.md-20.me-2 person
@@ -93,86 +93,6 @@
                 )
                   span.material-icons.md-20.me-2 check_circle
                   | Access
-
-WeekiNormalModal(
-  name="employee_profile"
-  title="Profile"
-  max-width="588px"
-  max-height="73%"
-  scrollable="true"
-  mfs="true"
-  height="unset"
-)
-
-  .nf.d-flex.justify-content-center.align-items-center.pt-12.pb-12( v-if="Object.keys(profileModalUser).length === 0" )
-
-    img( src="../../assets/animations/main_loader.svg" alt="Loading..." )
-
-  .content( v-else )
-
-    .d-flex.justify-content-between.align-items-center
-
-      .d-flex.justify-content-start.align-items-center
-
-        WeekiProfile.profile( :info="profileModalUser" )
-
-        .d-flex.flex-column.justify-content-center.align-items-start.pl-16
-
-          p.fw-bolder {{ profileModalUser['firstname'] }} {{ profileModalUser['lastname'] }}
-
-          .d-flex( v-if="Object.keys(profileModalUser['rate']).length === 0" )
-
-            img( src="../../assets/img/icons/icon_empty_star.svg" v-for="i in 5" :key="i" :class="{ 'mr-8' : i !== getStars }"  alt="s" )
-
-          .d-flex( v-else-if="getStars === 5" )
-
-            img( src="../../assets/img/icons/icon_star.svg" v-for="i in 5" :key="i" :class="{ 'mr-8' : i !== getStars }"  alt="s" )
-
-          .d-flex( v-else )
-
-            img( src="../../assets/img/icons/icon_star.svg" v-for="i in getStars" :key="i" :class="{ 'mr-8' : i !== 5 }"  alt="s" )
-            img( src="../../assets/img/icons/icon_empty_star.svg" v-for="i in 5 - getStars" :key="i" :class="{ 'mr-8' : i !== 5 }"  alt="s" )
-
-      .d-flex.justify-content-end.align-items-center
-
-        .d-flex.flex-column.justify-content-center.align-items-end
-
-          img.cursor-pointer(
-            src="../../assets/img/icons/icon_addUser_gray.svg"
-            v-if="!userInfo['contacts'].includes(profileModalUser['email'])"
-            @click="addToContacts"
-            alt="Add To Contacts"
-          )
-
-          img.cursor-pointer(
-            src="../../assets/img/icons/icon_removeUser_gray.svg"
-            @click="removeFromContacts"
-            alt="Remove From Contacts"
-            v-else
-          )
-
-          p.mb-0.mt-12.cursor-pointer(
-            data-bs-target="#WeekiNormalModal_employee_rate"
-            data-bs-toggle="modal"
-          )
-
-    .pl-40.mt-20
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../../assets/img/icons/icon_phone.svg" alt="phone number" )
-        p.mb-0.ml-16 {{ profileModalUser["phoneNumber"] }}
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../../assets/img/icons/icon_mail.svg" alt="email" )
-        p.mb-0.ml-16 {{ profileModalUser["email"] }}
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../../assets/img/icons/icon_company.svg" alt="company" )
-        p.mb-0.ml-16 {{ profileModalCompany["companyName"] }}
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../../assets/img/icons/icon_location.svg" alt="location" )
-        p.mb-0.ml-16 {{ profileModalUser["address"] }}
 
 WeekiNormalModal(
   name="employee_access_edit"
@@ -264,42 +184,6 @@ WeekiNormalModal(
 
   WeekiButton.float-end( text="Save Changes" data-bs-dismiss="modal" @click="updateAccess" )
 
-WeekiNormalModal(
-  name="employee_rate"
-  title="Rate"
-  max-width="380px"
-  max-height="73%"
-  scrollable="true"
-  mfs="true"
-  height="unset"
-)
-
-  p.mb-24 what's your rate?
-
-  .he.d-flex.justify-content-start.align-items-center
-
-    WeekiProfile.employee( :info="profileModalUser" )
-
-    p.ml-16.mb-0.fw-bolder {{ profileModalUser['firstname'] }} {{ profileModalUser['lastname'] }}
-
-  .st.d-flex.justify-content-center.justify-content-center.mb-24
-
-    img.cursor-pointer.unselectable(
-      src="../../assets/img/icons/icon_star_big.svg"
-      v-for="(i, index) in getSelfStars"
-      @click="profileModalStars = index + 1"
-      :key="i" alt="s"
-    )
-
-    img.cursor-pointer.unselectable(
-      src="../../assets/img/icons/icon_empty_star_big.svg"
-      v-for="(i, index) in 5 - getSelfStars"
-      @click="profileModalStars = getSelfStars + (index + 1)"
-      :key="i" alt="s"
-    )
-
-  WeekiButton.float-end( text="Confirm" @click="submitUserStars" )
-
 </template>
 
 <script lang="ts">
@@ -316,6 +200,7 @@ import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiButton from "@/components/elements/WeekiButton.vue"
 import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 @Options({
 
   // Page Components
@@ -433,7 +318,7 @@ import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
               )
                   .then(() =>
                   {
-                    this.getEmployees()
+                    location.reload()
                     Swal.close()
                   })
                   .catch(() =>
@@ -541,35 +426,7 @@ import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
     // Get Complete Employee
     completeEmployee(id)
     {
-      this.profileModalUser = {}
-      this.profileModalCompany = {}
-      this.profileModalStars = null
-
-      axios
-          .get(`/api/rest/employee/get/${ id }`, {
-            headers: {
-              "_csrf" : getToken() as any,
-              "Authorization": this.getAuth
-            }
-          })
-
-          .then(value =>
-          {
-            axios
-                .get("/api/rest/account/sd/" + value.data["company"], {
-                  headers: {
-                    "_csrf" : getToken() as any,
-                  }
-                })
-                .then(value2 =>
-                {
-                  this.profileModalCompany = value2.data
-                  this.profileModalUser = value.data
-                })
-                .catch(reason2 => console.log(reason2))
-          })
-
-          .catch(reason => console.log(reason))
+      this.$store.commit("setProfileModal", id)
     },
 
     // Remove Employee
@@ -629,88 +486,6 @@ import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
           })
     },
 
-    // Add To Contacts
-    addToContacts()
-    {
-      Swal.fire({
-        padding: "60px",
-        width: 153,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen()
-        {
-          Swal.showLoading()
-        }
-      })
-      const id = this.profileModalUser["email"]
-      const bodyFormData = new FormData()
-      bodyFormData.append("id", id)
-
-      axios.post(
-          "/api/rest/account/contact/add",
-          bodyFormData,
-          {
-            headers: {
-              "_csrf" : getToken() as any,
-              "Authorization": this.getAuth
-            }
-          }
-      )
-          .then(() =>
-          {
-            location.href = "/dashboard/employee?res=ac_done"
-          })
-          .catch(() =>
-          {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Something went wrong!',
-            })
-          })
-    },
-
-    // Remove From Contacts
-    removeFromContacts()
-    {
-      Swal.fire({
-        padding: "60px",
-        width: 153,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen()
-        {
-          Swal.showLoading()
-        }
-      })
-      const id = this.profileModalUser["email"]
-      const bodyFormData = new FormData()
-      bodyFormData.append("id", id)
-
-      axios.post(
-          "/api/rest/account/contact/remove",
-          bodyFormData,
-          {
-            headers: {
-              "_csrf" : getToken() as any,
-              "Authorization": this.getAuth
-            }
-          }
-      )
-          .then(() =>
-          {
-            location.href = "/dashboard/employee?res=rc_done"
-          })
-          .catch(() =>
-          {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Something went wrong!',
-            })
-          })
-    },
-
     // Set Access
     setAccess(index)
     {
@@ -721,45 +496,6 @@ import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
         this.access[user["access"][i]] = false
       }
     },
-
-    // Update User Stars
-    submitUserStars()
-    {
-      Swal.fire({
-        padding: "60px",
-        width: 153,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen()
-        {
-          Swal.showLoading()
-        }
-      })
-      const id = this.profileModalUser["email"]
-      const bodyFormData = new FormData()
-      bodyFormData.append("id", id)
-      bodyFormData.append("rate", this.profileModalStars)
-
-      axios.post(
-          "/api/rest/account/stars/update",
-          bodyFormData,
-          {
-            headers: {
-              "_csrf" : getToken() as any,
-              "Authorization": this.getAuth
-            }
-          }
-      )
-          .then(() => location.href = "/dashboard/employee?res=us_done")
-          .catch(() =>
-          {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Something went wrong!',
-            })
-          })
-    }
   },
 
   // Page Computed Variables
@@ -789,57 +525,8 @@ import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
       return this.$store.state.userData
     },
 
-    // Get Stars
-    getStars()
-    {
-      if (this.profileModalUser["rate"] !== null && typeof this.profileModalUser["rate"] !== "undefined")
-      {
-        const size: any[] = Object.values(this.profileModalUser["rate"])
-        let num = 0
-        for (let i = 0; i < size.length; i++)
-        {
-          num = num + size[i]
-        }
-        return Math.round(num / size.length)
-      }
-      else
-      {
-        return 0
-      }
-    },
-
-    // Get Stars
-    getSelfStars()
-    {
-      if (this.profileModalUser["rate"] !== null && typeof this.profileModalUser["rate"] !== "undefined")
-      {
-        if (this.profileModalStars == null)
-        {
-          const users = Object.keys(this.profileModalUser["rate"])
-
-          if (users.includes(this.userInfo["email"]))
-          {
-            return this.profileModalUser["rate"][this.userInfo["email"]]
-          }
-          else
-          {
-            return 0
-          }
-        }
-        else
-        {
-          return this.profileModalStars
-        }
-      }
-      else
-      {
-        return 0
-      }
-    },
-
     // Get Store Getters
     ...mapGetters([
-      "checkAuth",
       "getAuth"
     ]),
   }
