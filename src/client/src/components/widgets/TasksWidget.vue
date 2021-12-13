@@ -2,7 +2,7 @@
 
 .tasksWidget
 
-  .w-100.d-flex.justify-content-between.align-items-center
+  .header.w-100.d-flex.justify-content-between.align-items-center( v-if="tasks.length !== 0" )
 
     p.mb-0.fw-bolder( v-if="day == null" ) Today's Tasks
     p.mb-0.fw-bolder( v-else ) {{ getFormattedDate }} Tasks
@@ -19,16 +19,20 @@
       icon="add"
     )
 
-  .content.mt-12
+  .er.d-flex.align-items-center.justify-content-center.flex-column.h-100( v-if="tasks.length === 0" )
 
-    p.mb-0.text-center.d-flex.align-items-center.justify-content-center.h-100( v-if="tasks.length === 0" ) No task found !
+    p.mb-16.fw-bold( v-if="day != null" ) {{ getFormattedDate }}
+    p.mb-16.fw-bold No Tasks Have Been Registered
+
+    WeekiMiniFlatButton( text="Add a Task" data-bs-target="#WeekiNormalModal_tasks_add" data-bs-toggle="modal" )
+
+  .content.mt-12( v-else )
 
     .w-100.d-flex(
       v-for="(task, index) in tasks.sort((a, b) => { return getImportance(b['importance']) - getImportance(a['importance']) })"
       @mouseenter="toggleTaskHover"
       @mouseleave="toggleTaskHover"
       :key="task"
-      v-else
     )
 
       .task_cb.cursor-pointer( @click="checkTask(index)" )
@@ -182,6 +186,7 @@ import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
 import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
 import WeekiButton from "@/components/elements/WeekiButton.vue"
+import WeekiMiniFlatButton from "@/components/elements/WeekiMiniFlatButton.vue"
 import axios from 'axios'
 import { getToken } from "@/csrfManager"
 import { mapGetters } from "vuex"
@@ -200,7 +205,8 @@ import Swal from 'sweetalert2'
     WeekiNormalModal,
     WeekiTextArea,
     WeekiTextInput,
-    WeekiButton
+    WeekiButton,
+    WeekiMiniFlatButton
   },
 
   // Widget Variables

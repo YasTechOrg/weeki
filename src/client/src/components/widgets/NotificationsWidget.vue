@@ -2,15 +2,15 @@
 
 .notificationsWidget
 
-  .w-100.d-flex.justify-content-start.align-items-center
+  .header.w-100.d-flex.justify-content-start.align-items-center
 
     p.mb-0.fw-bolder Notifications
 
-  .mt-12
+  .er.d-flex.align-items-center.justify-content-center.flex-column( v-if="notifications.length === 0" )
 
-    p.mb-0.text-center.d-flex.align-items-center.justify-content-center.h-100(
-      v-if="notifications.length === 0"
-    ) No notification found !
+    p.mb-16.fw-bold No Notification Found !
+
+  .mt-12( v-else )
 
     .w-100.d-flex( v-for="notification in notifications" :key="notification" v-else )
 
