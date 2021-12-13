@@ -36,7 +36,7 @@ class AccountController
 )
 {
     @PostMapping("/login")
-    fun login(@RequestParam email: String, @RequestParam password: String): String
+    fun login(@RequestParam email: String, @RequestParam password: String, @RequestParam back: String): String
     {
         return if (userService.exist(email))
         {
@@ -46,7 +46,7 @@ class AccountController
                 {
                     if (userService.get(email).role == USERS.EMPLOYEE && !userService.get(email).accepted!!)
                     {
-                        "redirect:/account/login?res=err_ac"
+                        "redirect:/account/login?res=err_ac&back=$back"
                     }
                     else
                     {
@@ -56,22 +56,40 @@ class AccountController
 
                         val token = jwtUtils.generateJwtToken(authentication)
 
-                        "redirect:/dashboard?at=$token"
+                        "redirect:/dashboard?at=$token&at_to=$back"
                     }
                 }
                 else
                 {
-                    "redirect:/account/login?res=err"
+                    "redirect:/account/login?res=err&back=$back"
                 }
             }
             else
             {
-                "redirect:/account/login?res=safe"
+                "redirect:/account/login?res=safe&back=$back"
             }
         }
         else
         {
-            "redirect:/account/login?res=exi"
+            "redirect:/account/login?res=exi&back=$back"
+        }
+    }
+
+    @PostMapping("/change")
+    fun change(@RequestParam cp: String, @RequestParam np: String, @RequestParam email: String): String
+    {
+        return if(passwordEncoder.encoder().matches(cp, userService.get(email).password))
+        {
+            val updatedUser = userService.get(email)
+            updatedUser.password = passwordEncoder.encoder().encode(np)
+
+            userService.update(updatedUser)
+
+            "redirect:/dashboard/account/password?res=np_done"
+        }
+        else
+        {
+            "redirect:/dashboard/account/password?res=cp_wrr"
         }
     }
 

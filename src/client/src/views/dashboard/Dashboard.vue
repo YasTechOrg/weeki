@@ -39,7 +39,7 @@ import ChatWidget from "@/components/widgets/ChatWidget.vue"
     if (token != null && token !== "")
     {
       this.$store.commit("setAuth", token)
-      location.href = "/dashboard"
+      location.href = this.$route.query.at_to
     }
   }
 })

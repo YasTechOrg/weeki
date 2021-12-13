@@ -14,6 +14,7 @@
   form( method="post" action="/api/controller/account/login" )
 
     input( :value="require('@/csrfManager').getToken()" name="_csrf" hidden )
+    input( :value="(back === undefined || back === null || back === '') ? '/dashboard' : back" name="back" hidden )
 
     WeekiEmailInput( label="Email Address" name="email" )
 
@@ -59,7 +60,8 @@ import { showToast, Types } from '@/toastManager'
   data()
   {
     return {
-      res: this.$route.query.res
+      res: this.$route.query.res,
+      back: this.$route.query.back,
     }
   },
 

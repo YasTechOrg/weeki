@@ -64,7 +64,7 @@
                   span.material-icons.md-20.me-2 logout
                   | Logout
 
-          WeekiButton( text="Login / Register" @click="goTo('/account/login')" v-else )
+          WeekiButton( text="Login / Register" @click="goTo('/account/login?back=' + $route.path)" v-else )
 
       .mobile.d-none.row
 
@@ -107,7 +107,7 @@
                   span.material-icons.md-20.me-2 logout
                   | Logout
 
-          WeekiIconBtn( icon="icons/icon_login_white.svg" @click="goTo('/account/login')" v-else )
+          WeekiIconBtn( icon="icons/icon_login_white.svg" @click="goTo('/account/login?back=' + $route.path)" v-else )
 
   section( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
 
@@ -546,7 +546,7 @@ import Stomp from "webstomp-client"
 
               if (this.layout === 'dashboard')
               {
-                this.goTo("/account/login?res=expi")
+                this.goTo("/account/login?res=expi&back=" + this.$route.path)
               }
             })
             .finally(async () =>
