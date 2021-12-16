@@ -1,6 +1,7 @@
 <template lang="pug">
 
-.weekiNormalModal.w3-animate-zoom.modal.fade.pe-0(
+.weekiNormalModal.w3-animate-zoom.modal.fade(
+  :class="{ 'pe-0 ps-0' : getMfs, 'pe-2 ps-2' : !getMfs }"
   :id="'WeekiNormalModal_' + name"
   :aria-labelledby="'WeekiNormalModalLabel_' + name"
   aria-hidden="true"
@@ -57,6 +58,12 @@ import { Options, Vue } from 'vue-class-component'
       {
         return '600px'
       }
+    },
+
+    // Get Full Screen
+    getMfs()
+    {
+      return this.mfs === "true"
     },
 
     // Modal Max Height
