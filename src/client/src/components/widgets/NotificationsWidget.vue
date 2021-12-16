@@ -12,7 +12,7 @@
 
   .mt-12( v-else )
 
-    .w-100.d-flex( v-for="notification in notifications" :key="notification" v-else )
+    .w-100.d-flex( v-for="notification in notifications" :key="notification" )
 
       .nt_icon
 
