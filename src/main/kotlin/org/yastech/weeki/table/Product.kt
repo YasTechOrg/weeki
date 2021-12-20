@@ -22,6 +22,7 @@ data class Product
     var code: String,
     var grade: String,
     var publisher: String?,
+    var owner: String?,
     var packing: String,
     var amount: Long,
     var ppk: Long,
@@ -31,3 +32,6 @@ data class Product
 )
 
 interface ProductRepository : ReactiveMongoRepository<Product, String>
+{
+    fun findAllByOwner(owner: String): Flux<Product>
+}
