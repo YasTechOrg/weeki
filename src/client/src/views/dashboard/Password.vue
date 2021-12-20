@@ -18,7 +18,6 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
 import WeekiPasswordInput from "@/components/elements/WeekiPasswordInput.vue"
 import WeekiButton from "@/components/elements/WeekiButton.vue"
 import {showToast, Types} from "@/toastManager";
@@ -52,7 +51,6 @@ import {showToast, Types} from "@/toastManager";
 
   // Page Components
   components: {
-    WeekiTextInput,
     WeekiPasswordInput,
     WeekiButton
   },

@@ -1,0 +1,154 @@
+#newspaper
+  .aStyle
+    text-decoration: none
+    color: black
+
+  .newspaper-options
+    visibility: hidden
+
+  .text-align-center
+    text-align: center
+
+  .text-align-start
+    text-align: left
+
+  .dropdown-style
+    top: 12px
+    right: 15px
+    min-width: 100px
+    min-height: 70px
+    width: 120px
+    height: 70px
+    border: none
+    box-shadow: 0 3px 6px #0000001A
+    border-radius: 4px
+
+    button
+      font-size: 13px
+
+      img
+        margin-right: 9px !important
+
+  .news-inputs
+    box-shadow: none !important
+    border: 1px solid #E4E4E4
+
+  .news-buttons
+    background-color: #68B64D
+    box-shadow: 0 3px 10px #00000029
+    border-radius: 4px
+    color: white
+    font-size: 16px
+
+  .newspaper-notExist
+    padding: 200px 20px
+
+    > p
+      color: #6E6E6E
+      font-size: 14px
+
+    > button
+      background: #68b64d 0 0 no-repeat padding-box
+      border-radius: 4px
+      color: #fff
+      width: 130px
+      height: 40px
+
+  .newspaper-exist
+    > div:first-child
+      > p
+        font-weight: bolder
+        font-size: 18px
+
+      > button
+        border: 2px #68B64D solid
+        color: #68B64D
+
+    div.desktop-mode
+      div.col-3
+        > div
+          width: 100%
+
+          > a
+            @extend .aStyle
+
+            > p
+              font-size: 14px
+              text-overflow: ellipsis
+              overflow: hidden
+              width: auto
+              white-space: nowrap
+              text-align: center
+
+            img
+              width: 80px
+              height: 80px
+              border-radius: 50%
+
+      div:hover
+        background-color: white
+
+      div:hover .newspaper-options
+        visibility: visible
+
+    > div.mobile-mode
+      display: none
+
+      > .row
+        > div
+          > a:last-child
+            color: black
+            font-size: 16px
+            text-overflow: ellipsis
+            overflow: hidden
+            width: auto
+            white-space: nowrap
+            text-align: left
+
+          > a:first-child
+            img
+              width: 60px
+              height: 60px
+              border-radius: 50%
+              margin-right: 15px
+
+      div:hover
+        background-color: white
+
+  @media only screen and (max-width: 880px)
+
+    > #newspaper_layout_base
+      margin-right: 0 !important
+      margin-left: 0 !important
+
+      > .newspaper-exist
+        > div:first-child
+          padding: 0 25px
+
+        > div.desktop-mode
+          display: none
+
+        > div.mobile-mode
+          display: block
+
+  @media only screen and (max-width: 576px)
+    > .newspaper-exist
+      > div.mobile-mode
+        > div
+          > a
+            > div
+              p
+                width: 200px !important
+                font-size: 15px
+
+              img
+                width: 40px!important
+                height: 40px!important
+
+
+  @media only screen and (max-width: 350px)
+    > .newspaper-exist
+
+      > div:first-child
+        p
+          font-size: 15px!important
