@@ -3,6 +3,7 @@ package org.yastech.weeki.data
 import org.springframework.stereotype.Service
 import org.yastech.weeki.model.*
 import org.yastech.weeki.service.UserService
+import org.yastech.weeki.table.Product
 import org.yastech.weeki.table.User
 import reactor.core.publisher.Flux
 
@@ -12,6 +13,25 @@ class SecureGenerator
     private var userService: UserService
 )
 {
+    private fun getCompany(publisher: String, owner: String): String?
+    {
+        return if (publisher == owner)
+        {
+            userService.get(publisher).name
+        }
+        else
+        {
+            if (userService.get(publisher).role == USERS.NORMAL_USER)
+            {
+                null
+            }
+            else
+            {
+                userService.get(owner).name
+            }
+        }
+    }
+
     fun generateSecureUser(user: User): SecureUser
     {
         return SecureUser (
@@ -83,6 +103,55 @@ class SecureGenerator
                     }
                 },
                 it.role
+            )
+        }
+    }
+
+    fun generateProfileCard(products: Flux<Product>): Flux<ProductCard>
+    {
+        return products.map {
+
+            val user = userService.get(it.publisher!!)
+
+            val seller = if (it.publisher == it.owner)
+            {
+                null
+            }
+            else
+            {
+                "${user.firstname} ${user.lastname}"
+            }
+
+            val company = when(user.role)
+            {
+                USERS.NORMAL_USER -> {
+                    null
+                }
+                USERS.EMPLOYEE -> {
+                    userService.get(it.owner!!).name
+                }
+                else -> {
+                    user.name
+                }
+            }
+
+            ProductCard(
+                it.id!!,
+                it.type,
+                it.family,
+                it.country,
+                it.city,
+                it.location,
+                it.code,
+                it.grade,
+                it.packing,
+                it.amount,
+                it.ppk,
+                if (it.images!!.isEmpty()) null else it.images!![0],
+                it.bs,
+                it.description,
+                seller,
+                company
             )
         }
     }

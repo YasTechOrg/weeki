@@ -28,6 +28,7 @@
     "vue-router": "^4.0.0-0",
     "vue-toastification": "^2.0.0-rc.1",
     "vue3-carousel": "^0.1.25",
+    "vue3-dropzone": "^0.0.7",
     "vuex": "^4.0.0-0",
     "vuex-persistedstate": "^4.1.0",
     "webstomp-client": "^1.2.6"

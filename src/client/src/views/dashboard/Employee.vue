@@ -239,6 +239,7 @@ import WeekiCheckBox from "@/components/elements/WeekiCheckBox.vue"
         date_of_births: true,
         game: true
       },
+
       profileModalUser: {},
       profileModalCompany: {},
       profileModalStars: null

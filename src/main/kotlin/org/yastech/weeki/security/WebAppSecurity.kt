@@ -65,6 +65,7 @@ class WebAppSecurity
                 "/api/rest/notifications/**",
                 "/api/rest/tasks/**",
                 "/api/rest/employee/**",
+                "/api/rest/product/**"
             ).authenticated()
 
         // APPLY AUTH FILTER
