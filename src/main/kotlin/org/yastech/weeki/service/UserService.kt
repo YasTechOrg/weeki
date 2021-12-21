@@ -28,6 +28,8 @@ class UserService
 
         user.notifications = mutableListOf()
 
+        user.newspapers = mutableListOf()
+
         user.contacts = mutableListOf()
 
         user.rate = mutableMapOf()
