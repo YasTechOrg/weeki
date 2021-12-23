@@ -358,4 +358,5 @@ import { showToast, Types } from "@/toastManager"
 
 export default class Newspaper extends Vue {}
 </script>
+
 <style scoped src="../../assets/sass/page/newspaper.sass" lang="sass"></style>

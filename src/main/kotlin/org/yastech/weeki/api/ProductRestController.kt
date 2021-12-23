@@ -32,8 +32,7 @@ class ProductRestController
     private var jwtUtils: JWTUtils,
     private var fileService: FileService,
     private var fileUtils: FileUtils,
-    private var productService: ProductService,
-    private var secureGenerator: SecureGenerator
+    private var productService: ProductService
 )
 {
     @PostMapping("/image/{p_id}" , consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
@@ -63,13 +62,50 @@ class ProductRestController
             jwtUtils.getUserNameFromJwtToken(jwtParser.parse(request)!!)
         )
 
-        return if (user.role === USERS.EMPLOYEE)
-        {
-            secureGenerator.generateProfileCard(productService.get(user.company!!))
-        }
-        else
-        {
-            secureGenerator.generateProfileCard(productService.get(user.email))
+        val products = productService.get(if (user.role === USERS.EMPLOYEE) user.company!! else user.email)
+
+        return products.map {
+
+            val seller = if (it.publisher == it.owner)
+            {
+                null
+            }
+            else
+            {
+                "${user.firstname} ${user.lastname}"
+            }
+
+            val company = when(user.role)
+            {
+                USERS.NORMAL_USER -> {
+                    null
+                }
+                USERS.EMPLOYEE -> {
+                    userService.get(it.owner!!).name
+                }
+                else -> {
+                    user.name
+                }
+            }
+
+            ProductCard(
+                it.id!!,
+                it.type,
+                it.family,
+                it.country,
+                it.city,
+                it.location,
+                it.code,
+                it.grade,
+                it.packing,
+                it.amount,
+                it.ppk,
+                if (it.images!!.isEmpty()) null else it.images!![0],
+                it.bs,
+                it.description,
+                seller,
+                company
+            )
         }
     }
 }
