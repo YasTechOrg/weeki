@@ -22,7 +22,7 @@
 
     .col-sm-6.col-md-4
 
-      WeekiNormalDropDown( name="type" :list="['dobd', 'domdmo']" label="Type Of Product"  )
+      WeekiNormalDropDown( name="type" :list="['dobd', 'domdmo']" label="Type Of Product" )
 
     .col-sm-6.col-md-4
 

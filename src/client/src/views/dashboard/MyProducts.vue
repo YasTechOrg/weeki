@@ -9,6 +9,8 @@
     img( src="../../assets/animations/main_loader.svg" alt="Loading..." )
 
 
+
+
 </template>
 
 <script lang="ts">

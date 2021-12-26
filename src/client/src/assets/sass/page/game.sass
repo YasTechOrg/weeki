@@ -1,0 +1,81 @@
+#game
+  p:first-child
+    font-weight: bolder
+    font-size: 18px
+
+  .desktop-mode
+    div.col-3 > div
+      max-width: 300px
+      min-width: 200px
+
+      a
+        img
+          width: 80px
+          height: 80px
+          border-radius: 50%
+
+        p
+          font-size: 14px
+          text-overflow: ellipsis
+          overflow: hidden
+          width: 200px
+          white-space: nowrap
+          text-align: center
+
+
+      div:hover
+        background-color: white
+
+  .mobile-mode
+    display: none
+
+    div:hover
+      background-color: white
+
+    div
+      a:hover
+        background-color: white
+
+        div
+          img
+            width: 60px
+            height: 60px
+            border-radius: 50%
+            margin-right: 15px
+
+          p
+            color: black
+            font-size: 16px
+            text-overflow: ellipsis
+            overflow: hidden
+            width: 400px !important
+            white-space: nowrap
+            text-align: left
+
+@media only screen and (max-width: 1069px)
+  #game
+    .desktop-mode > div.col-3 > div
+      max-width: 200px
+      min-width: 150px
+
+
+    .desktop-mode > div.col-3 > div > a > p
+      width: 150px
+
+
+@media only screen and (max-width: 880px)
+
+  #game
+    margin-right: 0 !important
+    margin-left: 0 !important
+
+    p:first-child
+      padding-left: 20px
+
+    .desktop-mode
+      display: none
+
+    .mobile-mode
+      display: block
+
+
