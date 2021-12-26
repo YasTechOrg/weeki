@@ -11,7 +11,7 @@
     WeekiSearchInput.col-sm-12( placeholder="Search" v-model:value="productsSearch" )
 
     .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts" :key="item" )
-      ProductCardComponents( :product="item" )
+      ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
 
 </template>
 
@@ -51,16 +51,28 @@ import { mapGetters } from "vuex"
         break
     }
 
-    axios
-        .get("/api/rest/product/get", {
-          headers: {
-            "_csrf" : getToken() as any,
-            "Authorization": this.getAuth
-          }
-        })
+    this.getProducts()
+  },
 
-        .then(value => this.products = value.data)
-        .catch(reason => console.log(reason))
+  // Page Methods
+  methods: {
+
+    // Get Products
+    getProducts()
+    {
+      this.products = null
+
+      axios
+          .get("/api/rest/product/get", {
+            headers: {
+              "_csrf" : getToken() as any,
+              "Authorization": this.getAuth
+            }
+          })
+
+          .then(value => this.products = value.data)
+          .catch(reason => console.log(reason))
+    }
   },
 
   // Page Computed Variables

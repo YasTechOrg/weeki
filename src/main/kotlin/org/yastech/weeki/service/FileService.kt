@@ -57,4 +57,9 @@ class FileService
         val file: GridFSFile? = reactiveGridFsOperations.findOne(Query(Criteria.where("filename").`is`(id))).block()
         return file?.filename?.let { reactiveGridFsOperations.getResource(it).block() }
     }
+
+    fun removeProductImage(id: String)
+    {
+        reactiveGridFsOperations.delete(Query(Criteria.where("filename").`is`(id))).subscribe()
+    }
 }

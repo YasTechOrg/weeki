@@ -7,6 +7,7 @@ import org.yastech.weeki.data.USERS
 import org.yastech.weeki.table.Product
 import org.yastech.weeki.table.ProductRepository
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Service
 class ProductService
@@ -63,5 +64,15 @@ class ProductService
     fun get(id: String): Flux<Product>
     {
         return repository.findAllByOwner(id)
+    }
+
+    fun getById(id: String): Product
+    {
+        return repository.findById(id).block()!!
+    }
+
+    fun delete(id: String)
+    {
+        repository.deleteById(id).subscribe()
     }
 }

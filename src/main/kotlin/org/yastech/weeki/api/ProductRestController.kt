@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.yastech.weeki.data.FileUtils
 import org.yastech.weeki.data.JWTParser
-import org.yastech.weeki.data.SecureGenerator
 import org.yastech.weeki.data.USERS
 import org.yastech.weeki.model.ProductCard
 import org.yastech.weeki.security.JWTUtils
@@ -107,5 +106,20 @@ class ProductRestController
                 company
             )
         }
+    }
+
+    @PostMapping("/remove")
+    fun remove(request: HttpServletRequest, @RequestParam id: String)
+    {
+        val product = productService.getById(id)
+
+        if (product.images!!.isNotEmpty())
+        {
+            product.images!!.forEach {
+                fileService.removeProductImage(it)
+            }
+        }
+
+        productService.delete(id)
     }
 }
