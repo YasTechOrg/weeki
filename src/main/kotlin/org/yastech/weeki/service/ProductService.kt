@@ -1,6 +1,7 @@
 package org.yastech.weeki.service
 
 import org.springframework.stereotype.Service
+import org.yastech.weeki.data.HexConvertor
 import org.yastech.weeki.data.ProductGenerator
 import org.yastech.weeki.data.USERS
 import org.yastech.weeki.table.Product
@@ -13,15 +14,16 @@ class ProductService
     private var repository: ProductRepository,
     private var productGenerator: ProductGenerator,
     private var userService: UserService,
+    private var hexConvertor: HexConvertor
 )
 {
     fun add(product: Product, publisher: String): String
     {
-        var id = "product_${publisher}_${productGenerator.generatePID()}"
+        var id = "product_${hexConvertor.encode(publisher)}_${productGenerator.generatePID()}"
 
         while (exits(id))
         {
-            id = "product_${publisher}_${productGenerator.generatePID()}"
+            id = "product_${hexConvertor.encode(publisher)}_${productGenerator.generatePID()}"
         }
 
         product.id = id
