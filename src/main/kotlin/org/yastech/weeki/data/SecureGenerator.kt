@@ -107,55 +107,6 @@ class SecureGenerator
         }
     }
 
-    fun generateProfileCard(products: Flux<Product>): Flux<ProductCard>
-    {
-        return products.map {
-
-            val user = userService.get(it.publisher!!)
-
-            val seller = if (it.publisher == it.owner)
-            {
-                null
-            }
-            else
-            {
-                "${user.firstname} ${user.lastname}"
-            }
-
-            val company = when(user.role)
-            {
-                USERS.NORMAL_USER -> {
-                    null
-                }
-                USERS.EMPLOYEE -> {
-                    userService.get(it.owner!!).name
-                }
-                else -> {
-                    user.name
-                }
-            }
-
-            ProductCard(
-                it.id!!,
-                it.type,
-                it.family,
-                it.country,
-                it.city,
-                it.location,
-                it.code,
-                it.grade,
-                it.packing,
-                it.amount,
-                it.ppk,
-                if (it.images!!.isEmpty()) null else it.images!![0],
-                it.bs,
-                it.description,
-                seller,
-                company
-            )
-        }
-    }
-
     fun generateSecureUserByFlux(users: Flux<User>): Flux<SecureUser>
     {
         return users.map {

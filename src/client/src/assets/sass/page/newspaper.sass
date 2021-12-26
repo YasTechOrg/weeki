@@ -1,33 +1,31 @@
 #newspaper
-  .aStyle
-    text-decoration: none
-    color: black
 
   .newspaper-options
     visibility: hidden
 
-  .text-align-center
-    text-align: center
+    ul
+      box-shadow: 0 0 6px #0000001a!important
+      border-radius: 0 0 4px 4px!important
+      border: none!important
 
-  .text-align-start
-    text-align: left
+      > li
 
-  .dropdown-style
-    top: 12px
-    right: 15px
-    min-width: 100px
-    min-height: 70px
-    width: 120px
-    height: 70px
-    border: none
-    box-shadow: 0 3px 6px #0000001A
-    border-radius: 4px
+        > a
+          line-height: 15px!important
 
-    button
-      font-size: 13px
+          > span
+            color: #A0A0A0
 
-      img
-        margin-right: 9px !important
+        > a.active
+          background-color: unset!important
+          color: #53933C!important
+
+          > span
+            color: #53933C!important
+
+        > a:active
+          background-color: unset!important
+          color: #53933C!important
 
   .news-inputs
     box-shadow: none !important
@@ -55,22 +53,20 @@
       height: 40px
 
   .newspaper-exist
-    > div:first-child
-      > p
-        font-weight: bolder
-        font-size: 18px
 
-      > button
-        border: 2px #68B64D solid
-        color: #68B64D
+    > div:first-child > p
+      font-weight: bolder
+      font-size: 18px
 
     div.desktop-mode
+
       div.col-3
+        transition: 0.2s
+
         > div
           width: 100%
 
           > a
-            @extend .aStyle
 
             > p
               font-size: 14px
@@ -94,61 +90,62 @@
     > div.mobile-mode
       display: none
 
-      > .row
-        > div
-          > a:last-child
-            color: black
-            font-size: 16px
-            text-overflow: ellipsis
-            overflow: hidden
-            width: auto
-            white-space: nowrap
-            text-align: left
+      > .row > div
 
-          > a:first-child
-            img
-              width: 60px
-              height: 60px
-              border-radius: 50%
-              margin-right: 15px
+        > a:last-child
+          color: black
+          font-size: 16px
+          text-overflow: ellipsis
+          overflow: hidden
+          width: auto
+          white-space: nowrap
+          text-align: left
+
+        > a:first-child
+
+          img
+            width: 60px
+            height: 60px
+            border-radius: 50%
+            margin-right: 15px
 
       div:hover
         background-color: white
 
-  @media only screen and (max-width: 880px)
+@media only screen and (max-width: 880px)
 
-    > #newspaper_layout_base
-      margin-right: 0 !important
-      margin-left: 0 !important
+  #newspaper
+    margin-right: 0 !important
+    margin-left: 0 !important
 
-      > .newspaper-exist
-        > div:first-child
-          padding: 0 25px
-
-        > div.desktop-mode
-          display: none
-
-        > div.mobile-mode
-          display: block
-
-  @media only screen and (max-width: 576px)
-    > .newspaper-exist
-      > div.mobile-mode
-        > div
-          > a
-            > div
-              p
-                width: 200px !important
-                font-size: 15px
-
-              img
-                width: 40px!important
-                height: 40px!important
-
-
-  @media only screen and (max-width: 350px)
     > .newspaper-exist
 
       > div:first-child
+        padding: 0 25px
+
+      > div.desktop-mode
+        display: none
+
+      > div.mobile-mode
+        display: block
+
+  @media only screen and (max-width: 576px)
+
+    > .newspaper-exist
+
+      > div.mobile-mode > div > a > div
+
         p
-          font-size: 15px!important
+          width: 200px !important
+          font-size: 15px
+
+        img
+          width: 40px!important
+          height: 40px!important
+
+  @media only screen and (max-width: 350px)
+
+    > .newspaper-exist > div:first-child
+
+      p
+        font-size: 15px!important

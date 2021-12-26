@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.yastech.weeki.data.USERS
+import org.yastech.weeki.model.Newspaper
 import org.yastech.weeki.model.Notification
 import org.yastech.weeki.model.Task
 import reactor.core.publisher.Flux
@@ -28,6 +29,7 @@ data class User
     var name: String?,
     var tasks: MutableList<Task>?,
     var notifications: MutableList<Notification>?,
+    var newspapers: MutableList<Newspaper>?,
     var socketId: String?,
     var access: MutableList<String>?,
     var accepted: Boolean?,

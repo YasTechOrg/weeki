@@ -2,12 +2,16 @@
 
 #myProducts
 
-  WeekiSearchInput( placeholder="Search" v-model:value="productsSearch" )
-
   .load.d-flex.align-items-center.justify-content-center( v-if="products == null" )
 
     img( src="../../assets/animations/main_loader.svg" alt="Loading..." )
 
+  .list.pt-12.row.m-0( v-else )
+
+    WeekiSearchInput.col-sm-12( placeholder="Search" v-model:value="productsSearch" )
+
+    .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts" :key="item" )
+      ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
 
 
 
@@ -17,6 +21,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { showToast, Types } from "@/toastManager"
 import WeekiSearchInput from "@/components/elements/WeekiSearchInput.vue"
+import ProductCardComponents from "@/components/components/ProductCardComponents.vue"
 import axios from "axios"
 import { getToken } from "@/csrfManager"
 import { mapGetters } from "vuex"
@@ -25,7 +30,8 @@ import { mapGetters } from "vuex"
 
   // Page Components
   components: {
-    WeekiSearchInput
+    WeekiSearchInput,
+    ProductCardComponents
   },
 
   // Page Variables
@@ -47,16 +53,28 @@ import { mapGetters } from "vuex"
         break
     }
 
-    axios
-        .get("/api/rest/product/get", {
-          headers: {
-            "_csrf" : getToken() as any,
-            "Authorization": this.getAuth
-          }
-        })
+    this.getProducts()
+  },
 
-        .then(value => this.products = value.data)
-        .catch(reason => console.log(reason))
+  // Page Methods
+  methods: {
+
+    // Get Products
+    getProducts()
+    {
+      this.products = null
+
+      axios
+          .get("/api/rest/product/get", {
+            headers: {
+              "_csrf" : getToken() as any,
+              "Authorization": this.getAuth
+            }
+          })
+
+          .then(value => this.products = value.data)
+          .catch(reason => console.log(reason))
+    }
   },
 
   // Page Computed Variables
@@ -70,9 +88,10 @@ import { mapGetters } from "vuex"
     // Get Filtered New Employees
     filteredProducts()
     {
-      return this.new_employee.filter((el) =>
+      return this.products.filter((el) =>
       {
-        return (el["firstname"] + el["lastname"]).toLowerCase().indexOf(this.employeeSearch.toLowerCase()) !== -1
+        const query = `${el.type}, ${el.family}, ${el.city},  ${el.country}, ${el.code}, ${el.grade}, ${el.amount}, ${el.ppk}`
+        return (query).toLowerCase().indexOf(this.productsSearch.toLowerCase()) !== -1
       })
     },
   }

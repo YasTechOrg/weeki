@@ -65,8 +65,11 @@ class WebAppSecurity
                 "/api/rest/notifications/**",
                 "/api/rest/tasks/**",
                 "/api/rest/employee/**",
-                "/api/rest/product/**"
+                "/api/rest/product/**",
+                "/api/rest/newspaper/**"
             ).authenticated()
+
+            .antMatchers("/api/rest/cdn/product/images/**").permitAll()
 
         // APPLY AUTH FILTER
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)

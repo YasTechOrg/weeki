@@ -1,10 +1,12 @@
 package org.yastech.weeki.service
 
 import com.mongodb.BasicDBObject
+import com.mongodb.client.gridfs.model.GridFSFile
 import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsOperations
+import org.springframework.data.mongodb.gridfs.ReactiveGridFsResource
 import org.springframework.stereotype.Service
 import org.yastech.weeki.data.HexConvertor
 import org.yastech.weeki.data.ProductGenerator
@@ -48,5 +50,16 @@ class FileService
     fun exitsProductImage(id: String): Boolean
     {
         return reactiveGridFsOperations.findOne(Query(Criteria.where("filename").`is`(id))).block() !== null
+    }
+
+    fun getProductImage(id: String): ReactiveGridFsResource?
+    {
+        val file: GridFSFile? = reactiveGridFsOperations.findOne(Query(Criteria.where("filename").`is`(id))).block()
+        return file?.filename?.let { reactiveGridFsOperations.getResource(it).block() }
+    }
+
+    fun removeProductImage(id: String)
+    {
+        reactiveGridFsOperations.delete(Query(Criteria.where("filename").`is`(id))).subscribe()
     }
 }

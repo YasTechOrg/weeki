@@ -1,13 +1,8 @@
 package org.yastech.weeki.api
 
 import org.springframework.web.bind.annotation.*
-import org.yastech.weeki.data.JWTParser
-import org.yastech.weeki.data.SecureGenerator
-import org.yastech.weeki.data.USERS
-import org.yastech.weeki.model.MoreSecureUser
-import org.yastech.weeki.model.SecureContact
-import org.yastech.weeki.model.SecureUser
-import org.yastech.weeki.model.SellerDetail
+import org.yastech.weeki.data.*
+import org.yastech.weeki.model.*
 import org.yastech.weeki.security.JWTUtils
 import org.yastech.weeki.service.UserService
 import reactor.core.publisher.Flux
@@ -24,6 +19,8 @@ class AccountRestController
     private var jwtParser: JWTParser,
     private var secureGenerator: SecureGenerator,
     private var jwtUtils: JWTUtils,
+    private var hexConvertor: HexConvertor,
+    private var productGenerator: ProductGenerator
 )
 {
     @GetMapping("/user/get")
@@ -51,6 +48,31 @@ class AccountRestController
     fun getAllCompanies(): Flux<MoreSecureUser>
     {
         return secureGenerator.generateMoreSecureUserByFlux(userService.getCompanies())
+    }
+
+    @GetMapping("/newspapers/self")
+    fun getSelfNewspapers(request: HttpServletRequest): Flux<Newspaper>
+    {
+        val user = userService.get(
+            jwtUtils.getUserNameFromJwtToken(jwtParser.parse(request)!!)
+        )
+
+        return user.newspapers!!.toFlux()
+    }
+
+    @PostMapping("/newspapers/add")
+    fun addNewspaper(request: HttpServletRequest, @RequestParam name: String, @RequestParam url: String)
+    {
+        val user = userService.get(
+            jwtUtils.getUserNameFromJwtToken(jwtParser.parse(request)!!)
+        )
+        user.newspapers!!.add(Newspaper(
+            "newspaper-${hexConvertor.encode(user.email)}-${productGenerator.generatePID()}",
+            name,
+            url
+        ))
+
+        userService.update(user)
     }
 
     @GetMapping("/sd/{id}")

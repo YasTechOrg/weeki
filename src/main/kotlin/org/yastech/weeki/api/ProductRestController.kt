@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.yastech.weeki.data.FileUtils
 import org.yastech.weeki.data.JWTParser
-import org.yastech.weeki.data.SecureGenerator
 import org.yastech.weeki.data.USERS
 import org.yastech.weeki.model.ProductCard
 import org.yastech.weeki.security.JWTUtils
@@ -32,8 +31,7 @@ class ProductRestController
     private var jwtUtils: JWTUtils,
     private var fileService: FileService,
     private var fileUtils: FileUtils,
-    private var productService: ProductService,
-    private var secureGenerator: SecureGenerator
+    private var productService: ProductService
 )
 {
     @PostMapping("/image/{p_id}" , consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
@@ -63,13 +61,65 @@ class ProductRestController
             jwtUtils.getUserNameFromJwtToken(jwtParser.parse(request)!!)
         )
 
-        return if (user.role === USERS.EMPLOYEE)
-        {
-            secureGenerator.generateProfileCard(productService.get(user.company!!))
+        val products = productService.get(if (user.role === USERS.EMPLOYEE) user.company!! else user.email)
+
+        return products.map {
+
+            val seller = if (it.publisher == it.owner)
+            {
+                null
+            }
+            else
+            {
+                "${user.firstname} ${user.lastname}"
+            }
+
+            val company = when(user.role)
+            {
+                USERS.NORMAL_USER -> {
+                    null
+                }
+                USERS.EMPLOYEE -> {
+                    userService.get(it.owner!!).name
+                }
+                else -> {
+                    user.name
+                }
+            }
+
+            ProductCard(
+                it.id!!,
+                it.type,
+                it.family,
+                it.country,
+                it.city,
+                it.location,
+                it.code,
+                it.grade,
+                it.packing,
+                it.amount,
+                it.ppk,
+                if (it.images!!.isEmpty()) null else it.images!![0],
+                it.bs,
+                it.description,
+                seller,
+                company
+            )
         }
-        else
+    }
+
+    @PostMapping("/remove")
+    fun remove(request: HttpServletRequest, @RequestParam id: String)
+    {
+        val product = productService.getById(id)
+
+        if (product.images!!.isNotEmpty())
         {
-            secureGenerator.generateProfileCard(productService.get(user.email))
+            product.images!!.forEach {
+                fileService.removeProductImage(it)
+            }
         }
+
+        productService.delete(id)
     }
 }
