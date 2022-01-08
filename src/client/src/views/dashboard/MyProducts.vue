@@ -6,20 +6,23 @@
 
     img( src="../../assets/animations/main_loader.svg" alt="Loading..." )
 
-  .list.pt-12.row.m-0( v-else )
+  WeekiTabBar( :bottom="['For Sale', 'For Buy']" v-else )
 
-    WeekiSearchInput.col-sm-12( placeholder="Search" v-model:value="productsSearch" )
+    WeekiSearchInput( placeholder="Search" v-model:value="productsSearch" )
 
-    .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts" :key="item" )
-      ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
+    WeekiTabBarTab( btn="for_sale" :active="true" )
 
-  WeekiTabBar( :bottom="['Hello', 'Do']" )
+      .list.pt-12.row.m-0
 
-    WeekiTabBarTab( btn="hello" :active="true" )
-      | sdnodnpo
+        .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts.filter(buyerMethod)" :key="item" )
+          ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
 
-    WeekiTabBarTab( btn="do" )
-      | djwsoindo
+    WeekiTabBarTab( btn="for_buy" )
+
+      .list.pt-12.row.m-0
+
+        .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts.filter(sellerMethod)" :key="item" )
+          ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
 
 </template>
 
@@ -84,6 +87,18 @@ import { mapGetters } from "vuex"
 
           .then(value => this.products = value.data)
           .catch(reason => console.log(reason))
+    },
+
+    // Buyer Method
+    buyerMethod(value)
+    {
+      return value["bs"] === "buyer"
+    },
+
+    // Seller Method
+    sellerMethod(value)
+    {
+      return value["bs"] === "seller"
     }
   },
 
@@ -95,12 +110,12 @@ import { mapGetters } from "vuex"
       "getAuth"
     ]),
 
-    // Get Filtered New Employees
+    // Get Filtered Products
     filteredProducts()
     {
       return this.products.filter((el) =>
       {
-        const query = `${el.type}, ${el.family}, ${el.city},  ${el.country}, ${el.code}, ${el.grade}, ${el.amount}, ${el.ppk}`
+        const query = `${el.type} ${el.family} ${el.city} ${el.country} ${el.code} ${el.grade} ${el.amount} ${el.ppk}`
         return (query).toLowerCase().indexOf(this.productsSearch.toLowerCase()) !== -1
       })
     },

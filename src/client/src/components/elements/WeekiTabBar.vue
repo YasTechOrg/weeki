@@ -2,18 +2,18 @@
 
 .weekiTabBar
 
-  ul.nav.nav-pills.mb-5.row( role="tablist" )
+  ul.nav.nav-pills.row.mb-24( role="tablist" )
 
-    li.nav-item.col-4( role="presentation" v-for="(btn, index) in bottom" :key="btn" )
+    li.nav-item.col( role="presentation" v-for="(btn, index) in bottom" :key="btn" )
 
       button.nav-link(
         :class="{ 'active' : index === 0 }"
         :id="'tab_pills-' + btn + '-tab'"
         data-bs-toggle="pill"
-        :data-bs-target="'#tab_pills-' + btn.toLowerCase()"
+        :data-bs-target="'#tab_pills-' + getCorrectName(btn)"
         type="button"
         role="tab"
-        :aria-controls="'tab_pills-' + btn.toLowerCase()"
+        :aria-controls="'tab_pills-' + getCorrectName(btn)"
         aria-selected="true"
       ) {{ btn }}
 
@@ -30,6 +30,16 @@ import { Options, Vue } from 'vue-class-component'
 
   // Element Props
   props: ["bottom"],
+
+  // Element Methods
+  methods: {
+
+    // Get Correct Name
+    getCorrectName(name): string
+    {
+      return name.toLowerCase().replace(/\s/g, '_')
+    },
+  }
 })
 
 export default class WeekiTabBar extends Vue {}
