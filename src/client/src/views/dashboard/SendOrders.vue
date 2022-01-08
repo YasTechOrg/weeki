@@ -4,7 +4,7 @@
 #sendOrders
 
   form
-    .row.me-0
+    .row.me-0.send_order
       p.mb-4.fw-bold.col-12 Enter The Company Name And Product Specifications To Send The Order
 
       .col-sm-6.col-md-4
@@ -38,13 +38,22 @@
 
       .col-12
         WeekiButton.float-end( text="Send Order" @click="submitForm" )
-
+  hr
+  .orders-sent
+    .row.me-0
+      .col-md-6.col-sm-10
+        WeekiSearchInput.col-sm-12( placeholder="Search" v-model:value="productsSearch" )
+      .col-md-6.col-sm-2.d-flex
+        WeekiTextInput.flex-grow-1.me3( name="begTime" type="time" label="From" mb="false" )
+        WeekiTextInput.flex-grow-1.me3( name="endTime" type="time" label="To" mb="false" )
+        img(src="../../assets/img/icons/icon_printer.svg" alt="print" role="button")
 
 
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import WeekiSearchInput from "@/components/elements/WeekiSearchInput.vue"
 import WeekiNormalDropDown from "@/components/elements/WeekiNormalDropDown.vue"
 import WeekiOptionalDropDown from "@/components/elements/WeekiOptionalDropDown.vue"
 import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
@@ -57,6 +66,7 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
     WeekiNormalDropDown,
     WeekiOptionalDropDown,
     WeekiTextInput,
+    WeekiSearchInput,
     WeekiButton
   },
   data(){

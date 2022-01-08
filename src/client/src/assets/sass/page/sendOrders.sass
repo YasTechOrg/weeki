@@ -1,11 +1,19 @@
 #sendOrders
   form
-    .row
+    .send_order
       > p:first-child
         font-size: 16px
 
+    .orders-sent
+      .row:first-child
+
+        div:first-child > .WeekiSearchInput
+          height: 100% !important
+
+
+
   @media only screen and (max-width: 576px)
     form
-      .row
+      .send_order
         .col-12 > button
           width: 100% !important
