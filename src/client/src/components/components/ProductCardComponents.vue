@@ -144,46 +144,46 @@ import { showToast, Types } from "@/toastManager"
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes'
       })
-          .then((result) =>
-          {
-            if (result.isConfirmed)
+      .then((result) =>
+      {
+        if (result.isConfirmed)
+        {
+          Swal.fire({
+            padding: "60px",
+            width: 153,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen()
             {
-              Swal.fire({
-                padding: "60px",
-                width: 153,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen()
-                {
-                  Swal.showLoading()
-                }
-              })
-              axios.post(
-                  "/api/rest/product/remove",
-                  bodyFormData,
-                  {
-                    headers: {
-                      "_csrf" : getToken() as string,
-                      "Authorization": this.getAuth
-                    }
-                  }
-              )
-                  .then(() =>
-                  {
-                    this.$emit("doProductReload")
-                    Swal.close()
-                    showToast("System : Product removed successfully!", Types.SUCCESS)
-                  })
-                  .catch(() =>
-                  {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Oops...',
-                      text: 'Something went wrong!',
-                    })
-                  })
+              Swal.showLoading()
             }
           })
+          axios.post(
+              "/api/rest/product/remove",
+              bodyFormData,
+              {
+                headers: {
+                  "_csrf" : getToken() as string,
+                  "Authorization": this.getAuth
+                }
+              }
+          )
+          .then(() =>
+          {
+            this.$emit("doProductReload")
+            Swal.close()
+            showToast("System : Product removed successfully!", Types.SUCCESS)
+          })
+          .catch(() =>
+          {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
+          })
+        }
+      })
     }
   }
 })

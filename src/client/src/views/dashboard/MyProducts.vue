@@ -13,7 +13,13 @@
     .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts" :key="item" )
       ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
 
+  WeekiTabBar( :bottom="['Hello', 'Do']" )
 
+    WeekiTabBarTab( btn="hello" :active="true" )
+      | sdnodnpo
+
+    WeekiTabBarTab( btn="do" )
+      | djwsoindo
 
 </template>
 
@@ -22,6 +28,8 @@ import { Options, Vue } from 'vue-class-component'
 import { showToast, Types } from "@/toastManager"
 import WeekiSearchInput from "@/components/elements/WeekiSearchInput.vue"
 import ProductCardComponents from "@/components/components/ProductCardComponents.vue"
+import WeekiTabBar from "@/components/elements/WeekiTabBar.vue"
+import WeekiTabBarTab from "@/components/elements/WeekiTabBarTab.vue"
 import axios from "axios"
 import { getToken } from "@/csrfManager"
 import { mapGetters } from "vuex"
@@ -31,7 +39,9 @@ import { mapGetters } from "vuex"
   // Page Components
   components: {
     WeekiSearchInput,
-    ProductCardComponents
+    ProductCardComponents,
+    WeekiTabBar,
+    WeekiTabBarTab
   },
 
   // Page Variables
