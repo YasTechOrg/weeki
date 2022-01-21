@@ -48,7 +48,8 @@
           WeekiDateInput.me-3.flex-grow-1( name="begdate" placeholder="From" mb="false" )
           WeekiDateInput.flex-grow-1( name="enddate" placeholder="To" mb="false" )
           img.print-icon.ms-5.me-2(src="../../assets/img/icons/icon_printer.svg" alt="print" role="button" @click="printPage()")
-          img.calendar-icon(src="../../assets/img/icons/icon_calendar.svg" alt="calendar" role="button")
+          img.calendar-icon(src="../../assets/img/icons/icon_calendar.svg" alt="calendar" role="button" data-bs-target="#WeekiNormalModal_pick_time"
+            data-bs-toggle="modal")
 
         .orders-table.mt-4
 
@@ -56,9 +57,9 @@
             .w-24.p-2.d-flex.align-items-center.justify-content-center
               p.mb-0.text-center Product Details
             .w-8.p-2.d-flex.align-items-center.justify-content-center
-              p.mb-0 Packaging
+              p.mb-0.text-ellipsis Packaging
             .w-12.p-2.d-flex.align-items-center.justify-content-center
-              p.mb-0 Amount(kg)
+              p.mb-0.text-ellipsis Amount(kg)
             .w-8.p-2.d-flex.align-items-center.justify-content-center
               p.mb-0.text-center Price Per Kg(€)
             .w-16.p-2.d-flex.align-items-center.justify-content-center
@@ -131,11 +132,59 @@
                   data-bs-toggle="modal")
 
 
+
+
+
+        .orders-carts.mt-4
+          .order-cart.p-3
+            p Carrots, Anabella, Tehran, 300-400, A
+
+            .orders-carts-row.d-flex.justify-content-between
+              p.mb-3.orders-cart-title Status
+              p.mb-3.pt-1.pb-1.pe-2.ps-2.canceled-order canceled
+
+            .orders-carts-row.d-flex.justify-content-between
+              p.mb-3.orders-cart-title Packaging
+              p.mb-3.text-ellipsis Box
+
+            .orders-carts-row.d-flex.justify-content-between
+              p.mb-3.orders-cart-title Amount
+              p.mb-3 6000(Kg)
+
+            .orders-carts-row.d-flex.justify-content-between
+              p.mb-3.orders-cart-title Price Per Kg
+              p.mb-3 10(€)
+
+            .orders-carts-row.d-flex.justify-content-between
+              p.mb-3.orders-cart-title Company Name
+              p.mb-3.text-ellipsis Berlin Eugm
+
+            .orders-carts-row.justify-content-between.more-less-rows
+              p.mb-3.orders-cart-title.text-center Date & Time #[br] Product Sent
+              p.mb-3.text-center 12/16/2020 #[br] 08:00
+
+            .orders-carts-row.justify-content-between.more-less-rows
+              p.mb-3.orders-cart-title.text-center Date & Time #[br] Product Sent
+              p.mb-3.text-center 12/16/2020 #[br] 08:00
+
+            .orders-carts-row.more-less-rows.flex-column
+              p.mb-2.orders-cart-title Description
+              p.mb-3 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+
+            .orders-carts-row
+              p#more_details.text-center(role="button" @click="moreLess('flex','none','block')") More Details
+              p#less_details.text-center(role="button" @click="moreLess('none','block','none')") Less Details
+
+
+
+
+
+
 WeekiNormalModal(
   name="order_details"
   title="Order Details"
   max-width="900px"
-  max-height="73%"
+  max-height="75%"
   scrollable="true"
   mfs="true"
   height="unset"
@@ -181,6 +230,28 @@ WeekiNormalModal(
   p.grey-text.mt-5.mb-2 Description
   p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
 
+
+
+
+WeekiNormalModal.datePicker(
+  name="pick_time"
+  title="Pick Time"
+  max-width="80%"
+  max-height="75%"
+  scrollable="false"
+  mfs="true"
+  height="unset"
+)
+
+  .d-flex.dateInputs
+    WeekiDateInput.me-2.flex-grow-1( name="begdate" placeholder="From" mb="false" v-bind:value="range.start")
+    WeekiDateInput.ms-2.flex-grow-1( name="enddate" placeholder="To" mb="false" v-bind:value="range.end" )
+
+  .mt-3
+    DatePicker( v-model="range" color="green" is-range)
+
+  WeekiButton( text="Confirm" type="submit")
+
 </template>
 
 <script lang="ts">
@@ -194,6 +265,7 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
 import WeekiTabBar from "@/components/elements/WeekiTabBar.vue"
 import WeekiTabBarTab from "@/components/elements/WeekiTabBarTab.vue"
 import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
+import { Calendar, DatePicker } from 'v-calendar'
 
 @Options({
 
@@ -207,16 +279,31 @@ import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
     WeekiTabBar,
     WeekiTabBarTab,
     WeekiDateInput,
-    WeekiNormalModal
+    WeekiNormalModal,
+    Calendar,
+    DatePicker
   },
   data(){
     return{
       allCompanies: [],
+      // today:new Date().toLocaleDateString(),
+      range: {
+        start: 2022-10-1,
+        end: 2022-10-10
+      },
     }
   },
   methods : {
     printPage() {
       window.print()
+    },
+    moreLess(item,more,less){
+      let items = document.getElementsByClassName("more-less-rows")
+      document.getElementById("more_details")!.style.display = more
+      document.getElementById("less_details")!.style.display = less
+      for (let i = 0; i < 3; i++) {
+        (items[i] as HTMLDivElement).style.display = item
+      }
     }
   }
 })
@@ -225,3 +312,4 @@ export default class SendOrders extends Vue {}
 </script>
 
 <style scoped src="../../assets/sass/page/sendOrders.sass" lang="sass"></style>
+<style scoped src="../../assets/sass/widget/dataPicker.sass" lang="sass"></style>

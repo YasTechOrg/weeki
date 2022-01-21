@@ -60,6 +60,28 @@
   color: #68B64D !important
   border-radius: 17px
 
+.orders-carts
+  display: none
+  box-shadow: 0 3px 10px #00000029
+  border-radius: 4px
+  background-color: white
+
+  .orders-carts-row
+    .orders-cart-title
+      color: #6E6E6E
+
+    #less_details
+      display: none
+      color: #4CAF50
+      font-weight: bold
+
+    #more_details
+      color: #4CAF50
+      font-weight: bold
+
+  .more-less-rows
+    display: none
+
 #sendOrders
   padding-right: 12px
 
@@ -79,7 +101,8 @@
         display: none
 
 
-  @media only screen and (max-width: 800px)
+@media only screen and (max-width: 800px)
+  #sendOrders
     .orders-sent
       div:first-child
         img.print-icon
@@ -91,11 +114,19 @@
         .weekiDateInput
           max-width: 160px
 
-  @media only screen and (max-width: 576px)
-    form
-      .send_order
-        .col-12 > button
-          width: 100% !important
+  .orders-table
+    display: none
+
+  .orders-carts
+    display: block
+
+@media only screen and (max-width: 576px)
+  .weekiNormalModal
+    .weekiButton
+      width: 100% !important
+  #sendOrders
+    .weekiButton
+      width: 100% !important
 
     .orders-sent
       div:first-child
@@ -108,3 +139,13 @@
 
         .weekiDateInput
           display: none
+
+@media only screen and (max-width: 440px)
+  .datePicker
+
+    .dateInputs
+      display: block !important
+
+      .weekiDateInput
+        margin: 10px 0 !important
+
