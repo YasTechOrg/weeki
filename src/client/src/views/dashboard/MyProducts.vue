@@ -44,7 +44,7 @@ import { mapGetters } from "vuex"
     WeekiSearchInput,
     ProductCardComponents,
     WeekiTabBar,
-    WeekiTabBarTab
+    WeekiTabBarTab,
   },
 
   // Page Variables

@@ -378,6 +378,17 @@ WeekiNormalModal(
 
   WeekiButton.float-end( text="Confirm" @click="submitUserStars" )
 
+WeekiNormalModal(
+  name="product_edit"
+  title="Edit Product"
+  max-width="588px"
+  max-height="73%"
+  scrollable="true"
+  mfs="true"
+  height="unset"
+)
+  WeekiButton.float-end( text="Edit Product" )
+
 </template>
 
 <script lang="ts">
