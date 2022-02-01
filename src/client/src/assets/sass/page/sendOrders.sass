@@ -1,11 +1,151 @@
+.grey-text
+  color: #6E6E6E
+
+.w-12
+  width: 12% !important
+  border-left: 1px solid #E4E4E4
+
+.w-8
+  width: 8% !important
+  border-left: 1px solid #E4E4E4
+
+.w-16
+  width: 16% !important
+  border-left: 1px solid #E4E4E4
+
+.w-24
+  width: 24% !important
+
+.orders-table
+  box-shadow: 0 3px 10px #00000029
+  border-radius: 4px
+
+  .orders-table-header
+    background: #F5F5F5
+    font-size: 14px
+    color: #6E6E6E
+    box-shadow: 0 3px 6px #0000001A
+
+  .orders-table-body
+
+    .orders-table-row > div > p
+      font-size: 14px
+      color: black
+
+
+    .orders-table-row:nth-child(even)
+      background-color: #F5F5F5
+
+    .orders-table-row:nth-child(odd)
+      background-color: white
+
+.text-ellipsis
+  text-overflow: ellipsis
+  overflow: hidden
+  width: auto
+  white-space: nowrap
+
+.canceled-order
+  background-color: #F9CDCF
+  color: #EC5B62 !important
+  border-radius: 17px
+
+.pending-order
+  background-color: #FBDFBC
+  color: #F29423 !important
+  border-radius: 17px
+
+.sent-order
+  background-color: #D1E9C9
+  color: #68B64D !important
+  border-radius: 17px
+
+.orders-carts
+  display: none
+  box-shadow: 0 3px 10px #00000029
+  border-radius: 4px
+  background-color: white
+
+  .orders-carts-row
+    .orders-cart-title
+      color: #6E6E6E
+
+    #less_details
+      display: none
+      color: #4CAF50
+      font-weight: bold
+
+    #more_details
+      color: #4CAF50
+      font-weight: bold
+
+  .more-less-rows
+    display: none
+
 #sendOrders
+  padding-right: 12px
+
   form
-    .row
+    .send_order
       > p:first-child
         font-size: 16px
 
-  @media only screen and (max-width: 576px)
-    form
-      .row
-        .col-12 > button
+  .orders-sent
+    div:first-child
+
+      .weekiSearchInput
+        width: 40% !important
+
+
+      .calendar-icon
+        display: none
+
+
+@media only screen and (max-width: 800px)
+  #sendOrders
+    .orders-sent
+      div:first-child
+        img.print-icon
+          display: none
+
+        .weekiSearchInput
           width: 100% !important
+
+        .weekiDateInput
+          max-width: 160px
+
+  .orders-table
+    display: none
+
+  .orders-carts
+    display: block
+
+@media only screen and (max-width: 576px)
+  .weekiNormalModal
+    .weekiButton
+      width: 100% !important
+  #sendOrders
+    .weekiButton
+      width: 100% !important
+
+    .orders-sent
+      div:first-child
+        .calendar-icon
+          display: inline
+
+        .weekiSearchInput
+          padding-top: 10px
+          padding-bottom: 10px
+
+        .weekiDateInput
+          display: none
+
+@media only screen and (max-width: 440px)
+  .datePicker
+
+    .dateInputs
+      display: block !important
+
+      .weekiDateInput
+        margin: 10px 0 !important
+

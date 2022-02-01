@@ -8,8 +8,6 @@
     p.mb-0.fw-bolder( v-else ) {{ getFormattedDate }} Tasks
 
     WeekiBorderedIconButton(
-      data-bs-target="#WeekiNormalModal_tasks_add"
-      data-bs-toggle="modal"
       text="Add a Task"
       icon="add"
     )
