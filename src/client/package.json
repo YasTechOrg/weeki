@@ -23,6 +23,7 @@
     "node-schedule": "^2.0.0",
     "sockjs-client": "^1.5.2",
     "sweetalert2": "^11.1.9",
+    "terser-webpack-plugin": "^4.2.3",
     "v-calendar": "^3.0.0-alpha.6",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",

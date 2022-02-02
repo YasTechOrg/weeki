@@ -1,3 +1,5 @@
+const TerserPlugin = require("terser-webpack-plugin")
+
 module.exports = {
     runtimeCompiler: true,
     configureWebpack: {
@@ -6,7 +8,14 @@ module.exports = {
                 'balm-ui-plus': 'balm-ui/dist/balm-ui-plus.js',
                 'balm-ui-css': 'balm-ui/dist/balm-ui.css'
             }
-        }
+        },
+        optimization: {
+            minimize: true,
+            minimizer: [new TerserPlugin()],
+            splitChunks: {
+                chunks: 'all'
+            }
+        },
     },
     pages: {
         index: {
