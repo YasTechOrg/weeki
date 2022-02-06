@@ -1,9 +1,5 @@
 <template lang="pug">
 
-#loader-wrapper.d-flex.align-items-center.justify-content-center
-
-  img( src="../assets/animations/main_loader.svg" alt="Weeki" )
-
 .layout
 
   header.w-100.bg-white( v-if="layout !== 'account'" )
@@ -208,11 +204,11 @@
 
               router-link.mb-0.mt-16.text-decoration-none( to="/" ) Home
 
-              router-link.mb-0.mt-16.text-decoration-none( to="/" ) About Us
+              router-link.mb-0.mt-16.text-decoration-none( to="/about" ) About Us
 
-              router-link.mb-0.mt-16.text-decoration-none( to="/" ) Contact Us
+              router-link.mb-0.mt-16.text-decoration-none( to="/contact" ) Contact Us
 
-              router-link.mb-0.mt-16.text-decoration-none( to="/" ) FAQ
+              router-link.mb-0.mt-16.text-decoration-none( to="/faq" ) FAQ
 
             .col-6.p-0.d-flex.flex-column.justify-content-start
 
@@ -490,17 +486,11 @@ import Stomp from "webstomp-client"
           // Set Title
           document.title = to.meta.title || `${ this.$route.name } | Weeki`
 
-          // Show Loading
-          document.getElementById("loader-wrapper")!.classList.remove("h")
-
           // Disable All Schedule
           this.$store.commit("disableNotificationsSchedule")
 
           // Load Page
           await this.load()
-
-          // Hide Loading
-          document.getElementById("loader-wrapper")!.classList.add("h")
         }
       }
     },

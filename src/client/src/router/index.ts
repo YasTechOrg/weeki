@@ -1,31 +1,31 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from "@/views/surface/Home.vue"
-import Faq from "@/views/surface/Faq.vue"
-import Contact from "@/views/surface/Contact.vue"
-import About from "@/views/surface/About.vue"
-import Forgot from "@/views/account/Forgot.vue"
-import Register from "@/views/account/Register.vue"
-import Login from "@/views/account/Login.vue"
-import Dashboard from "@/views/dashboard/Dashboard.vue"
-import Employee from "@/views/dashboard/Employee.vue"
-import Messages from "@/views/dashboard/Messages.vue"
-import Planning from "@/views/dashboard/Planning.vue"
-import Email from "@/views/dashboard/Email.vue"
-import MyContacts from "@/views/dashboard/MyContacts.vue"
-import AddProducts from "@/views/dashboard/AddProducts.vue"
-import MyProducts from "@/views/dashboard/MyProducts.vue"
-import Bookmarks from "@/views/dashboard/Bookmarks.vue"
-import SendOrders from "@/views/dashboard/SendOrders.vue"
-import ReceivedOrders from "@/views/dashboard/ReceivedOrders.vue"
-import Claim from "@/views/dashboard/Claim.vue"
-import Blog from "@/views/dashboard/Blog.vue"
-import Newspaper from "@/views/dashboard/Newspaper.vue"
-import Weather from "@/views/dashboard/Weather.vue"
-import Traffic from "@/views/dashboard/Traffic.vue"
-import DateOfBirths from "@/views/dashboard/DateOfBirths.vue"
-import Game from "@/views/dashboard/Game.vue"
-import Profile from "@/views/dashboard/Profile.vue"
-import Password from "@/views/dashboard/Password.vue"
+const Home = () => import(/* webpackChunkName: "surface" */ "@/views/surface/Home.vue")
+const Faq = () => import(/* webpackChunkName: "surface" */ "@/views/surface/Faq.vue")
+const Contact = () => import(/* webpackChunkName: "surface" */ "@/views/surface/Contact.vue")
+const About = () => import(/* webpackChunkName: "surface" */ "@/views/surface/About.vue")
+const Forgot = () => import(/* webpackChunkName: "account" */ "@/views/account/Forgot.vue")
+const Register = () => import(/* webpackChunkName: "account" */ "@/views/account/Register.vue")
+const Login = () => import(/* webpackChunkName: "account" */ "@/views/account/Login.vue")
+const Dashboard = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Dashboard.vue")
+const Employee = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Employee.vue")
+const Messages = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Messages.vue")
+const Planning = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Planning.vue")
+const Email = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Email.vue")
+const MyContacts = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/MyContacts.vue")
+const AddProducts = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/AddProducts.vue")
+const MyProducts = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/MyProducts.vue")
+const Bookmarks = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Bookmarks.vue")
+const SendOrders = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/SendOrders.vue")
+const ReceivedOrders = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/ReceivedOrders.vue")
+const Claim = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Claim.vue")
+const Blog = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Blog.vue")
+const Newspaper = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Newspaper.vue")
+const Weather = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Weather.vue")
+const Traffic = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Traffic.vue")
+const DateOfBirths = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/DateOfBirths.vue")
+const Game = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Game.vue")
+const Profile = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Profile.vue")
+const Password = () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Password.vue")
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -194,7 +194,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router

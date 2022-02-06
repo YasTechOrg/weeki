@@ -21,7 +21,7 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer
     {
         registry
             .addEndpoint("/wst")
-            .setAllowedOrigins("http://localhost:8080", "http://192.168.1.38:8080")
+            .setAllowedOrigins("http://localhost:8080", "http://192.168.1.38:8080", "http://157.90.200.228:8080")
             .withSockJS()
     }
 }

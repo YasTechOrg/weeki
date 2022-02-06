@@ -294,9 +294,11 @@ import { Calendar, DatePicker } from 'v-calendar'
     }
   },
   methods : {
-    printPage() {
+    printPage()
+    {
       window.print()
     },
+
     moreLess(item,more,less){
       let items = document.getElementsByClassName("more-less-rows")
       document.getElementById("more_details")!.style.display = more
