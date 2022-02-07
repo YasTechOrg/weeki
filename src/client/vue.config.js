@@ -1,7 +1,7 @@
 const TerserPlugin = require("terser-webpack-plugin")
-const zlib = require("zlib")
+/*const zlib = require("zlib")*/
 
-module.exports = {
+module.exports = {/*
     pluginOptions: {
         compression:{
             brotli: {
@@ -22,7 +22,7 @@ module.exports = {
                 minRatio: 0.8,
             }
         }
-    },
+    },*/
     runtimeCompiler: true,
     productionSourceMap: false,
     configureWebpack: {
