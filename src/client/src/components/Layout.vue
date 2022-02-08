@@ -419,7 +419,9 @@ WeekiNormalModal(
 
       WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" )
 
-  WeekiTextArea.mb-24( label="Description" resize="false" height="200px" )
+    .col-12
+
+      WeekiTextArea.mb-24( label="Description" resize="false" height="200px" )
 
   WeekiButton.float-end( text="Edit Product" )
 
