@@ -1,0 +1,199 @@
+.tagPRed
+  color: #EC5B62
+
+.grey-text
+  color: #6E6E6E
+
+.cursor-pointer
+  cursor: pointer
+
+.w-12
+  width: 12% !important
+  border-left: 1px solid #E4E4E4
+
+.w-8
+  width: 8% !important
+  border-left: 1px solid #E4E4E4
+
+.w-16
+  width: 16% !important
+  border-left: 1px solid #E4E4E4
+
+.w-24
+  width: 24% !important
+  border-left: 1px solid #E4E4E4
+
+.orders-table
+  box-shadow: 0 3px 10px #00000029
+  border-radius: 4px
+
+  .orders-table-header
+    background: #F5F5F5
+    font-size: 14px
+    color: #6E6E6E
+    box-shadow: 0 3px 6px #0000001A
+
+  .orders-table-body
+
+    .orders-table-row > div > p
+      font-size: 14px
+      color: black
+
+
+    .orders-table-row:nth-child(even)
+      background-color: #F5F5F5
+
+    .orders-table-row:nth-child(odd)
+      background-color: white
+
+.text-ellipsis
+  text-overflow: ellipsis
+  overflow: hidden
+  width: auto
+  white-space: nowrap
+
+.canceled-order
+  background-color: #F9CDCF
+  color: #EC5B62 !important
+  border-radius: 17px
+
+.pending-order
+  background-color: #FBDFBC
+  color: #F29423 !important
+  border-radius: 17px
+
+.sent-order
+  background-color: #D1E9C9
+  color: #68B64D !important
+  border-radius: 17px
+
+.orders-carts
+  display: none
+  box-shadow: 0 3px 10px #00000029
+  border-radius: 4px
+  background-color: white
+
+  .orders-carts-row
+    .orders-cart-title
+      color: #6E6E6E
+
+  .text-button>p
+    color: #4CAF50
+    font-weight: bold
+
+
+#receivedOrders
+  .search-date-bar
+    .weekiOptionalDropDown
+      width: 40% !important
+
+    .calendar-icon
+      display: none
+
+  .selectedCompanyExist
+    display: none
+
+    .companies
+      background-color: #E4E4E4
+      border-radius: 17px
+
+      p:first-child
+        color: #6E6E6E
+
+    hr
+      color: #9d9d9d
+
+    .company-name
+      img
+        width: 40px
+        border-radius: 50%
+      p
+        font-size: 16px
+      span
+        background-color : #4CAF50
+        color: white
+        border-radius: 50%
+
+  .selectedCompanyNotExist
+    .company-orders
+      width: 100%
+      height: 50vh
+
+      > p
+        color: #6E6E6E
+
+      .company-container > div
+        background-color: #E4E4E4
+        border-radius: 24px
+
+        p
+          font-size: 12px
+
+        span
+          background-color: #4CAF50
+          font-size: 12px
+          color: white
+          border-radius: 50%
+
+        img:first-child
+          border-radius: 50%
+
+.weekiNormalModal
+  p
+    color: black
+
+  textarea
+    box-shadow: none!important
+    border: 1px solid #ced4da!important
+
+  .buttons
+    .weekiButton:first-child
+      background-color: #EC5B62!important
+
+  .order-cart
+    display: none
+    .orders-carts-row
+      color: black
+      .orders-cart-title
+        color: #6E6E6E
+
+@media only screen and (max-width: 800px)
+  #receivedOrders
+
+    .search-date-bar
+      img.print-icon
+        display: none
+
+      .weekiOptionalDropDown
+        width: 100% !important
+
+      .weekiDateInput
+        max-width: 160px
+
+    .orders-table
+      display: none
+
+    .orders-carts
+      display: block
+
+  .weekiNormalModal
+    .orders-table
+      display: block
+
+
+@media only screen and (max-width: 574px)
+
+  #receivedOrders
+    .search-date-bar
+      .calendar-icon
+        display: inline
+
+      .weekiDateInput
+        display: none
+
+  .weekiNormalModal
+    .orders-table
+      display: none
+
+    .order-cart
+      display: block

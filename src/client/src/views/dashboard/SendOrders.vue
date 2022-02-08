@@ -230,9 +230,6 @@ WeekiNormalModal(
   p.grey-text.mt-5.mb-2 Description
   p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
 
-
-
-
 WeekiNormalModal.datePicker(
   name="pick_time"
   title="Pick Time"

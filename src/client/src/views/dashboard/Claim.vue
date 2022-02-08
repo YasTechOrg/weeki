@@ -19,3 +19,5 @@ import { Options, Vue } from 'vue-class-component'
 export default class Claim extends Vue {}
 </script>
 
+<style scoped src="../../assets/sass/page/sendOrders.sass" lang="sass"></style>
+<style scoped src="../../assets/sass/widget/dataPicker.sass" lang="sass"></style>
