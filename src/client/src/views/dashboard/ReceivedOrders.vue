@@ -243,6 +243,27 @@ WeekiNormalModal(
     WeekiButton( text="Order Canceled" )
     WeekiButton( text="Order Sent" )
 
+
+
+WeekiNormalModal.datePicker(
+  name="pick_time"
+  title="Pick Time"
+  max-width="80%"
+  max-height="75%"
+  scrollable="false"
+  mfs="true"
+  height="unset"
+)
+  .d-flex.dateInputs
+    WeekiDateInput.me-2.flex-grow-1( name="begdate" placeholder="From" mb="false" v-bind:value="range.start")
+    WeekiDateInput.ms-2.flex-grow-1( name="enddate" placeholder="To" mb="false" v-bind:value="range.end" )
+
+  .mt-3
+    DatePicker( v-model="range" color="green" is-range)
+
+  WeekiButton( text="Confirm" type="submit")
+
+
 </template>
 
 <script lang="ts">
@@ -251,6 +272,7 @@ import WeekiDateInput from "@/components/elements/WeekiDateInput.vue"
 import WeekiOptionalDropDown from "@/components/elements/WeekiOptionalDropDown.vue"
 import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiButton from "@/components/elements/WeekiButton.vue"
+import { Calendar, DatePicker } from 'v-calendar'
 
 @Options({
 
@@ -259,7 +281,9 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
     WeekiDateInput,
     WeekiOptionalDropDown,
     WeekiNormalModal,
-    WeekiButton
+    WeekiButton,
+    Calendar,
+    DatePicker
   },
 
   computed : {
@@ -288,7 +312,11 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
         { email:"CompanyH@gmail.com" , name: "Company H" , logo:"icon_company.png" , new : 13 },
         { email:"CompanyI@gmail.com" , name: "Company I" , logo:"icon_company.png" , new : 13 },
         { email:"CompanyJ@gmail.com" , name: "Company J" , logo:"icon_company.png" , new : 13 },
-      ]
+      ],
+      range: {
+        start: 2022-10-1,
+        end: 2022-10-10
+      },
     }
   }
 })
