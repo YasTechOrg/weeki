@@ -263,6 +263,7 @@ const cities = require('@/assets/json/cities.json')
                       location.href = "/dashboard/products/add?res=err"
                     })
                   }
+                  else location.href = "/dashboard/products/self?res=done"
                 })
                 .catch(reason =>
                 {

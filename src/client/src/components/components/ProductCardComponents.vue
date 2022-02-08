@@ -2,9 +2,9 @@
 
 .productCardComponents
 
-  .position-relative.p_image
+  .position-relative.p_image.img_loading( ref="p_img" )
 
-    img( :src="getImage" alt="product image" )
+    img( :src="getImage" alt="product image" @load="loadImage" )
 
     .bs_badge.position-absolute
 
@@ -78,7 +78,12 @@
           alt="delete"
         )
 
-        img.cursor-pointer.ml-16( src="../../assets/img/icons/icon_edit_gray.svg" alt="edit" )
+        img.cursor-pointer.ml-16(
+          data-bs-target="#WeekiNormalModal_product_edit"
+          src="../../assets/img/icons/icon_edit_gray.svg"
+          data-bs-toggle="modal"
+          alt="edit"
+        )
 
       router-link.d-flex.align-items-center.justify-content-end.text-decoration-none(
         :to="'/single/' + product['id']"
@@ -97,6 +102,8 @@ import Swal from "sweetalert2"
 import axios from "axios"
 import { getToken } from "@/csrfManager"
 import { showToast, Types } from "@/toastManager"
+import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
+import WeekiButton from "@/components/elements/WeekiButton.vue"
 
 @Options({
 
@@ -104,6 +111,12 @@ import { showToast, Types } from "@/toastManager"
   props: ["product", "global"],
 
   // Widget Components
+  components: {
+    WeekiNormalModal,
+    WeekiButton
+  },
+
+  // Widget Computed Variables
   computed: {
 
     ...mapGetters([
@@ -184,6 +197,12 @@ import { showToast, Types } from "@/toastManager"
           })
         }
       })
+    },
+
+    // Load Image
+    loadImage()
+    {
+      this.$refs.p_img.classList.replace('img_loading', 'img_loaded')
     }
   }
 })
