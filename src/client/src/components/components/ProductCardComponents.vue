@@ -2,9 +2,9 @@
 
 .productCardComponents
 
-  .position-relative.p_image
+  .position-relative.p_image.img_loading( ref="p_img" )
 
-    img( :src="getImage" alt="product image" )
+    img( :src="getImage" alt="product image" @load="loadImage" )
 
     .bs_badge.position-absolute
 
@@ -197,6 +197,12 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
           })
         }
       })
+    },
+
+    // Load Image
+    loadImage()
+    {
+      this.$refs.p_img.classList.replace('img_loading', 'img_loaded')
     }
   }
 })

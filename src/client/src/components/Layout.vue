@@ -375,6 +375,7 @@ WeekiNormalModal(
   WeekiButton.float-end( text="Confirm" @click="submitUserStars" )
 
 WeekiNormalModal(
+  v-if="checkPage(['my_products'])"
   name="product_edit"
   title="Edit Product"
   max-width="588px"
@@ -383,6 +384,43 @@ WeekiNormalModal(
   mfs="true"
   height="unset"
 )
+
+  p.mb-24.fw-bold.text-black Carrots, Anabella, Tehran, 300-400, A
+
+  .upload_part.d-flex.justify-content-start.align-items-center.mb-20
+
+    .p_upload_card.position-relative( v-for="i in 5" :key="i" )
+
+      img( src="../assets/img/images/no_img.png" alt="product img" )
+
+      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" )
+
+    .p_upload_card.add_p
+
+      .p_card.d-flex.justify-content-center.align-items-center
+
+        img( src="../assets/img/icons/icon_plus_small_green.svg" alt="add" )
+
+  .p_detail_part.row.m-0
+
+    .col-sm-6
+
+      WeekiTextInput.mb-3( name="packing" label="Packing" auto-complete="false" )
+
+    .col-sm-6
+
+      WeekiTextInput.mb-3( name="location" label="Location" auto-complete="false" )
+
+    .col-sm-6
+
+      WeekiTextInput.mb-3( name="amount" label="Amount(kg)" auto-complete="false" type="number" )
+
+    .col-sm-6
+
+      WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" )
+
+  WeekiTextArea.mb-24( label="Description" resize="false" height="200px" )
+
   WeekiButton.float-end( text="Edit Product" )
 
 </template>
@@ -390,15 +428,17 @@ WeekiNormalModal(
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { mapGetters } from 'vuex'
-import WeekiButton from "@/components/elements/WeekiButton.vue"
-import WeekiProfile from "@/components/elements/WeekiProfile.vue"
-import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
-import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import axios from "axios"
 import { getToken } from '@/csrfManager'
 import { showToast, Types } from "@/toastManager"
 import SockJS from "sockjs-client"
 import Stomp from "webstomp-client"
+import WeekiButton from "@/components/elements/WeekiButton.vue"
+import WeekiProfile from "@/components/elements/WeekiProfile.vue"
+import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
+import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
+import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
+import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -410,7 +450,9 @@ import Stomp from "webstomp-client"
     WeekiButton,
     WeekiProfile,
     WeekiIconBtn,
-    WeekiNormalModal
+    WeekiNormalModal,
+    WeekiTextInput,
+    WeekiTextArea
   },
 
   // App Variables

@@ -149,6 +149,7 @@ select:focus,
 
 ::-webkit-scrollbar
   width: 7px!important
+  height: 8px!important
 
 ::-webkit-scrollbar-track
   background: #f1f1f1!important
@@ -157,6 +158,51 @@ select:focus,
 ::-webkit-scrollbar-thumb
   background: #C2c2c2!important
   border-radius: 7px!important
+
+#WeekiNormalModal_product_edit > div > div > div > .nm-content
+
+  > p
+    font-size: 14px
+    line-height: 14px
+
+  > .upload_part
+    overflow-x: scroll
+    padding-bottom: 10px
+
+    > .p_upload_card
+      padding-right: 12px
+      flex: 25% 0 0
+
+      @media screen and (max-width: 570px)
+        flex: 51% 0 0
+
+      > img:first-child
+        width: 100%
+        aspect-ratio: 1 / 1
+        object-fit: cover
+        border-radius: 4px
+
+      > img:last-child
+        right: 20px
+        bottom: 10px
+        width: 14px
+        height: auto
+
+    > .p_upload_card.add_p
+      aspect-ratio: 1 / 1
+      padding: 6px 0!important
+
+      > .p_card
+        background-color: white
+        border-radius: 4px
+        width: 100%
+        height: 100%
+
+        > img
+          width: 40px!important
+
+  > form > div
+    margin-bottom: 10px
 
 #WeekiNormalModal_user_profile > div > div > div > .nm-content
 
