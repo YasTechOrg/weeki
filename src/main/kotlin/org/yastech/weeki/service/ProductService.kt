@@ -7,7 +7,6 @@ import org.yastech.weeki.data.USERS
 import org.yastech.weeki.table.Product
 import org.yastech.weeki.table.ProductRepository
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 @Service
 class ProductService
