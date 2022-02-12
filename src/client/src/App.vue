@@ -10,10 +10,15 @@ vue3-progress
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import {defineAsyncComponent} from "vue"
+
+const Layout = defineAsyncComponent(() =>
+    import(/* webpackChunkName: "layout" */"@/components/Layout.vue")
+)
 
 @Options({
   components: {
-    Layout: () => import(/* webpackChunkName: "layout" */"@/components/Layout.vue")
+    Layout
   },
   mounted() {
     this.$progress.finish()
