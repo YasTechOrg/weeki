@@ -13,7 +13,7 @@ data class ProductCard
     var packing: String,
     var amount: Long,
     var ppk: Long,
-    var images: String?,
+    var images: MutableList<String>?,
     var bs: String,
     var description: String,
     var seller: String?,

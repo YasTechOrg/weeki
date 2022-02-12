@@ -81,6 +81,7 @@
         img.cursor-pointer.ml-16(
           data-bs-target="#WeekiNormalModal_product_edit"
           src="../../assets/img/icons/icon_edit_gray.svg"
+          @click="setProductEdit"
           data-bs-toggle="modal"
           alt="edit"
         )
@@ -128,7 +129,7 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
     getImage()
     {
       const img = this.product["images"]
-      return img ? `/api/rest/cdn/product/images/${img}` : require("../../assets/img/images/no_img.png")
+      return img ? `/api/rest/cdn/product/images/${img[0]}` : require("../../assets/img/images/no_img.png")
     },
 
     // Get Is Global
@@ -203,7 +204,23 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
     loadImage()
     {
       this.$refs.p_img.classList.replace('img_loading', 'img_loaded')
-    }
+    },
+
+    // Get Complete Employee
+    setProductEdit()
+    {
+      const product = this.product
+      this.$store.commit("setProductEdit", {
+        id: product["id"],
+        files: product["images"] ? product["images"] : [],
+        query: `${product["family"]}, ${product["city"] }, ${product["code"] }, ${product["grade"]}`,
+        packing: product["packing"],
+        location: product["location"],
+        amount: product["amount"],
+        ppk: product["ppk"],
+        description: product["description"]
+      })
+    },
   }
 })
 

@@ -1,6 +1,9 @@
 section
   background-color: whitesmoke!important
 
+.layout
+  height: 100vh
+
 .logo
   height: 40px!important
 
@@ -172,6 +175,7 @@ select:focus,
     > .p_upload_card
       padding-right: 12px
       flex: 25% 0 0
+      overflow: hidden
 
       @media screen and (max-width: 570px)
         flex: 51% 0 0
@@ -200,6 +204,18 @@ select:focus,
 
         > img
           width: 40px!important
+
+    > .p_upload_card.img_loading::before
+      content: ''
+      display: block
+      position: absolute
+      z-index: 5
+      left: -150px
+      top: 0
+      height: 100%
+      width: 150px
+      background: linear-gradient(to right, transparent 0%, #E8E8E8 50%, transparent 100%)
+      animation: load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite
 
   > .p_detail_part
     margin: 0 -11px!important
@@ -255,3 +271,9 @@ select:focus,
 
   #WeekiNormalModal_user_profile > div > div > div > .nm-content > .content > div:first-child > div:last-child > div > p:after
     content: 'Your Rate?'!important
+
+@keyframes load
+  from
+    left: -150px
+  to
+    left: 100%

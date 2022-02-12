@@ -18,6 +18,7 @@ const store = createStore({
     profileModal: {},
     profileModalCo: {},
     profileModalStars: {},
+    productModalEdit: {}
   },
 
   plugins: [createPersistedState()],
@@ -363,6 +364,11 @@ const store = createStore({
               text: 'Something went wrong!',
             })
           })
+    },
+
+    setProductEdit(state, data)
+    {
+      state.productModalEdit = data
     },
   },
 

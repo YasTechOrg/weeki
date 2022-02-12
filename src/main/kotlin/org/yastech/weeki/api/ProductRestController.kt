@@ -99,7 +99,7 @@ class ProductRestController
                 it.packing,
                 it.amount,
                 it.ppk,
-                if (it.images!!.isEmpty()) null else it.images!![0],
+                if (it.images!!.isEmpty()) null else it.images!!,
                 it.bs,
                 it.description,
                 seller,

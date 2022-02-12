@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.layout
+.layout.d-flex.flex-column
 
   header.w-100.bg-white( v-if="layout !== 'account'" )
 
@@ -105,17 +105,19 @@
 
           WeekiIconBtn( icon="icons/icon_login_white.svg" @click="goTo('/account/login?back=' + $route.path)" v-else )
 
-  section( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
+  section.flex-grow-1( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
 
     slot
 
-  section( v-if="layout === 'account'"  data-account )
+  section.flex-grow-1( v-if="layout === 'account'"  data-account )
 
     div( :class="{ 'log' : $route.path === '/account/login' || $route.path === '/account/forgot', 'reg' : $route.path === '/account/register' }" )
 
       slot
 
-  section( v-if="layout === 'dashboard'"  data-dashboard )
+  section.flex-grow-1( v-if="!(['account', 'dashboard', 'single', 'surface'].includes(layout))" )
+
+  section.flex-grow-1( v-if="layout === 'dashboard'"  data-dashboard )
 
     .inner.gm.flex-nowrap.row
 
@@ -385,19 +387,38 @@ WeekiNormalModal(
   height="unset"
 )
 
-  p.mb-24.fw-bold.text-black Carrots, Anabella, Tehran, 300-400, A
+  p.mb-24.fw-bold.text-black {{ getProductModalEdit["query"] }}
 
   .upload_part.d-flex.justify-content-start.align-items-center.mb-20
 
-    .p_upload_card.position-relative( v-for="i in 5" :key="i" )
+    .p_upload_card.position-relative.img_loading(
+      v-for="i in (getProductModalEdit['files'] ? getProductModalEdit['files'].length : 0)"
+      :data-image_card="i"
+      :key="i"
+    )
 
-      img( src="../assets/img/images/no_img.png" alt="product img" )
+      img(
+        :src="'/api/rest/cdn/product/images/' + getProductModalEdit['files'][i]"
+        @load="loadProductModalEditImage(i)"
+        alt="product img"
+      )
+
+      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" )
+
+    .p_upload_card.position-relative(
+      v-for="i in files"
+      :key="i"
+    )
+
+      img( :src="getProductModalEditUrl(i)" alt="product img" )
 
       img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" )
 
     .p_upload_card.add_p
 
-      .p_card.d-flex.justify-content-center.align-items-center
+      .p_card.d-flex.justify-content-center.align-items-center( v-bind="getEditProductDropData.rootProps()" )
+
+        input( v-bind="getEditProductDropData.inputProps()" accept="image/jpeg, image/png" )
 
         img( src="../assets/img/icons/icon_plus_small_green.svg" alt="add" )
 
@@ -405,23 +426,23 @@ WeekiNormalModal(
 
     .col-sm-6
 
-      WeekiTextInput.mb-3( name="packing" label="Packing" auto-complete="false" )
+      WeekiTextInput.mb-3( name="packing" label="Packing" auto-complete="false" v-model:value="getProductModalEdit['packing']" )
 
     .col-sm-6
 
-      WeekiTextInput.mb-3( name="location" label="Location" auto-complete="false" )
+      WeekiTextInput.mb-3( name="location" label="Location" auto-complete="false" v-model:value="getProductModalEdit['location']" )
 
     .col-sm-6
 
-      WeekiTextInput.mb-3( name="amount" label="Amount(kg)" auto-complete="false" type="number" )
+      WeekiTextInput.mb-3( name="amount" label="Amount(kg)" auto-complete="false" type="number" v-model:value="getProductModalEdit['amount']" )
 
     .col-sm-6
 
-      WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" )
+      WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" v-model:value="getProductModalEdit['ppk']" )
 
     .col-12
 
-      WeekiTextArea.mb-24( label="Description" resize="false" height="200px" )
+      WeekiTextArea.mb-24( label="Description" resize="false" height="200px" v-model:value="getProductModalEdit['description']" )
 
   WeekiButton.float-end( text="Edit Product" )
 
@@ -441,6 +462,7 @@ import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
 import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
 import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
+import { useDropzone } from "vue3-dropzone"
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -461,6 +483,7 @@ import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
   data()
   {
     return {
+      files: [],
       authorName: require("../../package.json").author.name,
       authorUrl: require("../../package.json").author.url,
       home_menu: [
@@ -542,6 +565,33 @@ import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
 
   // App Methods
   methods: {
+
+    // Image Load
+    loadProductModalEditImage(item)
+    {
+      (document.querySelector(`#WeekiNormalModal_product_edit div[data-image_card = ${item}]`) as HTMLDivElement)
+          .classList.replace('img_loading', 'img_loaded')
+    },
+
+    // On User Drop
+    onEditProductDrop(file)
+    {
+      if (["image/png", "image/jpeg"].includes(file[0]["type"]))
+      {
+        if (file[0]["size"] <= 819200)
+        {
+          this.files.push(file[0])
+        }
+        else
+        {
+          showToast("System : Image size is more than 800MB!", Types.ERROR)
+        }
+      }
+      else
+      {
+        showToast("System : Please import the file in photo format!", Types.ERROR)
+      }
+    },
 
     // On App Load
     async load()
@@ -817,6 +867,21 @@ import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
     {
       this.$store.commit("setProfileModalStars", value)
     },
+
+    getProductModalEditUrl(i)
+    {
+      console.log(this.files[i])
+      const reader = new FileReader()
+      reader.addEventListener("load", function ()
+      {
+        return reader.result
+      }, false)
+
+      if (this.files[i])
+      {
+        reader.readAsDataURL(this.files[i])
+      }
+    },
   },
 
   // App Computed Variables
@@ -832,6 +897,12 @@ import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
         "checkAuth",
         "getAuth"
     ]),
+
+    getEditProductDropData()
+    {
+      const { getRootProps, getInputProps, ...rest } = useDropzone({ onDrop: this.onEditProductDrop })
+      return { rootProps: getRootProps, inputProps: getInputProps, rest: rest }
+    },
 
     dashboardMenu()
     {
@@ -851,6 +922,11 @@ import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
     getProfileModalStars()
     {
       return this.$store.state.profileModalStars
+    },
+
+    getProductModalEdit()
+    {
+      return this.$store.state.productModalEdit
     },
 
     notifications()

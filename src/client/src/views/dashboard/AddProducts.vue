@@ -112,7 +112,7 @@ const cities = require('@/assets/json/cities.json')
       countries: countries,
       cities: cities.data,
       returnableCity: [],
-      file: {},
+      file: {}
     }
   },
 

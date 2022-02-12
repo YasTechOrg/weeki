@@ -10,11 +10,10 @@ vue3-progress
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import Layout from "@/components/Layout.vue"
 
 @Options({
   components: {
-    Layout
+    Layout: () => import(/* webpackChunkName: "layout" */"@/components/Layout.vue")
   },
   mounted() {
     this.$progress.finish()
