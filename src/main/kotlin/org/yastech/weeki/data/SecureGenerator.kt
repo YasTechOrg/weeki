@@ -13,25 +13,6 @@ class SecureGenerator
     private var userService: UserService
 )
 {
-    private fun getCompany(publisher: String, owner: String): String?
-    {
-        return if (publisher == owner)
-        {
-            userService.get(publisher).name
-        }
-        else
-        {
-            if (userService.get(publisher).role == USERS.NORMAL_USER)
-            {
-                null
-            }
-            else
-            {
-                userService.get(owner).name
-            }
-        }
-    }
-
     fun generateSecureUser(user: User): SecureUser
     {
         return SecureUser (

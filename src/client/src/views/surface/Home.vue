@@ -49,6 +49,26 @@
         WeekiChipButton( :enabled="sort_by === 'cheap'" @click="sort_by = 'cheap'" text="Cheapest" )
         WeekiChipButton( :enabled="sort_by === 'mex'" @click="sort_by = 'mex'" text="Most Expensive" )
 
+      nav.m-auto.pr-12.pl-12.pt-4( aria-label="Weeki Search Pagination" )
+        ul.pagination
+
+          li.page-item
+            a.page-link( aria-label="Previous" )
+              span( aria-hidden="true" ) &laquo;
+
+          li.page-item
+            a.page-link 1
+          li.page-item
+            a.page-link 2
+          li.page-item
+            a.page-link 3
+          li.page-item
+            a.page-link 4
+
+          li.page-item
+            a.page-link( aria-label="Next" )
+              span( aria-hidden="true" ) &raquo;
+
 </template>
 
 <script lang="ts">

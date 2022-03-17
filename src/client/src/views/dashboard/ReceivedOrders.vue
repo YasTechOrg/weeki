@@ -324,6 +324,6 @@ import { Calendar, DatePicker } from 'v-calendar'
 export default class ReceivedOrders extends Vue {}
 </script>
 
-<style scoped src="../../assets/sass/page/sendOrders.sass" lang="sass"></style>
+<style scoped src="../../assets/sass/page/receivedOrders.sass" lang="sass"></style>
 <style scoped src="../../assets/sass/widget/dataPicker.sass" lang="sass"></style>
 

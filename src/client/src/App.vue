@@ -20,10 +20,12 @@ const Layout = defineAsyncComponent(() =>
   components: {
     Layout
   },
-  mounted() {
+  mounted()
+  {
     this.$progress.finish()
   },
-  created() {
+  created()
+  {
     this.$progress.start()
 
     this.$router.beforeEach((to, from, next) =>
@@ -36,7 +38,7 @@ const Layout = defineAsyncComponent(() =>
     {
       this.$progress.finish()
     })
-  },
+  }
 })
 export default class App extends Vue {}
 </script>

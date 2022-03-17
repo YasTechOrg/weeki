@@ -48,6 +48,11 @@ class ProductService
         return id
     }
 
+    fun update(product: Product)
+    {
+
+    }
+
     fun addImage(id: String, p_id: String)
     {
         val product = repository.findById(p_id).block()!!

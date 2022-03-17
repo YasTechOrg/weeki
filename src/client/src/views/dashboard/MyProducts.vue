@@ -64,6 +64,10 @@ import { mapGetters } from "vuex"
       case "done":
         showToast("System : New product added successfully!", Types.SUCCESS)
         break
+
+      case "u_done":
+        showToast("System : Product updated successfully!", Types.SUCCESS)
+        break
     }
 
     this.getProducts()

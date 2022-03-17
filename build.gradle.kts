@@ -14,6 +14,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 repositories {
     mavenCentral()
 }
+
 configurations {
     implementation {
         exclude(module = "spring-boot-starter-tomcat")
@@ -22,7 +23,9 @@ configurations {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:2.5.6")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.5.6")
+    implementation("org.eclipse.jetty:jetty-alpn-conscrypt-server")
+    implementation("org.eclipse.jetty.http2:http2-server")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.6.4")
     implementation("org.springframework.security:spring-security-messaging:5.5.1")
     implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-web:2.5.6")

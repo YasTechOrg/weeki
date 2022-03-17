@@ -5,15 +5,19 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.yastech.weeki.service.FileService
+import org.yastech.weeki.service.ProductService
 
 @RestController
 @RequestMapping("/api/rest/cdn")
 class CDNRestController
 (
-    private var fileService: FileService
+    private var fileService: FileService,
+    private var productService: ProductService
 )
 {
     @GetMapping("/product/images/{id}")
@@ -30,6 +34,17 @@ class CDNRestController
         else
         {
             ResponseEntity.notFound().build()
+        }
+    }
+
+    @PostMapping("/product/remove/{id}")
+    fun removeProductImage(@RequestParam data: MutableList<Int>, @PathVariable id: String)
+    {
+        val product = productService.getById(id)
+
+        data.forEach {
+            fileService.removeProductImage(product.images!![it])
+            product.images!!.removeAt(it)
         }
     }
 }

@@ -62,6 +62,7 @@ class WebAppSecurity
             .antMatchers(
                 "/api/rest/account/user/**",
                 "/api/rest/account/contact/**",
+                "/api/rest/cdn/product/remove/*",
                 "/api/rest/notifications/**",
                 "/api/rest/tasks/**",
                 "/api/rest/employee/**",

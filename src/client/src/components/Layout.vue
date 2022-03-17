@@ -392,27 +392,27 @@ WeekiNormalModal(
   .upload_part.d-flex.justify-content-start.align-items-center.mb-20
 
     .p_upload_card.position-relative.img_loading(
-      v-for="i in (getProductModalEdit['files'] ? getProductModalEdit['files'].length : 0)"
+      v-for="(i, index) in getProductModalEdit['files'].filter((item, item_index) => !onlineRemovedItemsProfileEdit.includes(item_index))"
       :data-image_card="i"
       :key="i"
     )
 
       img(
-        :src="'/api/rest/cdn/product/images/' + getProductModalEdit['files'][i]"
+        :src="'/api/rest/cdn/product/images/' + i"
         @load="loadProductModalEditImage(i)"
         alt="product img"
       )
 
-      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" )
+      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" @click="onlineRemovedItemsProfileEdit.push(index)" )
 
     .p_upload_card.position-relative(
-      v-for="i in files"
+      v-for="(i, index) in files"
       :key="i"
     )
 
-      img( :src="getProductModalEditUrl(i)" alt="product img" )
+      img( :src="i[1]" alt="product img" )
 
-      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" )
+      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" @click="files.splice(index, 1)" )
 
     .p_upload_card.add_p
 
@@ -444,16 +444,16 @@ WeekiNormalModal(
 
       WeekiTextArea.mb-24( label="Description" resize="false" height="200px" v-model:value="getProductModalEdit['description']" )
 
-  WeekiButton.float-end( text="Edit Product" )
+  WeekiButton.float-end( text="Edit Product" @click="uploadEditProduct" :disabled="isEditProductModalDisabled")
 
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import { mapGetters } from 'vuex'
+import {Options, Vue} from 'vue-class-component'
+import {mapGetters} from 'vuex'
 import axios from "axios"
-import { getToken } from '@/csrfManager'
-import { showToast, Types } from "@/toastManager"
+import {getToken} from '@/csrfManager'
+import {showToast, Types} from "@/toastManager"
 import SockJS from "sockjs-client"
 import Stomp from "webstomp-client"
 import WeekiButton from "@/components/elements/WeekiButton.vue"
@@ -462,7 +462,9 @@ import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
 import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
 import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
-import { useDropzone } from "vue3-dropzone"
+import {useDropzone} from "vue3-dropzone"
+import Swal from "sweetalert2";
+import store from "@/store";
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -484,6 +486,7 @@ import { useDropzone } from "vue3-dropzone"
   {
     return {
       files: [],
+      onlineRemovedItemsProfileEdit: [],
       authorName: require("../../package.json").author.name,
       authorUrl: require("../../package.json").author.url,
       home_menu: [
@@ -561,10 +564,151 @@ import { useDropzone } from "vue3-dropzone"
         }
       }
     },
+
+    files()
+    {
+      console.log(this.files)
+      const rendered: string[] = []
+
+      for (let i = 0; i < this.files.length; i++)
+      {
+        const reader = new FileReader()
+
+        reader.addEventListener("load", function ()
+        {
+          rendered.push(reader.result as string)
+        }, false)
+
+        reader.readAsDataURL(this.files[i])
+      }
+      console.log(rendered)
+      this.renderedFiles = rendered
+      console.log(this.renderedFiles)
+    }
   },
 
   // App Methods
   methods: {
+
+    uploadEditProduct()
+    {
+      Swal.fire({
+        padding: "60px",
+        width: 153,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen()
+        {
+          Swal.showLoading()
+        }
+      })
+
+      const webRemoveItems: number[] = []
+      const webFiles = this.getProductModalEdit["files"] as string[]
+      const localFiles: Blob[] = this.files
+      const newUploadedImage: FormData[] = []
+
+      webFiles.forEach((value, index) =>
+      {
+        if ((this.onlineRemovedItemsProfileEdit as number[]).includes(index)) webRemoveItems.push(index)
+      })
+
+      const bodyFormData = new FormData()
+      bodyFormData.append("data", JSON.stringify(webRemoveItems))
+
+      axios.post(
+          "/api/rest/cdn/product/remove/" + this.getProductModalEdit["id"],
+          bodyFormData,
+          {
+            headers: {
+              "_csrf" : getToken() as any,
+              "Authorization": store.getters.getAuth
+            }
+          }
+      )
+      .then(() =>
+      {
+        localFiles.forEach(async (value, index) =>
+        {
+          const bodyFormData = new FormData()
+          bodyFormData.append("file", value)
+
+          await axios.post(
+              `/api/rest/product/image/${this.getProductModalEdit["id"]}`,
+              bodyFormData,
+              {
+                headers: {
+                  "_csrf" : getToken() as any,
+                  "Authorization" : this.getAuth,
+                  "Content-Type" : "multipart/form-data"
+                }
+              }
+          )
+          .then(value1 =>
+          {
+            showToast(`System : File ${index} uploaded successfully`, Types.SUCCESS)
+            newUploadedImage.push(value1.data)
+          })
+          .catch(reason =>
+          {
+            console.log(reason)
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
+          })
+        })
+      })
+      .catch(() =>
+      {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+        })
+      })
+      .finally(() =>
+      {
+       /* const formDataRef = document
+            .querySelector("#WeekiNormalModal_product_edit .p_detail_part") as HTMLDivElement
+        const formDataRefInputs = formDataRef.querySelectorAll("div > div > input") as NodeListOf<HTMLInputElement>
+        const formDataRefTextArea = formDataRef.querySelector("div > div > textarea") as HTMLTextAreaElement
+
+        const bodyFormData = new FormData()
+        bodyFormData.append("id", this.getProductModalEdit["id"])
+        bodyFormData.append("files", JSON.stringify(newUploadedImage))
+        bodyFormData.append("packing", formDataRefInputs[0].value)
+        bodyFormData.append("location", formDataRefInputs[1].value)
+        bodyFormData.append("amount", formDataRefInputs[2].value)
+        bodyFormData.append("ppk", formDataRefInputs[3].value)
+        bodyFormData.append("description", formDataRefTextArea.value)
+*/
+
+        axios.post(
+            "/api/rest/product/update",
+            bodyFormData,
+            {
+              headers: {
+                "_csrf" : getToken() as any,
+                "Authorization" : this.getAuth,
+              }
+            }
+        )
+            .then(() =>
+            {
+              location.href = "/dashboard/products/self?res=u_done"
+            })
+            .catch(() =>
+            {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+              })
+            })
+      })
+    },
 
     // Image Load
     loadProductModalEditImage(item)
@@ -580,7 +724,17 @@ import { useDropzone } from "vue3-dropzone"
       {
         if (file[0]["size"] <= 819200)
         {
-          this.files.push(file[0])
+          const reader = new FileReader()
+
+          const t = this
+
+          reader.addEventListener("load", function ()
+          {
+            t.files.push([file[0], reader.result])
+          }, false)
+
+          reader.readAsDataURL(file[0])
+
         }
         else
         {
@@ -866,22 +1020,7 @@ import { useDropzone } from "vue3-dropzone"
     setProfileModalStars(value)
     {
       this.$store.commit("setProfileModalStars", value)
-    },
-
-    getProductModalEditUrl(i)
-    {
-      console.log(this.files[i])
-      const reader = new FileReader()
-      reader.addEventListener("load", function ()
-      {
-        return reader.result
-      }, false)
-
-      if (this.files[i])
-      {
-        reader.readAsDataURL(this.files[i])
-      }
-    },
+    }
   },
 
   // App Computed Variables
@@ -897,6 +1036,31 @@ import { useDropzone } from "vue3-dropzone"
         "checkAuth",
         "getAuth"
     ]),
+
+    isEditProductModalDisabled()
+    {
+      /*const formDataRef = document
+          .querySelector("#WeekiNormalModal_product_edit .p_detail_part") as HTMLDivElement
+      const formDataRefInputs = formDataRef.querySelector("div > div > input") as NodeListOf<HTMLInputElement>
+      const formDataRefTextArea = formDataRef.querySelector("div > div > textarea") as HTMLTextAreaElement
+      const values = this.getProductModalEdit
+
+      if (
+          formDataRefInputs[0] == values["packing"] &&
+          formDataRefInputs[1] == values["location"] &&
+          formDataRefInputs[2] == values["amount"] &&
+          formDataRefInputs[3] == values["ppk"] &&
+          formDataRefTextArea == values["description"] &&
+          this.onlineRemovedItemsProfileEdit.length === 0 &&
+          this.files.length === 0
+      ) {
+        return true
+      }
+      else
+      {
+        false
+      }*/
+    },
 
     getEditProductDropData()
     {

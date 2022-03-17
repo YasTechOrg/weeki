@@ -412,18 +412,18 @@ function removeContact(id, url)
         }
       }
   )
-      .then(() =>
-      {
-        location.href = `${ url }?res=ac_done`
-      })
-      .catch(() =>
-      {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-        })
-      })
+  .then(() =>
+  {
+    location.href = `${ url }?res=ac_done`
+  })
+  .catch(() =>
+  {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Something went wrong!',
+    })
+  })
 }
 
 export default store

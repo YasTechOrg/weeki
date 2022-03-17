@@ -54,6 +54,31 @@ class ProductRestController
         return productService.add(product, user.email).toMono()
     }
 
+    @PostMapping("/update")
+    fun update(
+        @RequestParam id: String,
+        @RequestParam files: MutableList<String>,
+        @RequestParam packing: String,
+        @RequestParam location: String,
+        @RequestParam amount: Long,
+        @RequestParam ppk: Long,
+        @RequestParam description: String
+    )
+    {
+        val product = productService.getById(id)
+        product.let {
+            it.packing = packing
+            it.location = location
+            it.amount = amount
+            it.ppk = ppk
+            it.description = description
+            files.forEach { image ->
+                it.images!!.add(image)
+            }
+        }
+        productService.update(product)
+    }
+
     @GetMapping("/get")
     fun get(request: HttpServletRequest): Flux<ProductCard>
     {
@@ -65,26 +90,13 @@ class ProductRestController
 
         return products.map {
 
-            val seller = if (it.publisher == it.owner)
-            {
-                null
-            }
-            else
-            {
-                "${user.firstname} ${user.lastname}"
-            }
+            val seller = if (it.publisher == it.owner) null else "${user.firstname} ${user.lastname}"
 
             val company = when(user.role)
             {
-                USERS.NORMAL_USER -> {
-                    null
-                }
-                USERS.EMPLOYEE -> {
-                    userService.get(it.owner!!).name
-                }
-                else -> {
-                    user.name
-                }
+                USERS.NORMAL_USER -> null
+                USERS.EMPLOYEE -> userService.get(it.owner!!).name
+                else -> user.name
             }
 
             ProductCard(
@@ -99,7 +111,7 @@ class ProductRestController
                 it.packing,
                 it.amount,
                 it.ppk,
-                if (it.images!!.isEmpty()) null else it.images!!,
+                if (it.images!!.isEmpty()) mutableListOf() else it.images!!,
                 it.bs,
                 it.description,
                 seller,

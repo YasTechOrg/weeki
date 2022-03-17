@@ -129,7 +129,7 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
     getImage()
     {
       const img = this.product["images"]
-      return img ? `/api/rest/cdn/product/images/${img[0]}` : require("../../assets/img/images/no_img.png")
+      return img.length !== 0 ? `/api/rest/cdn/product/images/${img[0]}` : require("../../assets/img/images/no_img.png")
     },
 
     // Get Is Global
@@ -212,7 +212,7 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
       const product = this.product
       this.$store.commit("setProductEdit", {
         id: product["id"],
-        files: product["images"] ? product["images"] : [],
+        files: product["images"],
         query: `${product["family"]}, ${product["city"] }, ${product["code"] }, ${product["grade"]}`,
         packing: product["packing"],
         location: product["location"],
