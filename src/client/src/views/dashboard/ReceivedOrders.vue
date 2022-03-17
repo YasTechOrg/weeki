@@ -326,4 +326,3 @@ export default class ReceivedOrders extends Vue {}
 
 <style scoped src="../../assets/sass/page/receivedOrders.sass" lang="sass"></style>
 <style scoped src="../../assets/sass/widget/dataPicker.sass" lang="sass"></style>
-
