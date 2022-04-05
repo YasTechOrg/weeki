@@ -228,6 +228,7 @@ const cities = require('@/assets/json/cities.json')
                 productFormData.append("amount", (inputs[4] as HTMLInputElement).value)
                 productFormData.append("ppk", (inputs[5] as HTMLInputElement).value)
                 productFormData.append("description", (textarea as HTMLTextAreaElement).value)
+                productFormData.append("date", new Date().toISOString())
 
                 axios.post(
                     "/api/rest/product/add",

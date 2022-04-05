@@ -18,4 +18,5 @@ data class ProductCard
     var description: String,
     var seller: String?,
     var company: String?,
+    var date: String?
 )

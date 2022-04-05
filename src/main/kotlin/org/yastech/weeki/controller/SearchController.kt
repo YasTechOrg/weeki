@@ -75,7 +75,8 @@ class SearchController(
                 it.bs,
                 it.description,
                 seller,
-                company
+                company,
+                it.date
             )
         }
 

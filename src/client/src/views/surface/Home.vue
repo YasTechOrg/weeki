@@ -362,7 +362,6 @@ import {watch} from "vue"
       this.searchClient.subscribe('/user/search/get', function (response)
       {
         const resp = JSON.parse(response.body)
-        console.log(resp[1])
         if (resp[1].length === 0)
         {
           t.searchResult = null
@@ -401,18 +400,11 @@ import {watch} from "vue"
       {
         this.sortedSearchResult = this.searchResult.sort((a, b) =>
         {
-          if(this.sort_by === 'near')
-          {
-            return +new Date(b["dat"]) - +new Date(a["dat"])
-          }
-          else if(this.sort_by === 'cheap')
-          {
-            return a["ppk"] - b["ppk"]
-          }
-          else if(this.sort_by === 'mex')
-          {
-            return b["ppk"] - a["ppk"]
-          }
+          if(this.sort_by === 'near') return +new Date(b["date"]) - +new Date(a["date"])
+
+          else if(this.sort_by === 'cheap') return a["ppk"] - b["ppk"]
+
+          else if(this.sort_by === 'mex') return b["ppk"] - a["ppk"]
         })
       }
     }
