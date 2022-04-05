@@ -12,6 +12,8 @@
     :autocomplete="getAutoComplete"
     :list="'autoCompleteList' + name"
     :required="getRequired"
+    :min="getMin"
+    :max="getMax"
   )
 
   datalist( v-if="list != null" :id="'autoCompleteList' + name" )
@@ -30,7 +32,7 @@ import { Options, Vue } from 'vue-class-component'
 @Options({
 
   // Element Props
-  props: ["label", "value", "name", "icon", "list", "type", "mb", "req", "autoComplete"],
+  props: ["label", "value", "name", "icon", "list", "type", "mb", "req", "autoComplete", "min", "max"],
 
   // Export Input Value
   emits: ['update:value', 'inFocus'],
@@ -62,6 +64,24 @@ import { Options, Vue } from 'vue-class-component'
       {
         return "off"
       }
+    },
+
+    getMin()
+    {
+      if (this.min !== null)
+      {
+        return this.min
+      }
+      else return false
+    },
+
+    getMax()
+    {
+      if (this.max !== null)
+      {
+        return this.max
+      }
+      else return false
     }
   }
 })

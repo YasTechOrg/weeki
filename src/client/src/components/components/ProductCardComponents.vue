@@ -37,14 +37,14 @@
         img( src="../../assets/img/icons/icon_company_gray.svg" alt="company" )
 
         p.title.mb-0.fw-bolder( v-if="product['company'] !== null" ) {{ product['company'] }}
-        p.title.mb-0.fw-bolder( v-else ) -
+        p.title.mb-0.fw-bolder( v-else )  {{ "-" }}
 
       .d-flex.justify-content-start.align-items-center.mt-16( v-if="getGlobal" )
 
         img( src="../../assets/img/icons/icon_person_gray.svg" alt="seller" )
 
-        p.title.mb-0.fw-bolder( v-if="product['seller'] !== null" ) {{ product['seller'] }}
-        p.title.mb-0.fw-bolder( v-else ) -
+        p.title.mb-0.fw-bolder( v-if="product['seller'] !== ''" ) {{ product['seller'] }}
+        p.title.mb-0.fw-bolder( v-else )  {{ product['company'] }}
 
       .d-flex.justify-content-start.align-items-center.mt-16( v-if="getGlobal" )
 

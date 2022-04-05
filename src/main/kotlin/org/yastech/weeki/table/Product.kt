@@ -25,6 +25,7 @@ data class Product
     var images: MutableList<String>?,
     var bs: String,
     var description: String,
+    var date: String?
 )
 
 interface ProductRepository : ReactiveMongoRepository<Product, String>

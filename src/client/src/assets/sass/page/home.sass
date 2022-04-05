@@ -7,6 +7,17 @@
       > .weekiSearchInput
         height: 42px!important
 
+      > .bs, > .filter
+        padding: 20px 16px!important
+        background-color: white!important
+        border-radius: 4px!important
+
+      > .filter
+
+        > .part
+          padding-bottom: 20px
+          border-bottom: 1px solid #E4E4E4!important
+
     > .col-md-9
       padding-left: 12px
 
@@ -27,3 +38,25 @@
 
         .page-item:last-child
           margin-left: 10px
+
+        .page-item:first-child > a, .page-item:last-child > a
+          border-radius: 360%!important
+          padding: 0!important
+          height: 100%!important
+          width: 35px!important
+          display: flex!important
+          align-items: center!important
+          justify-content: center!important
+
+        .page-item > a
+          color: #6e6e6e
+          background: #e4e4e4
+          border-radius: 5px!important
+          margin: 0 5px!important
+          cursor: pointer!important
+          border: none!important
+
+        .page-item.active > a, .page-item:hover > a
+          background-color: #68b64d!important
+          border-color: unset!important
+          color: white

@@ -56,11 +56,11 @@
 
     .col-sm-6.col-md-4
 
-      WeekiTextInput.mb-3( name="amount" label="Inventory Amount(kg)" auto-complete="false" type="number" req="true" )
+      WeekiTextInput.mb-3( name="amount" label="Inventory Amount(kg)" auto-complete="false" type="number" req="true" min="0" max="9999999" )
 
     .col-sm-6.col-md-4
 
-      WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" req="true" )
+      WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" req="true" min="0" max="9999999" )
 
     .col-sm-6.col-md-4
 

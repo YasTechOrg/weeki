@@ -7,6 +7,7 @@ import "bootstrap"
 import "@/assets/lib/w3.css"
 import "@/assets/lib/google_icons.css"
 import 'vue3-carousel/dist/carousel.css'
+import "@vueform/slider/themes/default.css"
 import "vue-toastification/dist/index.css"
 import Toast from "vue-toastification"
 import Vue3Progress from "vue3-progress"

@@ -90,7 +90,7 @@ class ProductRestController
 
         return products.map {
 
-            val seller = if (it.publisher == it.owner) null else "${user.firstname} ${user.lastname}"
+            val seller = if (it.publisher == it.owner) "" else "${user.firstname} ${user.lastname}"
 
             val company = when(user.role)
             {

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#home
+#home.gm
 
   .w-100.w3-hide-large
 
@@ -34,12 +34,139 @@
       WeekiSearchInput( placeholder="Search Fruits Or Vegetables" v-model:value="s_text" )
 
       .bs.mt-12
-        | mmd
+
+        p.fw-bolder.mb-20 Buyer / Seller
+
+        .d-flex.justify-content-center.align-items-center
+
+          .pe-1.w-100
+            WeekiChipButton.w-100( :enabled="s_bs === 1" @click="s_bs = 1" text="I am a buyer" )
+
+          .ps-1.w-100
+            WeekiChipButton.w-100( :enabled="s_bs === 2" @click="s_bs = 2" text="I am a seller" )
 
       .filter.mt-12
-        | mmd
 
-    .col-md-9.p-0.pl-16
+        .part
+
+          p.fw-bolder.mb-20 Product Details
+
+          WeekiTextInput.mt-16(
+            label="Product's City"
+            v-model:value="s_pc"
+            class="mt-16"
+            name="pc"
+            type="text"
+            :list="cities"
+            mb="false" req="false"
+          )
+
+          WeekiTextInput.mt-16(
+            label="Code"
+            v-model:value="s_pcd"
+            class="mt-16"
+            name="pcd"
+            type="text"
+            mb="false" req="false"
+          )
+
+          WeekiTextInput.mt-16(
+            label="Grade"
+            v-model:value="s_pg"
+            class="mt-16"
+            name="pg"
+            type="text"
+            mb="false" req="false"
+          )
+
+          WeekiTextInput.mt-16(
+            label="Packing"
+            v-model:value="s_pp"
+            class="mt-16"
+            name="pp"
+            type="text"
+            mb="false" req="false"
+          )
+
+        .part
+
+          p.fw-bolder.mb-20.mt-20 Amount (kg)
+
+          Slider.mt-24.me-2.ms-2( v-model="s_am" :min="0" :max="9999999" :tooltips="false" )
+
+          .row.m-0.mt-16
+
+            .col-6.ps-0
+              WeekiTextInput(
+                mb="false"
+                v-model:value="s_am[0]"
+                label="Min"
+                name="min_am"
+                type="number"
+                min="0" max="9999999"
+              )
+
+            .col-6.pe-0
+              WeekiTextInput(
+                mb="false"
+                v-model:value="s_am[1]"
+                label="Max"
+                name="max_am"
+                type="number"
+                min="0" max="9999999"
+              )
+
+        .part
+
+          p.fw-bolder.mb-20.mt-20 Price Per Kg (€)
+
+          Slider.mt-24.me-2.ms-2( v-model="s_ppk" :min="0" :max="9999999" :tooltips="false" )
+
+          .row.m-0.mt-16
+
+            .col-6.ps-0
+              WeekiTextInput(
+                mb="false"
+                v-model:value="s_ppk[0]"
+                label="Min"
+                name="min_ppk"
+                type="number"
+                min="0" max="9999999"
+              )
+
+            .col-6.pe-0
+              WeekiTextInput(
+                mb="false"
+                v-model:value="s_ppk[1]"
+                label="Max"
+                name="max_ppk"
+                type="number"
+                min="0" max="9999999"
+              )
+
+        div
+
+          p.fw-bolder.mb-20.mt-20 Seller Details
+
+          WeekiTextInput.mt-16(
+            label="Company Name"
+            v-model:value="s_cn"
+            type="text"
+            name="cn"
+            mb="false"
+            req="false"
+          )
+
+          WeekiTextInput.mt-16(
+            label="Seller Name"
+            v-model:value="s_sn"
+            type="text"
+            name="cn"
+            mb="false"
+            req="false"
+          )
+
+    .col-md-9.p-0.pl-16.me-auto.ms-auto
 
       .ml-12.mr-12.s_part.w3-hide-small.w3-hide-medium.d-flex.align-items-center.justify-content-start
 
@@ -49,33 +176,65 @@
         WeekiChipButton( :enabled="sort_by === 'cheap'" @click="sort_by = 'cheap'" text="Cheapest" )
         WeekiChipButton( :enabled="sort_by === 'mex'" @click="sort_by = 'mex'" text="Most Expensive" )
 
-      nav.m-auto.pr-12.pl-12.pt-4( aria-label="Weeki Search Pagination" )
+      vue-lottie-player.mt-40.mb-40.w-auto(
+        :animationData="require('../../assets/animations/loading.json')"
+        v-if="searchResult != null && searchResult.length === 0"
+        name="loading"
+        width="256px"
+        height="256px"
+        loop
+        autoPlay
+      )
+
+      vue-lottie-player.mt-40.mb-40.w-auto(
+        :animationData="require('../../assets/animations/notfound.json')"
+        v-if="searchResult == null"
+        name="loading"
+        width="256px"
+        height="256px"
+        loop
+        autoPlay
+      )
+
+      .pl.row.m-0( v-if="searchResult != null && searchResult.length > 0" )
+
+        .col-md-4.pl-12.pr-12.pt-12( v-for="product in sortedSearchResult" :key="product" )
+
+          ProductCardComponent( global="true" :product="product" )
+
+      nav.m-auto.pr-12.pl-12.pt-40( aria-label="Weeki Search Pagination" v-if="searchResult != null && searchResult.length > 0 && pages !== 0" )
+
         ul.pagination
 
           li.page-item
-            a.page-link( aria-label="Previous" )
+            a.page-link( aria-label="Previous" v-if="pages !== 0 && page !== 1" @click="page = page - 1" )
               span( aria-hidden="true" ) &laquo;
 
-          li.page-item
-            a.page-link 1
-          li.page-item
-            a.page-link 2
-          li.page-item
-            a.page-link 3
-          li.page-item
-            a.page-link 4
+          li.page-item( v-for="item in pages" :key="item" :class="{ 'active' : item === page }" )
+            a.page-link( @click="page = item" ) {{ item }}
 
           li.page-item
-            a.page-link( aria-label="Next" )
+            a.page-link( aria-label="Next" v-if="pages !== 0 && page !== pages" @click="page = page + 1" )
               span( aria-hidden="true" ) &raquo;
 
 </template>
 
 <script lang="ts">
+/* eslint-disable  @typescript-eslint/no-empty-function */
+/* eslint-disable  @typescript-eslint/no-this-alias */
+
 import { Options, Vue } from 'vue-class-component'
 import WeekiOptionalDropDown from "@/components/elements/WeekiOptionalDropDown.vue"
 import WeekiSearchInput from "@/components/elements/WeekiSearchInput.vue"
 import WeekiChipButton from "@/components/elements/WeekiChipButton.vue"
+import VueLottiePlayer from "vue-lottie-player"
+import ProductCardComponents from "@/components/components/ProductCardComponents.vue"
+import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
+import city from "../../assets/json/cities.json"
+import Slider from "@vueform/slider"
+import SockJS from "sockjs-client"
+import Stomp from "webstomp-client"
+import {watch} from "vue"
 
 @Options({
 
@@ -83,7 +242,11 @@ import WeekiChipButton from "@/components/elements/WeekiChipButton.vue"
   components: {
     WeekiOptionalDropDown,
     WeekiSearchInput,
-    WeekiChipButton
+    WeekiChipButton,
+    VueLottiePlayer,
+    WeekiTextInput,
+    Slider,
+    ProductCardComponent: ProductCardComponents
   },
 
   // Page Variables
@@ -111,7 +274,147 @@ import WeekiChipButton from "@/components/elements/WeekiChipButton.vue"
       s_sn: "",
 
       searchResult: [],
-      sortedSearchResult: []
+      sortedSearchResult: [],
+
+      page: 1,
+      pages: 0
+    }
+  },
+
+  // On Page Load
+  async mounted()
+  {
+
+    // Define Queries
+    const urlQueries = [
+      "text",
+      "bs",
+      "location",
+      "pc",
+      "pcd",
+      "pg",
+      "pp",
+      "min_am",
+      "max_am",
+      "min_ppk",
+      "max_ppk",
+      "cn",
+      "sn"
+    ]
+
+    // Set Search Value
+    for (const [key, value] of Object.entries(this.$route.query))
+    {
+      if (urlQueries.includes(key) && value !== null)
+      {
+        switch (key)
+        {
+          case "min_am":
+            this.s_am[0] = value
+            break
+
+          case "max_am":
+            this.s_am[1] = value
+            break
+
+          case "min_ppk":
+            this.s_ppk[0] = value
+            break
+
+          case "max_ppk":
+            this.s_ppk[1] = value
+            break
+
+          case "bs":
+            this.s_bs = Number(value)
+            break
+
+          default:
+            this["s_" + key] = value
+            break
+        }
+      }
+    }
+
+    // Define City Array
+    for (let i = 0; i < city.data.length; i++)
+    {
+      this.cities.push(city.data[i].city)
+    }
+
+    // Connect To Socket Server
+    this.searchSocket = new SockJS(this.baseurl + "/wst")
+
+    // Define Stomp Client
+    this.searchClient = Stomp.over(this.searchSocket)
+
+    // Disable Stomp Logging
+    this.searchClient.debug = () => {}
+
+    // Define this
+    const t = this
+
+    // Connect Stomp
+    this.searchClient.connect({}, () =>
+    {
+
+      // Subscribe Stomp
+      this.searchClient.subscribe('/user/search/get', function (response)
+      {
+        const resp = JSON.parse(response.body)
+        console.log(resp[1])
+        if (resp[1].length === 0)
+        {
+          t.searchResult = null
+          t.pages = 0
+        }
+        else
+        {
+          t.searchResult = resp[1]
+          t.getSortedProducts()
+          t.pages = resp[0]
+        }
+      })
+
+      this.searchClient.send("/ss/do-search", "", { 'search': JSON.stringify(this.getSearchObject), 'page': this.page })
+
+      watch(() => this.getSearchObject, () =>
+      {
+        this.searchResult = []
+        this.searchClient.send("/ss/do-search", "", { 'search': JSON.stringify(this.getSearchObject), 'page': this.page })
+      })
+
+      watch(() => this.page, () =>
+      {
+        window.scrollTo(0, 0)
+        this.searchResult = []
+        this.searchClient.send("/ss/do-search", "", { 'search': JSON.stringify(this.getSearchObject), 'page': this.page })
+      })
+    })
+  },
+
+  // Page Methods
+  methods: {
+    getSortedProducts()
+    {
+      if (this.searchResult)
+      {
+        this.sortedSearchResult = this.searchResult.sort((a, b) =>
+        {
+          if(this.sort_by === 'near')
+          {
+            return +new Date(b["dat"]) - +new Date(a["dat"])
+          }
+          else if(this.sort_by === 'cheap')
+          {
+            return a["ppk"] - b["ppk"]
+          }
+          else if(this.sort_by === 'mex')
+          {
+            return b["ppk"] - a["ppk"]
+          }
+        })
+      }
     }
   },
 
@@ -160,8 +463,39 @@ import WeekiChipButton from "@/components/elements/WeekiChipButton.vue"
           }
         }
       }
+
       return result
     },
+
+    // Get Search Items As Object
+    getSearchObject()
+    {
+      return {
+        text: this.s_text,
+        bs: this.s_bs,
+        location: this.s_location,
+        pc: this.s_pc,
+        pcd: this.s_pcd,
+        pg: this.s_pg,
+        pp: this.s_pp,
+        min_am: this.s_am[0],
+        max_am: this.s_am[1],
+        min_ppk: this.s_ppk[0],
+        max_ppk: this.s_ppk[1],
+        cn: this.s_cn,
+        sn: this.s_sn
+      }
+    }
+  },
+
+  // Page Variable Watchers
+  watch: {
+
+    // Watch Sort By
+    sort_by()
+    {
+      this.getSortedProducts()
+    }
   }
 })
 export default class Home extends Vue {}
