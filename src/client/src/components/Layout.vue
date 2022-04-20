@@ -256,7 +256,7 @@
 
         .line.w-100
 
-        p.mt-24.mb-0.text-center @ {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙
+        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.0.0
 
 WeekiNormalModal(
   v-if="checkPage(['employee', 'my_contacts'])"
@@ -468,6 +468,7 @@ import store from "@/store";
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable  @typescript-eslint/no-this-alias */
 
 @Options({
 
@@ -1157,8 +1158,8 @@ import store from "@/store";
 export default class Layout extends Vue {}
 </script>
 
-<style src="../assets/sass/layout/header.sass" lang="sass"></style>
-<style src="../assets/sass/layout/footer.sass" lang="sass"></style>
+<style src="../assets/sass/layout/header.sass" lang="sass" scoped></style>
+<style src="../assets/sass/layout/footer.sass" lang="sass" scoped></style>
 <style src="../assets/sass/layout/surface.sass" lang="sass"></style>
 <style src="../assets/sass/layout/account.sass" lang="sass"></style>
 <style src="../assets/sass/layout/dashboard.sass" lang="sass"></style>
