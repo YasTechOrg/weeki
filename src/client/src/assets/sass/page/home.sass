@@ -21,6 +21,20 @@
     > .col-md-9
       padding-left: 12px
 
+      @media screen and (max-width: 993px)
+        width: 100%!important
+        padding-left: 0!important
+
+      @media screen and (max-width: 480px)
+        .pl > .col-md-4
+          padding-left: 0!important
+          padding-right: 0!important
+
+      @media screen and (max-width: 993px) and (min-width: 600px)
+        .pl > .col-md-4
+          flex: 0 0 auto!important
+          width: 50%!important
+
       > .s_part
         background-color: white!important
         border-radius: 4px!important
