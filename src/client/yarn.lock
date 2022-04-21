@@ -1009,6 +1009,13 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.10.2.tgz"
   integrity sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ==
 
+"@salmon-ui/icons@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@salmon-ui/icons/-/icons-1.0.6.tgz#efea4d6b43220f83ed966887aa1ea727e12e214e"
+  integrity sha512-4i8Hr9vXRTS/h5VQ6GOXHuQnVOLIFtRPaeJ1KyFgDmnFaRTi0zo0xb61r8whfyGX2tZX9z8OMvImZ3fqPu5+vg==
+  dependencies:
+    core-js "^3.6.5"
+
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.0"
   resolved "https://registry.npmjs.org/@soda/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.8.0.tgz"
@@ -9670,6 +9677,11 @@ vue-router@^4.0.12:
   integrity sha512-CPXvfqe+mZLB1kBWssssTiWg4EQERyqJZes7USiqfW9B5N2x+nHlnsM1D3b5CaJ6qgCvMmYJnz+G0iWjNCvXrg==
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.18"
+
+vue-share-modal@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/vue-share-modal/-/vue-share-modal-2.0.6.tgz#f7cdff899ea1cc17050f0bbbc52f5291e05eed8b"
+  integrity sha512-J810iLejJafG93xUgHi9mc2e4bOo9i8r2r3JtpZ8PBDH8k9FHt7pP6BdBRNah6U5ZnZg0aDPMerbbgnQs4kPqA==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.3"
