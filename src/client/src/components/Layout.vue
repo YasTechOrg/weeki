@@ -65,7 +65,7 @@
       .mobile.d-none.row
 
         .col-4.d-flex.align-items-center.justify-content-start
-          img.cursor-pointer( src="../assets/img/icons/icon_menu.svg" alt="menu" )
+          img.cursor-pointer( src="../assets/img/icons/icon_menu.svg" alt="menu" @click="toggleMobileSidebar" )
 
         .col-4.d-flex.justify-content-center
           img.m-auto.cursor-pointer.logo( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
@@ -104,6 +104,32 @@
                   | Logout
 
           WeekiIconBtn( icon="icons/icon_login_white.svg" @click="goTo('/account/login?back=' + $route.path)" v-else )
+
+  #mobile_menu.d-none.w3-animate-left.h-100.w-100(
+    v-if="layout === 'surface' || layout === 'error' || layout === 'single' || layout === 'dashboard'"
+  )
+
+    img.position-absolute.cursor-pointer.exit.w3-animate-zoom(
+      @click="toggleMobileSidebar"
+      src="../assets/img/icons/icon_exit.svg"
+      alt="exit"
+    )
+
+    .logo.d-flex.align-items-center.justify-content-center
+      img.w3-animate-zoom.pt-1.pb-1.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="$router.push('/')" alt="weeki" )
+
+    WeekiIconButton.mt-24.mr-16.ml-16.w3-animate-zoom(
+      v-if="$route.path !== '/'"
+      text="Advanced Search"
+      icon="icons/icon_search_green.svg"
+    )
+
+    .surface.mt-24
+
+      MobileMenuItem( page="home" link="/" icon="home" )
+      MobileMenuItem( page="about" link="/about" icon="info" )
+      MobileMenuItem( page="contact" link="/contact" icon="phone" )
+      MobileMenuItem( page="faq" link="/faq" icon="question" )
 
   section.flex-grow-1( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
 
@@ -462,9 +488,12 @@ import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
 import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
 import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
+import WeekiIconButton from "@/components/elements/WeekiIconButton.vue"
+import MobileMenuItem from "@/components/components/MobileMenuItem.vue"
 import {useDropzone} from "vue3-dropzone"
-import Swal from "sweetalert2";
-import store from "@/store";
+import Swal from "sweetalert2"
+import store from "@/store"
+
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -479,7 +508,9 @@ import store from "@/store";
     WeekiIconBtn,
     WeekiNormalModal,
     WeekiTextInput,
-    WeekiTextArea
+    WeekiTextArea,
+    WeekiIconButton,
+    MobileMenuItem
   },
 
   // App Variables
@@ -563,6 +594,13 @@ import store from "@/store";
           // Load Page
           await this.load()
         }
+
+        // Define Menu Element
+        const el = document
+            .querySelector("#mobile_menu")!
+
+        // Check Null
+        if (el) if (!el.classList.contains("d-none")) el.classList.add("d-none")
       }
     },
 
@@ -981,6 +1019,11 @@ import store from "@/store";
       }
 
       return final
+    },
+
+    toggleMobileSidebar()
+    {
+      document.querySelector("#mobile_menu")!.classList.toggle("d-none")
     },
 
     dashboardMenuToggle()
