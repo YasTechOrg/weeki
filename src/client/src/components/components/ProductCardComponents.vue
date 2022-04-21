@@ -56,7 +56,7 @@
 
       .d-flex.align-items-center.justify-content-start( v-if="getGlobal" )
 
-        img.cursor-pointer( src="../../assets/img/icons/icon_share_gray.svg" alt="share" )
+        img.cursor-pointer( src="../../assets/img/icons/icon_share_gray.svg" @click="showShare = true" alt="share" )
 
         img.cursor-pointer.ml-16(
           src="../../assets/img/icons/icon_message_gray.svg"
@@ -94,6 +94,11 @@
 
         img( src="../../assets/img/icons/icon_arrow_right_green.svg" alt="gtp" )
 
+share-modal( :show="showShare" @update:show="showShare = false" :link="purl" )
+  template( v-for="(m, key) in modules" :key="key" )
+    share-module( tag="a" :href="m.url" :name="m.name" :variables="shareModalStyle" target="_blank" )
+      component( :is="m.component" )
+
 </template>
 
 <script lang="ts">
@@ -105,16 +110,45 @@ import { getToken } from "@/csrfManager"
 import { showToast, Types } from "@/toastManager"
 import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
 import WeekiButton from "@/components/elements/WeekiButton.vue"
+import { ChatCircle, At, Share, Twitter, FacebookFill } from "@salmon-ui/icons"
+import ShareModal from "vue-share-modal"
+import ShareModule from "vue-share-modal/src/components/share-module.vue"
+import {sanitizeUrl} from "@braintree/sanitize-url";
 
 @Options({
 
   // Widget Props
   props: ["product", "global"],
 
+  // Widget Variables
+  data()
+  {
+    return {
+      showShare: false,
+      base: location.origin,
+      shareModalStyle: {
+        fontFamily: 'Inter, sans-serif',
+        red: '#ee4d4d',
+        white: '#fefefe',
+        primary: '#ee6c4d',
+        primaryLight: '#ee6c4d08',
+        secondary: '#3d5a80',
+        secondaryLight: '#3d5a8096',
+      }
+    }
+  },
+
   // Widget Components
   components: {
     WeekiNormalModal,
-    WeekiButton
+    WeekiButton,
+    At,
+    Share,
+    Twitter,
+    ChatCircle,
+    FacebookFill,
+    ShareModal,
+    ShareModule,
   },
 
   // Widget Computed Variables
@@ -136,7 +170,24 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
     getGlobal()
     {
       return this.global === "true"
-    }
+    },
+
+    // Get Product Url
+    purl()
+    {
+      return this.base + '/single/' + this.product['id']
+    },
+
+    modules()
+    {
+      const text = `${this.product["family"]}, ${this.product["city"]}, ${this.product["code"]}, ${this.product["grade"]} | Weeki.de`
+      return [
+        { name: "Telegram", component: ChatCircle, url: sanitizeUrl(`https://t.me/share/url?url=${this.purl}&text=${text}`) },
+        { name: "Twitter", component: Twitter, url: sanitizeUrl(`https://twitter.com/intent/tweet?text=${text}&url=${this.purl}`)  },
+        { name: "E-mail", component: At, url: sanitizeUrl(`mailto:?subject=${text}&body=${this.purl}`)  },
+        { name: "Facebook", component: FacebookFill, url: ""  },
+      ];
+    },
   },
 
   // Page Methods

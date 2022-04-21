@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
   "author": {
     "url": "https://yastech.org",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@braintree/sanitize-url": "^5.0.2",
     "@popperjs/core": "^2.10.1",
+    "@salmon-ui/icons": "^1.0.6",
     "@types/sockjs-client": "^1.5.1",
     "@vueform/slider": "^2.0.9",
     "axios": "^0.22.0",
@@ -30,6 +31,7 @@
     "vue-class-component": "^8.0.0-0",
     "vue-lottie-player": "^0.1.9",
     "vue-router": "^4.0.12",
+    "vue-share-modal": "^2.0.6",
     "vue-toastification": "^2.0.0-rc.1",
     "vue3-carousel": "^0.1.25",
     "vue3-dropzone": "^0.0.7",
