@@ -131,6 +131,20 @@
       MobileMenuItem( page="contact" link="/contact" icon="phone" )
       MobileMenuItem( page="faq" link="/faq" icon="question" )
 
+    .dashboard( v-if="checkAuth" )
+
+      .part.mt-12( v-for="(item, index) in dashboard_menu_titles" :key="item" )
+
+        .part_title.d-flex.align-items-center.justify-content-start
+
+          img.mr-16( :src="require(`@/assets/img/icons/${ item.icon }.svg`)" :alt="item.name" )
+
+          p.mb-0 {{ item.name }}
+
+        .menu_items( v-if="typeof this.userInfo['access'] !== 'undefined' && this.userInfo['access'] != null" )
+
+          MobileMenuItem( v-for="link in dashboard_menu(index)" :key="link" :page="link.name" :link="link.path" :icon="link.icon" item="dash" )
+
   section.flex-grow-1( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
 
     slot
@@ -282,7 +296,7 @@
 
         .line.w-100
 
-        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.0.2
+        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.0.3
 
 WeekiNormalModal(
   v-if="checkPage(['employee', 'my_contacts'])"
