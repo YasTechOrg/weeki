@@ -79,6 +79,43 @@ class ProductRestController
         productService.update(product)
     }
 
+    @GetMapping("/get/single/{id}")
+    fun getSingle(request: HttpServletRequest, @PathVariable id: String): Mono<ProductCard>
+    {
+        val product = productService.getById(id)
+
+        val user = userService.get(product.publisher!!)
+
+        val seller = if (product.publisher == product.owner) "" else "${user.firstname} ${user.lastname}"
+
+        val company = when(user.role)
+        {
+            USERS.NORMAL_USER -> null
+            USERS.EMPLOYEE -> userService.get(product.owner!!).name
+            else -> user.name
+        }
+
+        return ProductCard(
+            product.id!!,
+            product.type,
+            product.family,
+            product.country,
+            product.city,
+            product.location,
+            product.code,
+            product.grade,
+            product.packing,
+            product.amount,
+            product.ppk,
+            if (product.images!!.isEmpty()) mutableListOf() else product.images!!,
+            product.bs,
+            product.description,
+            seller,
+            company,
+            product.date
+        ).toMono()
+    }
+
     @GetMapping("/get")
     fun get(request: HttpServletRequest): Flux<ProductCard>
     {

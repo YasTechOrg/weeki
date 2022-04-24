@@ -56,7 +56,7 @@ class WebAppSecurity
             .antMatchers("/css/*", "/img/*", "/js/*").permitAll()
 
             // ACCESS WEBSOCKET
-            .antMatchers("/wst/**").permitAll()
+            .antMatchers("/wst/**", "/api/rest/product/get/single/*").permitAll()
 
             // ACCESS TO AUTH APIS AND CONTROLLERS
             .antMatchers(

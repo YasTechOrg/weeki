@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+const Single = () => import(/* webpackChunkName: "home" */ "@/views/surface/Single.vue")
 const Home = () => import(/* webpackChunkName: "home" */ "@/views/surface/Home.vue")
 const Faq = () => import(/* webpackChunkName: "faq" */ "@/views/surface/Faq.vue")
 const Contact = () => import(/* webpackChunkName: "contact" */ "@/views/surface/Contact.vue")
@@ -50,6 +51,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/faq',
     name: 'FAQ',
     component: Faq,
+    meta: { layout: "surface" },
+  },
+  {
+    path: '/single/:id',
+    name: 'Single',
+    component: Single,
     meta: { layout: "surface" },
   },
   {
