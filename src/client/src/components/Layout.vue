@@ -296,7 +296,7 @@
 
         .line.w-100
 
-        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.0.3
+        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.1.1
 
 WeekiNormalModal(
   v-if="checkPage(['employee', 'my_contacts'])"

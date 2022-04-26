@@ -44,7 +44,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xbackend-threads=4")
+        freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
 }
