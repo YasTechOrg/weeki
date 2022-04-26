@@ -6,7 +6,16 @@
     img( src="../../assets/animations/main_loader.svg" alt="Loading..." )
 
   .product( v-else )
-    | {{ product["type"] }}
+
+    .part1.row.m-0
+
+      .col-lg-7.pr-12
+        div
+          p.title.mb-0.fw-bold {{ product["family"] }}, {{ product["city"] }}, {{ product["code"] }}, {{ product["grade"] }}
+
+      .col-lg-5.pl-12
+        div
+          p.title.mb-0.fw-bold Seller Details
 
 </template>
 
