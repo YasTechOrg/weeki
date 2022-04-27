@@ -9,6 +9,9 @@
   > .product
 
     > .part1
+      @media screen and (max-width: 991px)
+        max-width: 600px
+        margin: auto!important
 
       > div
         @media screen and (max-width: 991px)
@@ -23,16 +26,52 @@
             color: black
             font-size: 16px
 
-        > div:first-child > .section1 > div:last-child
-          padding: 0 24px
+      > div:first-child
 
-          > .detail
-            background-color: #F5F5F5
-            border-radius: 4px
-            height: calc(100% - 74.5px)
-            padding: 16px
+        > div
+          @media screen and (max-width: 991px)
+            background-color: transparent!important
+            padding: 0!important
 
-          > .items
+          > .section1
 
-            > img
-              width: 18px
+            > div:first-child > img
+              margin-bottom: 33.5px
+
+              @media screen and (max-width: 991px)
+                margin-bottom: 10px!important
+
+            > div:last-child
+              padding: 0 24px
+
+              @media screen and (max-width: 991px)
+                display: none
+
+              > .detail
+                background-color: #F5F5F5
+                border-radius: 4px
+                height: calc(100% - 74.5px)
+                padding: 16px
+
+                > div
+
+                  > p:first-child
+                    color: #6E6E6E
+                    font-size: 14px
+                    margin-bottom: 8px!important
+
+                  > p:last-child
+                    color: black
+                    font-size: 16px
+
+              > .items
+
+                > img
+                  width: 18px
+
+
+      > div:not(:first-child)
+
+        > div
+          @media screen and (max-width: 991px)
+            box-shadow: 0 3px 6px #00000029

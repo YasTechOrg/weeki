@@ -15,7 +15,7 @@
 
           .section1.row.m-0
 
-            .col-7.p-0
+            .col-lg-7.p-0
               carousel( v-if="product['images'].length !== 0" :settings="slider_settings" )
 
                 Slide( v-for="item in product['images']" :key="item" )
@@ -30,21 +30,41 @@
 
             .col-5.flex.flex-column
 
-              .detail.flex-grow-1.flex.flex-column.justify-content-between
+              .detail.flex-grow-1.d-flex.flex-column.justify-content-between.align-items-center
 
-                div
-                  | test
+                div.text-center
+                  p Price per Kg
+                  p.mb-0.fw-bold €{{ product['ppk'] }}
 
-                div
-                  | test
+                div.text-center
+                  p Inventory Amount
+                  p.mb-0.fw-bold €{{ product['amount'] }}(Kg)
 
               .items.flex-grow-0.mt-16.text-end
-                img.pl-16( src="../../assets/img/icons/icon_bookmark_gray.svg" alt="bookmark" )
-                img( src="../../assets/img/icons/icon_share_gray.svg" alt="share" )
+                img.mr-16.cursor-pointer( src="../../assets/img/icons/icon_bookmark_gray.svg" v-if="checkAuth" alt="bookmark" )
+                img.cursor-pointer( src="../../assets/img/icons/icon_share_gray.svg" @click="showShare = true" alt="share" )
+
+          p.title.fw-bold.mb-24.d-none.d-lg-block Product Details
+
+          .section2.d-none.d-lg-block
+            | in development...
+
+      .d-lg-none
+        div
+          p.title.mb-24.fw-bold Product Details
+
+          | in development...
 
       .col-lg-5.pl-12
         div
           p.title.mb-24.fw-bold Seller Details
+
+          | in development...
+
+share-modal( :show="showShare" @update:show="showShare = false" :link="purl" )
+  template( v-for="(m, key) in modules" :key="key" )
+    share-module( tag="a" :href="m.url" :name="m.name" :variables="shareModalStyle" target="_blank" )
+      component( :is="m.component" )
 
 </template>
 
@@ -57,6 +77,10 @@ import axios from "axios"
 import { getToken } from "@/csrfManager"
 import { mapGetters } from "vuex"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
+import { sanitizeUrl } from "@braintree/sanitize-url"
+import { ChatCircle, At, Share, Twitter, FacebookFill } from "@salmon-ui/icons"
+import ShareModal from "vue-share-modal";
+import ShareModule from "vue-share-modal/src/components/share-module.vue"
 
 @Options({
 
@@ -66,6 +90,13 @@ import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
     Carousel,
     Slide,
     Navigation,
+    At,
+    Share,
+    Twitter,
+    ChatCircle,
+    FacebookFill,
+    ShareModal,
+    ShareModule,
   },
 
   // Page Variables
@@ -73,11 +104,22 @@ import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
   {
     return {
       product: {},
+      showShare: false,
       slider_settings: {
         itemsToShow: 1,
         snapAlign: 'center',
         wrapAround: true
       },
+      base: location.origin,
+      shareModalStyle: {
+        fontFamily: 'Inter, sans-serif',
+        red: '#ee4d4d',
+        white: '#fefefe',
+        primary: '#ee6c4d',
+        primaryLight: '#ee6c4d08',
+        secondary: '#3d5a80',
+        secondaryLight: '#3d5a8096',
+      }
     }
   },
 
@@ -104,8 +146,26 @@ import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
   // Page Computed Variables
   computed: {
     ...mapGetters([
-      "getAuth"
-    ])
+      "getAuth",
+      "checkAuth"
+    ]),
+
+    // Get Product Url
+    purl()
+    {
+      return this.base + '/single/' + this.product['id']
+    },
+
+    modules()
+    {
+      const text = `${this.product["family"]}, ${this.product["city"]}, ${this.product["code"]}, ${this.product["grade"]} | Weeki.de`
+      return [
+        { name: "Telegram", component: ChatCircle, url: sanitizeUrl(`https://t.me/share/url?url=${this.purl}&text=${text}`) },
+        { name: "Twitter", component: Twitter, url: sanitizeUrl(`https://twitter.com/intent/tweet?text=${text}&url=${this.purl}`)  },
+        { name: "E-mail", component: At, url: sanitizeUrl(`mailto:?subject=${text}&body=${this.purl}`)  },
+        { name: "Facebook", component: FacebookFill, url: ""  },
+      ]
+    },
   },
 
   // Page Variable Watchers
@@ -118,7 +178,7 @@ export default class Single extends Vue {}
 
 <style scoped src="../../assets/sass/page/single.sass" lang="sass"></style>
 <style lang="sass">
-#single > .product > .part1 > div > div:first-child > .section1 > div:first-child
+#single > .product > .part1 > div:first-child > div > .section1 > div:first-child
 
   .carousel
     background-color: transparent!important
@@ -132,6 +192,12 @@ export default class Single extends Vue {}
     width: 100%
     -o-object-fit: cover
     object-fit: cover
+
+  .carousel__pagination
+    padding: 0
+
+    @media screen and (max-width: 991px)
+      margin-bottom: 0!important
 
   .carousel__pagination-button
     padding-right: 0

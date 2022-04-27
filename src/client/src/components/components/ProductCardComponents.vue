@@ -113,7 +113,7 @@ import WeekiButton from "@/components/elements/WeekiButton.vue"
 import { ChatCircle, At, Share, Twitter, FacebookFill } from "@salmon-ui/icons"
 import ShareModal from "vue-share-modal"
 import ShareModule from "vue-share-modal/src/components/share-module.vue"
-import {sanitizeUrl} from "@braintree/sanitize-url";
+import { sanitizeUrl } from "@braintree/sanitize-url"
 
 @Options({
 
@@ -186,7 +186,7 @@ import {sanitizeUrl} from "@braintree/sanitize-url";
         { name: "Twitter", component: Twitter, url: sanitizeUrl(`https://twitter.com/intent/tweet?text=${text}&url=${this.purl}`)  },
         { name: "E-mail", component: At, url: sanitizeUrl(`mailto:?subject=${text}&body=${this.purl}`)  },
         { name: "Facebook", component: FacebookFill, url: ""  },
-      ];
+      ]
     },
   },
 
