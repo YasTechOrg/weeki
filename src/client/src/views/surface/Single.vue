@@ -124,7 +124,7 @@
               .left
 
                 .d-flex.justify-content-start.align-items-center
-
+                  | In Production
 
               .right
                 | :
