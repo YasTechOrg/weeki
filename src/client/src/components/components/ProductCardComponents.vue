@@ -14,7 +14,7 @@
   .content.pl-12.pr-12.mt-24.pb-16
 
     p.m-0.w-100.fw-bolder
-      | {{ product["family"] }}, {{ product["city"] }}, {{ product["code"] }}, {{ product["grade"] }}
+      | {{ product["type"] }}, {{ product["family"] }}, {{ product["city"] }}, {{ product["code"] }}, {{ product["grade"] }}
 
     .dl.d-flex.flex-column.mt-24
 

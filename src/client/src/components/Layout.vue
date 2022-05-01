@@ -296,7 +296,7 @@
 
         .line.w-100
 
-        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.1.3
+        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.1.4
 
 WeekiNormalModal(
   v-if="checkPage(['employee', 'my_contacts'])"
@@ -803,6 +803,8 @@ import store from "@/store"
     // On App Load
     async load()
     {
+      window.scrollTo(0, 0)
+
       if (this.checkAuth)
       {
         const d: any = this.$store.state.at_time
@@ -864,7 +866,6 @@ import store from "@/store"
                   location.href = "/dashboard?res=da_nu"
                 }
 
-                window.scrollTo(0, 0)
 
                 switch (this.$route.query.res)
                 {

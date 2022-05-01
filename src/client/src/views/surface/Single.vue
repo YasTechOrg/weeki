@@ -47,19 +47,95 @@
           p.title.fw-bold.mb-24.d-none.d-lg-block Product Details
 
           .section2.d-none.d-lg-block
-            | in development...
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Type
+              p.m-0 {{ product["type"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Family
+              p.m-0 {{ product["family"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 City/Country
+              p.m-0 {{ product["country"] }}, {{ product["city"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Code
+              p.m-0 {{ product["code"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Family
+              p.m-0 {{ product["grade"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Packing
+              p.m-0 {{ product["packing"] }}
+
+            .data.d-flex.flex-column.justify-content-between.align-items-start.border-0.pb-0
+              p.m-0 Description
+              p.m-0 {{ product["description"] }}
 
       .d-lg-none
         div
-          p.title.mb-24.fw-bold Product Details
 
-          | in development...
+          .title.d-flex.align-items-center.justify-content-between
+            p.fw-bold.m-0 Product Details
+            img( :src="require('../../assets/img/icons/icon_' + (mm_open ? 'plus' : 'minus') + '.svg')" @click="mm_open = !mm_open" alt="plus" )
+
+          .data_list.mt-24( :class="{ 'd-none' : !mm_open }" )
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Type
+              p.m-0 {{ product["type"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Family
+              p.m-0 {{ product["family"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 City/Country
+              p.m-0 {{ product["country"] }}, {{ product["city"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Code
+              p.m-0 {{ product["code"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Family
+              p.m-0 {{ product["grade"] }}
+
+            .data.d-flex.align-items-center.justify-content-between
+              p.m-0 Packing
+              p.m-0 {{ product["packing"] }}
+
+            .data.d-flex.flex-column.justify-content-between.align-items-start.border-0.pb-0
+              p.m-0 Description
+              p.m-0 {{ product["description"] }}
 
       .col-lg-5.pl-12
         div
           p.title.mb-24.fw-bold Seller Details
 
-          | in development...
+          .sd.d-flex.flex-column.justify-content-start
+
+            .sd_card.d-flex.align-items-center.justify-content-center
+
+              .left
+
+                .d-flex.justify-content-start.align-items-center
+
+
+              .right
+                | :
+
+          p.title.mb-24.fw-bold.mt-24 Product Location
+
+          .d-flex.align-items-start.justify-content-start
+
+            img( src="../../assets/img/icons/icon_location_gray.svg" alt="location" )
+
+            p.mb-0.ml-16 {{ product['location'] }}
 
 share-modal( :show="showShare" @update:show="showShare = false" :link="purl" )
   template( v-for="(m, key) in modules" :key="key" )
@@ -119,7 +195,8 @@ import ShareModule from "vue-share-modal/src/components/share-module.vue"
         primaryLight: '#ee6c4d08',
         secondary: '#3d5a80',
         secondaryLight: '#3d5a8096',
-      }
+      },
+      mm_open: false
     }
   },
 
