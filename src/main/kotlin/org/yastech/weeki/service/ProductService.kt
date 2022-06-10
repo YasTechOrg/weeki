@@ -69,8 +69,9 @@ class ProductService
         max_am: Long,
         min_ppk: Long,
         max_ppk: Long,
-    ): MutableList<Product>?{
-
+    )
+        : MutableList<Product>?
+    {
         // Check Buyer / Seller Value
         val filterQueries = Criteria.where("bs").`is`(bs)
 

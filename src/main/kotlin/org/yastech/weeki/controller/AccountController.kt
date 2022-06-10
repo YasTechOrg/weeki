@@ -112,14 +112,8 @@ class AccountController
                 {
                     val notification: Notification? = company.notifications!!.find { it.id == "$id$counter" }
 
-                    if (notification != null)
-                    {
-                        counter++
-                    }
-                    else
-                    {
-                        break
-                    }
+                    if (notification != null) counter++
+                    else break
                 }
 
                 id = "$id$counter"
