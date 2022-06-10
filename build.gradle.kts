@@ -69,6 +69,6 @@ tasks.register<Copy>("copyFrontendToBuild") {
 
 tasks.register<Exec>("npmBuild") {
     workingDir("./src/client/")
-    commandLine("chmod", "-R", "a+x", "node_modules")
+    commandLine("rm", "-rf", "node_modules")
     commandLine("npm","run", "build")
 }
