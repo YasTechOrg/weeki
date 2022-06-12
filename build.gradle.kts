@@ -53,6 +53,15 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.processResources {
+    dependsOn("copyFrontendToBuild")
+}
+
 tasks.bootJar {
     archiveFileName.set("weeki.jar")
+}
+
+tasks.register<Copy>("copyFrontendToBuild") {
+    from("$projectDir/src/client/dist/")
+    into("$buildDir/resources/main/static")
 }
