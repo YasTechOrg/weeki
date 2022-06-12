@@ -53,10 +53,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.processResources {
-    dependsOn("copyFrontendToBuild")
-}
-
 tasks.bootJar {
     archiveFileName.set("weeki.jar")
 }
