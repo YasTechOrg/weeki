@@ -60,15 +60,3 @@ tasks.processResources {
 tasks.bootJar {
     archiveFileName.set("weeki.jar")
 }
-
-tasks.register<Copy>("copyFrontendToBuild") {
-    dependsOn("npmBuild")
-    from("$projectDir/src/client/dist/")
-    into("$buildDir/resources/main/static")
-}
-
-tasks.register<Exec>("npmBuild") {
-    workingDir("./src/client/")
-    commandLine("rm", "-rf", "node_modules")
-    commandLine("npm","run", "build")
-}
