@@ -91,7 +91,10 @@ class SearchController(
 
         // Convert Result To Json
         val jsonSearchResult = Gson()
-            .toJson(mutableListOf(indexItems.size, indexItems[page - 1]))
+            .toJson({
+                if(indexItems.isNotEmpty()) mutableListOf(indexItems.size, indexItems[page - 1])
+                else mutableListOf()
+            })
 
         // Send Result To Client
         searchDispatcher.send(stompHeaderAccessor.sessionId!!, jsonSearchResult)
