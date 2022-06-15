@@ -362,6 +362,7 @@ import {watch} from "vue"
       this.searchClient.subscribe('/user/search/get', function (response)
       {
         const resp = JSON.parse(response.body)
+
         if (resp[1].length === 0)
         {
           t.searchResult = null
