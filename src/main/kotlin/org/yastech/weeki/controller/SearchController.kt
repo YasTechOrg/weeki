@@ -84,16 +84,11 @@ class SearchController(
 
         val indexItems = mapResult.chunked(6)
 
-        /*
-        * Todo
-        *  Index 0 out of bounds for length 0
-        */
-
         // Convert Result To Json
         val jsonSearchResult = Gson()
             .toJson({
                 if(indexItems.isNotEmpty()) mutableListOf(indexItems.size, indexItems[page - 1])
-                else mutableListOf()
+                else mutableListOf(0, emptyList<Any>())
             })
 
         // Send Result To Client
