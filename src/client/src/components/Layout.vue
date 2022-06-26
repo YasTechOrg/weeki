@@ -1,1220 +1,328 @@
-<template lang="pug">
-
-.layout.d-flex.flex-column
-
-  header.w-100.bg-white( v-if="layout !== 'account'" )
-
-    .inner.gm
-
-      .desktop.d-flex.justify-content-between.align-items-center
-
-        .left.d-flex.align-items-center
-
-          img.cursor-pointer.logo( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
-
-          .d-flex.flex-nowrap
-
-            router-link.text-decoration-none(
-              v-for="item in home_menu"
-              :key="item"
-              :to="item.path"
-              active-class="ac"
-            ) {{ item.name }}
-
-        .right.d-flex.align-items-center.justify-content-end
-
-          .search
-
-          .nt
-
-          .language
-
-          .account.btn-group( v-if="checkAuth" )
-
-            WeekiProfile.cursor-pointer(
-              :info="userInfo"
-              data-bs-toggle="dropdown"
-              data-bs-auto-close="true"
-              aria-expanded="false"
-            )
-
-            ul.dropdown-menu.dropdown-menu-end( aria-labelledby="accountDropdown" )
-
-              li
-                router-link.dropdown-item.d-flex.align-items-center( to="/dashboard" active-class="active" )
-                  span.material-icons.md-20.me-2 dashboard
-                  | Dashboard
-
-              li
-                router-link.dropdown-item.d-flex.align-items-center( to="/dashboard/profile" active-class="active" )
-                  span.material-icons.md-20.me-2 person
-                  | Profile
-
-              li
-                router-link.dropdown-item.d-flex.align-items-center( to="/dashboard/password" active-class="active" )
-                  span.material-icons.md-20.me-2 lock
-                  | Password
-
-              li
-                a.dropdown-item.d-flex.align-items-center.cursor-pointer( @click="logoutUser" )
-                  span.material-icons.md-20.me-2 logout
-                  | Logout
-
-          WeekiButton( text="Login / Register" @click="goTo('/account/login?back=' + $route.path)" v-else )
-
-      .mobile.d-none.row
-
-        .col-4.d-flex.align-items-center.justify-content-start
-          img.cursor-pointer( src="../assets/img/icons/icon_menu.svg" alt="menu" @click="toggleMobileSidebar" )
-
-        .col-4.d-flex.justify-content-center
-          img.m-auto.cursor-pointer.logo( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
-
-        .col-4.d-flex.align-items-center.justify-content-end
-
-          .account.btn-group( v-if="checkAuth" )
-
-            WeekiProfile.cursor-pointer(
-              :info="userInfo"
-              data-bs-toggle="dropdown"
-              data-bs-auto-close="true"
-              aria-expanded="false"
-            )
-
-            ul.dropdown-menu.dropdown-menu-end( aria-labelledby="accountDropdown" )
-
-              li
-                router-link.dropdown-item.d-flex.align-items-center( to="/dashboard" active-class="active" )
-                  span.material-icons.md-20.me-2 dashboard
-                  | Dashboard
-
-              li
-                router-link.dropdown-item.d-flex.align-items-center( to="/dashboard/profile" active-class="active" )
-                  span.material-icons.md-20.me-2 person
-                  | Profile
-
-              li
-                router-link.dropdown-item.d-flex.align-items-center( to="/dashboard/password" active-class="active" )
-                  span.material-icons.md-20.me-2 lock
-                  | Password
-
-              li
-                a.dropdown-item.d-flex.align-items-center.cursor-pointer( @click="logoutUser" )
-                  span.material-icons.md-20.me-2 logout
-                  | Logout
-
-          WeekiIconBtn( icon="icons/icon_login_white.svg" @click="goTo('/account/login?back=' + $route.path)" v-else )
-
-  #mobile_menu.d-none.w3-animate-left.h-100.w-100(
-    v-if="layout === 'surface' || layout === 'error' || layout === 'single' || layout === 'dashboard'"
-  )
-
-    img.position-absolute.cursor-pointer.exit.w3-animate-zoom(
-      @click="toggleMobileSidebar"
-      src="../assets/img/icons/icon_exit.svg"
-      alt="exit"
-    )
-
-    .logo.d-flex.align-items-center.justify-content-center
-      img.w3-animate-zoom.pt-1.pb-1.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="$router.push('/')" alt="weeki" )
-
-    WeekiIconButton.mt-24.mr-16.ml-16.w3-animate-zoom(
-      v-if="$route.path !== '/'"
-      text="Advanced Search"
-      icon="icons/icon_search_green.svg"
-    )
-
-    .surface.mt-24
-
-      MobileMenuItem( page="home" link="/" icon="home" )
-      MobileMenuItem( page="about" link="/about" icon="info" )
-      MobileMenuItem( page="contact" link="/contact" icon="phone" )
-      MobileMenuItem( page="faq" link="/faq" icon="question" )
-
-    .dashboard( v-if="checkAuth" )
-
-      .part.mt-12( v-for="(item, index) in dashboard_menu_titles" :key="item" )
-
-        .part_title.d-flex.align-items-center.justify-content-start
-
-          img.mr-16( :src="require(`@/assets/img/icons/${ item.icon }.svg`)" :alt="item.name" )
-
-          p.mb-0 {{ item.name }}
-
-        .menu_items( v-if="typeof this.userInfo['access'] !== 'undefined' && this.userInfo['access'] != null" )
-
-          MobileMenuItem( v-for="link in dashboard_menu(index)" :key="link" :page="link.name" :link="link.path" :icon="link.icon" item="dash" )
-
-  section.flex-grow-1( v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface )
-
-    slot
-
-  section.flex-grow-1( v-if="layout === 'account'"  data-account )
-
-    div( :class="{ 'log' : $route.path === '/account/login' || $route.path === '/account/forgot', 'reg' : $route.path === '/account/register' }" )
-
-      slot
-
-  section.flex-grow-1( v-if="!(['account', 'dashboard', 'single', 'surface'].includes(layout))" )
-
-  section.flex-grow-1( v-if="layout === 'dashboard'"  data-dashboard )
-
-    .inner.gm.flex-nowrap.row
-
-      .sidebar.col-md.p-0.w3-hide-medium.w3-hide-small( :class="dashboardMenu" )
-
-        button.cao_btn.position-relative.d-flex.justify-content-center.align-items-center.cursor-pointer( @click="dashboardMenuToggle" )
-
-          img( src="../assets/img/icons/icon_menu_gray.svg" alt="o_a_c" )
-
-        .mb-24
-
-          .part.mt-24( v-for="(item, index) in dashboard_menu_titles" :key="item" )
-
-            .part_title.d-flex.align-items-center.justify-content-start
-
-              img.mr-16( :src="require(`@/assets/img/icons/${ item.icon }.svg`)" :alt="item.name" )
-
-              p.mb-0( v-if="dashboardMenu === 'open'" ) {{ item.name }}
-
-            .menu_items.pl-16( v-if="typeof this.userInfo['access'] !== 'undefined' && this.userInfo['access'] != null" )
-
-              router-link.d-flex.align-items-center.justify-content-start.text-decoration-none.mt-24(
-                v-for="link in dashboard_menu(index)"
-                :key="link"
-                active-class="menu_item_active"
-                :to="link.path"
-              )
-
-                .mi_label.mr-16
-
-                .mi_icon.d-flex.align-items-center.justify-content-start
-
-                  p.mb-0.material-icons.md-20 {{ link.icon }}
-
-                .mi_title.d-flex.align-items-center.justify-content-start( v-if="dashboardMenu === 'open'" )
-
-                  p.mb-0 {{ link.name }}
-
-              a.d-flex.align-items-center.justify-content-start.text-decoration-none.mt-24.cursor-pointer(
-                v-if="index === 3"
-                @click="logoutUser"
-              )
-
-                .mi_label.mr-16
-
-                .mi_icon.d-flex.align-items-center.justify-content-start
-
-                  p.mb-0.material-icons.md-20 logout
-
-                .mi_title.d-flex.align-items-center.justify-content-start( v-if="dashboardMenu === 'open'" )
-
-                  p.mb-0 Logout
-
-      .content.col-md
-
-        slot
-
-  footer(  v-if="layout !== 'account'" )
-
-    .inner.gm
-
-      .content.row.m-0
-
-        .col-md-3.p-0.d-flex.flex-column.justify-content-start
-
-          .logo
-            img.cursor-pointer( src="../assets/img/images/brand/logo.png" @click="goTo('/')" alt="Weeki" )
-
-          .language
-
-          .contact.mt-24.d-flex.align-items-center
-            img.mr-16( src="../assets/img/icons/icon_phone.svg" alt="phone" )
-            p.m-0 +49 1514 689615
-
-          .contact.mt-24.d-flex.align-items-center
-            img.mr-16( src="../assets/img/icons/icon_mail.svg" alt="mail" )
-            p.m-0 info@weeki.de
-
-        .col-md-9.p-0.row.m-0
-
-          .col-sm-6.p-0.row.m-0
-
-            .col-6.p-0.d-flex.flex-column.justify-content-start
-
-              p.mb-16.fw-bolder Company
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/" ) Home
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/about" ) About Us
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/contact" ) Contact Us
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/faq" ) FAQ
-
-            .col-6.p-0.d-flex.flex-column.justify-content-start
-
-              p.mb-16.fw-bolder Main Tools
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/planning" ) Planning
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/messages" ) Messages
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/email" ) E-Mail
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/contacts" ) My Contacts
-
-          .col-sm-6.p-0.row.m-0
-
-            .col-6.p-0.d-flex.flex-column.justify-content-start
-
-              p.mb-16.fw-bolder Main Process
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/products/add" ) Add Products
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/orders/send" ) Send Orders
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/claim" ) Claim
-
-            .col-6.p-0.d-flex.flex-column.justify-content-start
-
-              p.mb-16.fw-bolder Playful And Functional
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/blog" ) Blog
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/newspapers" ) News Papers
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/weather" ) Weather
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/traffic" ) Traffic
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/dob" ) Date Of Births
-
-              router-link.mb-0.mt-16.text-decoration-none( to="/dashboard/game" ) Game
-
-      .copyright
-
-        .line.w-100
-
-        p.mt-24.mb-0.text-center © {{ new Date().getFullYear() }} Weeki All Right Reserved. | #[a( :href="authorUrl" ) {{ authorName }}] made this site with 💙 | version 1.1.4
-
-WeekiNormalModal(
-  v-if="checkPage(['employee', 'my_contacts'])"
-  name="user_profile"
-  title="Profile"
-  max-width="588px"
-  max-height="73%"
-  scrollable="true"
-  mfs="true"
-  height="unset"
-)
-
-  .nf.d-flex.justify-content-center.align-items-center.pt-12.pb-12( v-if="Object.keys(getProfileModalData).length === 0" )
-
-    img( src="../assets/animations/main_loader.svg" alt="Loading..." )
-
-  .content( v-else )
-
-    .d-flex.justify-content-between.align-items-center
-
-      .d-flex.justify-content-start.align-items-center
-
-        WeekiProfile.profile( :info="getProfileModalData" )
-
-        .d-flex.flex-column.justify-content-center.align-items-start.pl-16
-
-          p.fw-bolder {{ getProfileModalData['firstname'] }} {{ getProfileModalData['lastname'] }}
-
-          .d-flex( v-if="Object.keys(getProfileModalData['rate']).length === 0" )
-
-            img( src="../assets/img/icons/icon_empty_star.svg" v-for="i in 5" :key="i" :class="{ 'mr-8' : i !== getStars }"  alt="s" )
-
-          .d-flex( v-else-if="getStars === 5" )
-
-            img( src="../assets/img/icons/icon_star.svg" v-for="i in 5" :key="i" :class="{ 'mr-8' : i !== getStars }"  alt="s" )
-
-          .d-flex( v-else )
-
-            img( src="../assets/img/icons/icon_star.svg" v-for="i in getStars" :key="i" :class="{ 'mr-8' : i !== 5 }"  alt="s" )
-            img( src="../assets/img/icons/icon_empty_star.svg" v-for="i in 5 - getStars" :key="i" :class="{ 'mr-8' : i !== 5 }"  alt="s" )
-
-      .d-flex.justify-content-end.align-items-center
-
-        .d-flex.flex-column.justify-content-center.align-items-end
-
-          img.cursor-pointer(
-            src="../assets/img/icons/icon_addUser_gray.svg"
-            v-if="!userInfo['contacts'].includes(getProfileModalData['email'])"
-            @click="addToContacts(getProfileModalData['email'])"
-            alt="Add To Contacts"
-          )
-
-          img.cursor-pointer(
-            src="../assets/img/icons/icon_removeUser_gray.svg"
-            @click="removeFromContacts(getProfileModalData['email'])"
-            alt="Remove From Contacts"
-            v-else
-          )
-
-          p.mb-0.mt-12.cursor-pointer(
-            data-bs-target="#WeekiNormalModal_user_profile_rate"
-            data-bs-toggle="modal"
-          )
-
-    .pl-40.mt-20
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../assets/img/icons/icon_phone.svg" alt="phone number" )
-        p.mb-0.ml-16 {{ getProfileModalData["phoneNumber"] }}
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../assets/img/icons/icon_mail.svg" alt="email" )
-        p.mb-0.ml-16 {{ getProfileModalData["email"] }}
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../assets/img/icons/icon_company.svg" alt="company" )
-        p.mb-0.ml-16 {{ getProfileModalCompany["companyName"] }}
-
-      .d-flex.justify-content-start.align-items-center.pt-16.pb-16
-        img( src="../assets/img/icons/icon_location.svg" alt="location" )
-        p.mb-0.ml-16 {{ getProfileModalData["address"] }}
-
-WeekiNormalModal(
-  v-if="checkPage(['employee', 'my_contacts'])"
-  name="user_profile_rate"
-  title="Rate"
-  max-width="380px"
-  max-height="73%"
-  scrollable="true"
-  mfs="true"
-  height="unset"
-)
-
-  p.mb-24 what's your rate?
-
-  .he.d-flex.justify-content-start.align-items-center.mb-12
-
-    WeekiProfile.employee( :info="getProfileModalData" )
-
-    p.ml-16.mb-0.fw-bolder {{ getProfileModalData['firstname'] }} {{ getProfileModalData['lastname'] }}
-
-  .st.d-flex.justify-content-around.justify-content-center.mb-24
-
-    img.cursor-pointer.unselectable(
-      src="../assets/img/icons/icon_star_big.svg"
-      v-for="(i, index) in getSelfStars"
-      @click="setProfileModalStars(index + 1)"
-      :key="i" alt="s"
-    )
-
-    img.cursor-pointer.unselectable(
-      src="../assets/img/icons/icon_empty_star_big.svg"
-      v-for="(i, index) in (5 - getSelfStars)"
-      @click="setProfileModalStars(getSelfStars + (index + 1))"
-      :key="i" alt="s"
-    )
-
-  WeekiButton.float-end( text="Confirm" @click="submitUserStars" )
-
-WeekiNormalModal(
-  v-if="checkPage(['my_products'])"
-  name="product_edit"
-  title="Edit Product"
-  max-width="588px"
-  max-height="73%"
-  scrollable="true"
-  mfs="true"
-  height="unset"
-)
-
-  p.mb-24.fw-bold.text-black {{ getProductModalEdit["query"] }}
-
-  .upload_part.d-flex.justify-content-start.align-items-center.mb-20
-
-    .p_upload_card.position-relative.img_loading(
-      v-for="(i, index) in getProductModalEdit['files'].filter((item, item_index) => !onlineRemovedItemsProfileEdit.includes(item_index))"
-      :data-image_card="i"
-      :key="i"
-    )
-
-      img(
-        :src="'/api/rest/cdn/product/images/' + i"
-        @load="loadProductModalEditImage(i)"
-        alt="product img"
-      )
-
-      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" @click="onlineRemovedItemsProfileEdit.push(index)" )
-
-    .p_upload_card.position-relative(
-      v-for="(i, index) in files"
-      :key="i"
-    )
-
-      img( :src="i[1]" alt="product img" )
-
-      img.position-absolute( src="../assets/img/icons/icon_delete_gray.svg" alt="remove" @click="files.splice(index, 1)" )
-
-    .p_upload_card.add_p
-
-      .p_card.d-flex.justify-content-center.align-items-center( v-bind="getEditProductDropData.rootProps()" )
-
-        input( v-bind="getEditProductDropData.inputProps()" accept="image/jpeg, image/png" )
-
-        img( src="../assets/img/icons/icon_plus_small_green.svg" alt="add" )
-
-  .p_detail_part.row.m-0
-
-    .col-sm-6
-
-      WeekiTextInput.mb-3( name="packing" label="Packing" auto-complete="false" v-model:value="getProductModalEdit['packing']" )
-
-    .col-sm-6
-
-      WeekiTextInput.mb-3( name="location" label="Location" auto-complete="false" v-model:value="getProductModalEdit['location']" )
-
-    .col-sm-6
-
-      WeekiTextInput.mb-3( name="amount" label="Amount(kg)" auto-complete="false" type="number" v-model:value="getProductModalEdit['amount']" )
-
-    .col-sm-6
-
-      WeekiTextInput.mb-3( name="ppk" label="Price Per Kg(€)" auto-complete="false" type="number" v-model:value="getProductModalEdit['ppk']" )
-
-    .col-12
-
-      WeekiTextArea.mb-24( label="Description" resize="false" height="200px" v-model:value="getProductModalEdit['description']" )
-
-  WeekiButton.float-end( text="Edit Product" @click="uploadEditProduct" :disabled="isEditProductModalDisabled")
-
-</template>
-
-<script lang="ts">
-import {Options, Vue} from 'vue-class-component'
-import {mapGetters} from 'vuex'
-import axios from "axios"
-import {getToken} from '@/csrfManager'
-import {showToast, Types} from "@/toastManager"
-import SockJS from "sockjs-client"
-import Stomp from "webstomp-client"
-import WeekiButton from "@/components/elements/WeekiButton.vue"
-import WeekiProfile from "@/components/elements/WeekiProfile.vue"
-import WeekiIconBtn from "@/components/elements/WeekiIconBtn.vue"
-import WeekiNormalModal from "@/components/elements/WeekiNormalModal.vue"
-import WeekiTextInput from "@/components/elements/WeekiTextInput.vue"
-import WeekiTextArea from "@/components/elements/WeekiTextArea.vue"
-import WeekiIconButton from "@/components/elements/WeekiIconButton.vue"
-import MobileMenuItem from "@/components/components/MobileMenuItem.vue"
-import {useDropzone} from "vue3-dropzone"
-import Swal from "sweetalert2"
-import store from "@/store"
-
-
+<script lang="ts" setup>
 /* eslint @typescript-eslint/no-var-requires: "off" */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 /* eslint-disable  @typescript-eslint/no-this-alias */
 
-@Options({
+// Imports
+const WeekiButton = defineAsyncComponent(() => import("@/components/elements/WeekiButton.vue"))
+const WeekiProfile = defineAsyncComponent(() => import("@/components/elements/WeekiProfile.vue"))
+const WeekiIconBtn = defineAsyncComponent(() => import("@/components/elements/WeekiIconBtn.vue"))
+const WeekiNormalModal = defineAsyncComponent(() => import("@/components/elements/WeekiNormalModal.vue"))
+const WeekiTextInput = defineAsyncComponent(() => import("@/components/elements/WeekiTextInput.vue"))
+const WeekiTextArea = defineAsyncComponent(() => import("@/components/elements/WeekiTextArea.vue"))
+const WeekiIconButton = defineAsyncComponent(() => import("@/components/elements/WeekiIconButton.vue"))
+const MobileMenuItem = defineAsyncComponent(() => import("@/components/components/MobileMenuItem.vue"))
+const MobileMenu = defineAsyncComponent(() => import("@/components/components/MobileMenu.vue"))
+import {useDropzone} from "vue3-dropzone"
+import Swal from "sweetalert2"
+import store from "@/store"
+import {computed, defineAsyncComponent, onMounted, ref, watch} from "vue"
+import router from "@/router"
 
-  // App Components
-  components: {
-    WeekiButton,
-    WeekiProfile,
-    WeekiIconBtn,
-    WeekiNormalModal,
-    WeekiTextInput,
-    WeekiTextArea,
-    WeekiIconButton,
-    MobileMenuItem
-  },
+// variables
+const files = ref([])
+const onlineRemovedItemsProfileEdit = ref([])
+const authorName = ref(require("../../package.json").author.name)
+const authorUrl = ref(require("../../package.json").author.url)
+const home_menu = ref([
+  { name : "Home", path: "/" },
+  { name : "About", path: "/about" },
+  { name : "Contact", path: "/contact" },
+  { name : "Faq", path: "/faq" }
+])
 
-  // App Variables
-  data()
+const layout = computed(() => router.currentRoute.value.meta["layout"] as string)
+const checkAuth = computed(() => store.getters.checkAuth)
+const unSeenNotification = computed(() => store.state.unSeenNotification)
+const dashboard_menu_titles = ref([
+  { name: "Main Tools", icon: "icon_setting_gray" },
+  { name: "Main Process", icon: "icon_refresh_gray" },
+  { name: "Playful And Functional", icon: "icon_dashboard_gray" },
+  { name: "Account", icon: "icon_account_gray" },
+])
+const dm = ref([
+  [
+    { name: "Dashboard", icon: "dashboard", path: "/dashboard", id: "dashboard" },
+    { name: "Employee", icon: "people", path: "/dashboard/employee", id: "employee" },
+    { name: "Planning", icon: "calendar_today", path: "/dashboard/planning", id: "planning" },
+    { name: "Messages", icon: "message", path: "/dashboard/messages", id: "messages" },
+    { name: "E-Mail", icon: "email", path: "/dashboard/email", id: "e_mail" },
+    { name: "My Contacts", icon: "account_circle", path: "/dashboard/contacts", id: "my_contacts" },
+  ],
+  [
+    { name: "Add Products", icon: "create_new_folder", path: "/dashboard/products/add", id: "add_products" },
+    { name: "My Products", icon: "inbox", path: "/dashboard/products/self", id: "my_products" },
+    { name: "Bookmarks", icon: "bookmark", path: "/dashboard/bookmarks", id: "bookmarks" },
+    { name: "Send Orders", icon: "featured_play_list", path: "/dashboard/orders/send", id: "orders_send" },
+    { name: "Received Orders", icon: "move_to_inbox", path: "/dashboard/orders/received", id: "orders_received" },
+    { name: "Claim", icon: "restore_page", path: "/dashboard/claim", id: "claim" },
+  ],
+  [
+    { name: "Blog", icon: "info", path: "/dashboard/blog", id: "blog" },
+    { name: "Newspaper", icon: "description", path: "/dashboard/newspapers", id: "newspaper" },
+    { name: "Weather", icon: "light_mode", path: "/dashboard/weather", id: "weather" },
+    { name: "Traffic", icon: "traffic", path: "/dashboard/traffic", id: "traffic" },
+    { name: "Date Of Births", icon: "cake", path: "/dashboard/dob", id: "date_of_births" },
+    { name: "Game", icon: "games", path: "/dashboard/game", id: "game" },
+  ],
+  [
+    { name: "Profile", icon: "person", path: "/dashboard/account/profile", id: "profile" },
+    { name: "Password", icon: "lock", path: "/dashboard/account/password", id: "password" },
+  ]
+])
+const userInfo = computed(() => store.state.userData)
+const dashboardMenu = computed(() => store.state.d_menu)
+
+// Watchers
+watch(files, async () =>
+{
+  console.log(files.value)
+  const rendered: string[] = []
+
+  for (let i = 0; i < files.value.length; i++)
   {
-    return {
-      files: [],
-      onlineRemovedItemsProfileEdit: [],
-      authorName: require("../../package.json").author.name,
-      authorUrl: require("../../package.json").author.url,
-      home_menu: [
-        { name : "Home", path: "/" },
-        { name : "About", path: "/about" },
-        { name : "Contact", path: "/contact" },
-        { name : "Faq", path: "/faq" }
-      ],
+    const reader = new FileReader()
 
-      unSeenNotification: false,
-
-      dashboard_menu_titles: [
-        { name: "Main Tools", icon: "icon_setting_gray" },
-        { name: "Main Process", icon: "icon_refresh_gray" },
-        { name: "Playful And Functional", icon: "icon_dashboard_gray" },
-        { name: "Account", icon: "icon_account_gray" },
-      ],
-
-      dm: [
-        [
-          { name: "Dashboard", icon: "dashboard", path: "/dashboard", id: "dashboard" },
-          { name: "Employee", icon: "people", path: "/dashboard/employee", id: "employee" },
-          { name: "Planning", icon: "calendar_today", path: "/dashboard/planning", id: "planning" },
-          { name: "Messages", icon: "message", path: "/dashboard/messages", id: "messages" },
-          { name: "E-Mail", icon: "email", path: "/dashboard/email", id: "e_mail" },
-          { name: "My Contacts", icon: "account_circle", path: "/dashboard/contacts", id: "my_contacts" },
-        ],
-        [
-          { name: "Add Products", icon: "create_new_folder", path: "/dashboard/products/add", id: "add_products" },
-          { name: "My Products", icon: "inbox", path: "/dashboard/products/self", id: "my_products" },
-          { name: "Bookmarks", icon: "bookmark", path: "/dashboard/bookmarks", id: "bookmarks" },
-          { name: "Send Orders", icon: "featured_play_list", path: "/dashboard/orders/send", id: "orders_send" },
-          { name: "Received Orders", icon: "move_to_inbox", path: "/dashboard/orders/received", id: "orders_received" },
-          { name: "Claim", icon: "restore_page", path: "/dashboard/claim", id: "claim" },
-        ],
-        [
-          { name: "Blog", icon: "info", path: "/dashboard/blog", id: "blog" },
-          { name: "Newspaper", icon: "description", path: "/dashboard/newspapers", id: "newspaper" },
-          { name: "Weather", icon: "light_mode", path: "/dashboard/weather", id: "weather" },
-          { name: "Traffic", icon: "traffic", path: "/dashboard/traffic", id: "traffic" },
-          { name: "Date Of Births", icon: "cake", path: "/dashboard/dob", id: "date_of_births" },
-          { name: "Game", icon: "games", path: "/dashboard/game", id: "game" },
-        ],
-        [
-          { name: "Profile", icon: "person", path: "/dashboard/account/profile", id: "profile" },
-          { name: "Password", icon: "lock", path: "/dashboard/account/password", id: "password" },
-        ]
-      ]
-    }
-  },
-
-  // App Watchers
-  watch: {
-
-    // Set Layout Title
-    $route: {
-      immediate: true,
-      async handler(to)
-      {
-        // Set Title
-        document.title = to.meta.title || `Weeki`
-
-        // Is Router Loaded
-        if (typeof this.$route.name !== 'undefined')
-        {
-
-          // Set Title
-          document.title = to.meta.title || `${ this.$route.name } | Weeki`
-
-          // Disable All Schedule
-          this.$store.commit("disableNotificationsSchedule")
-
-          // Load Page
-          await this.load()
-        }
-
-        // Define Menu Element
-        const el = document
-            .querySelector("#mobile_menu")!
-
-        // Check Null
-        if (el) if (!el.classList.contains("d-none")) el.classList.add("d-none")
-      }
-    },
-
-    files()
+    reader.addEventListener("load", function ()
     {
-      console.log(this.files)
-      const rendered: string[] = []
+      rendered.push(reader.result as string)
+    }, false)
 
-      for (let i = 0; i < this.files.length; i++)
-      {
-        const reader = new FileReader()
-
-        reader.addEventListener("load", function ()
-        {
-          rendered.push(reader.result as string)
-        }, false)
-
-        reader.readAsDataURL(this.files[i])
-      }
-      console.log(rendered)
-      this.renderedFiles = rendered
-      console.log(this.renderedFiles)
-    }
-  },
-
-  // App Methods
-  methods: {
-
-    uploadEditProduct()
-    {
-      Swal.fire({
-        padding: "60px",
-        width: 153,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen()
-        {
-          Swal.showLoading()
-        }
-      })
-
-      const webRemoveItems: number[] = []
-      const webFiles = this.getProductModalEdit["files"] as string[]
-      const localFiles: Blob[] = this.files
-      const newUploadedImage: FormData[] = []
-
-      webFiles.forEach((value, index) =>
-      {
-        if ((this.onlineRemovedItemsProfileEdit as number[]).includes(index)) webRemoveItems.push(index)
-      })
-
-      const bodyFormData = new FormData()
-      bodyFormData.append("data", JSON.stringify(webRemoveItems))
-
-      axios.post(
-          "/api/rest/cdn/product/remove/" + this.getProductModalEdit["id"],
-          bodyFormData,
-          {
-            headers: {
-              "_csrf" : getToken() as any,
-              "Authorization": store.getters.getAuth
-            }
-          }
-      )
-      .then(() =>
-      {
-        localFiles.forEach(async (value, index) =>
-        {
-          const bodyFormData = new FormData()
-          bodyFormData.append("file", value)
-
-          await axios.post(
-              `/api/rest/product/image/${this.getProductModalEdit["id"]}`,
-              bodyFormData,
-              {
-                headers: {
-                  "_csrf" : getToken() as any,
-                  "Authorization" : this.getAuth,
-                  "Content-Type" : "multipart/form-data"
-                }
-              }
-          )
-          .then(value1 =>
-          {
-            showToast(`System : File ${index} uploaded successfully`, Types.SUCCESS)
-            newUploadedImage.push(value1.data)
-          })
-          .catch(reason =>
-          {
-            console.log(reason)
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Something went wrong!',
-            })
-          })
-        })
-      })
-      .catch(() =>
-      {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-        })
-      })
-      .finally(() =>
-      {
-       /* const formDataRef = document
-            .querySelector("#WeekiNormalModal_product_edit .p_detail_part") as HTMLDivElement
-        const formDataRefInputs = formDataRef.querySelectorAll("div > div > input") as NodeListOf<HTMLInputElement>
-        const formDataRefTextArea = formDataRef.querySelector("div > div > textarea") as HTMLTextAreaElement
-
-        const bodyFormData = new FormData()
-        bodyFormData.append("id", this.getProductModalEdit["id"])
-        bodyFormData.append("files", JSON.stringify(newUploadedImage))
-        bodyFormData.append("packing", formDataRefInputs[0].value)
-        bodyFormData.append("location", formDataRefInputs[1].value)
-        bodyFormData.append("amount", formDataRefInputs[2].value)
-        bodyFormData.append("ppk", formDataRefInputs[3].value)
-        bodyFormData.append("description", formDataRefTextArea.value)
-*/
-
-        axios.post(
-            "/api/rest/product/update",
-            bodyFormData,
-            {
-              headers: {
-                "_csrf" : getToken() as any,
-                "Authorization" : this.getAuth,
-              }
-            }
-        )
-            .then(() =>
-            {
-              location.href = "/dashboard/products/self?res=u_done"
-            })
-            .catch(() =>
-            {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong!',
-              })
-            })
-      })
-    },
-
-    // Image Load
-    loadProductModalEditImage(item)
-    {
-      (document.querySelector(`#WeekiNormalModal_product_edit div[data-image_card = ${item}]`) as HTMLDivElement)
-          .classList.replace('img_loading', 'img_loaded')
-    },
-
-    // On User Drop
-    onEditProductDrop(file)
-    {
-      if (["image/png", "image/jpeg"].includes(file[0]["type"]))
-      {
-        if (file[0]["size"] <= 819200)
-        {
-          const reader = new FileReader()
-
-          const t = this
-
-          reader.addEventListener("load", function ()
-          {
-            t.files.push([file[0], reader.result])
-          }, false)
-
-          reader.readAsDataURL(file[0])
-
-        }
-        else
-        {
-          showToast("System : Image size is more than 800MB!", Types.ERROR)
-        }
-      }
-      else
-      {
-        showToast("System : Please import the file in photo format!", Types.ERROR)
-      }
-    },
-
-    // On App Load
-    async load()
-    {
-      window.scrollTo(0, 0)
-
-      if (this.checkAuth)
-      {
-        const d: any = this.$store.state.at_time
-        const date1: any = new Date(d)
-        const date2: any = new Date()
-        const diffTime = Math.abs(date2 - date1)
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-        if (diffDays >= 5)
-        {
-          this.$store.commit("removeAuth")
-
-          if (this.layout === 'dashboard')
-          {
-            this.goTo("/account/login?res=expi")
-          }
-        }
-
-        if (this.layout === "account")
-        {
-          this.goTo("/dashboard")
-        }
-
-        axios
-            .get("/api/rest/account/user/get", {
-              headers: {
-                "_csrf" : getToken() as any,
-                "Authorization": this.getAuth
-              }
-            })
-            .then(async value =>
-            {
-              await this.$store.commit("setUserData", value.data)
-              await this.$store.commit("clearProfileModal")
-              await this.$store.commit("getTasks")
-            })
-            .catch((err) =>
-            {
-              console.log(err)
-              this.$store.commit("removeAuth")
-
-              showToast("System : Your login has expired", Types.WARNING)
-
-              if (this.layout === 'dashboard')
-              {
-                this.goTo("/account/login?res=expi&back=" + this.$route.path)
-              }
-            })
-            .finally(async () =>
-            {
-              if (this.layout === 'dashboard')
-              {
-                if (this.userInfo["access"].includes(this.$route.meta["id"]))
-                {
-                  location.href = "/dashboard?res=da"
-                }
-                else if (this.$route.meta["id"] === "employee" && this.userInfo["role"] === "NORMAL_USER")
-                {
-                  location.href = "/dashboard?res=da_nu"
-                }
-
-
-                switch (this.$route.query.res)
-                {
-                  case "add_task_comp":
-                    showToast("System : Task added successfully!", Types.SUCCESS)
-                    break
-
-                  case "add_task_err":
-                    showToast("System : An error occurred while add new task!", Types.ERROR)
-                    break
-
-                  case "da":
-                    showToast("System : Your access to this page has been restricted by your boss!", Types.ERROR)
-                    break
-
-                  case "da_nu":
-                    showToast("System : Normal Users don't have access to the employee page", Types.ERROR)
-                    break
-
-                  case "update_task_comp":
-                    showToast("System : Task edited successfully!", Types.SUCCESS)
-                    break
-
-                  case "update_task_err":
-                    showToast("System : An error occurred while edit a task!", Types.ERROR)
-                    break
-                }
-
-                // Get Notifications
-                await this.getNotifications()
-                const seenNotifications: boolean[] = []
-
-                for (const item in this.notifications)
-                {
-                  seenNotifications.push(item["seen"])
-                }
-
-                if (seenNotifications.includes(false))
-                {
-                  this.unSeenNotification = true
-                }
-
-                // Define this
-                // eslint-disable-next-line @typescript-eslint/no-this-alias
-                const t = this
-
-                // Connect To Socket Server
-                this.socket = new SockJS(location.origin + "/wst", [], {
-                  sessionId: function ()
-                  {
-                    return t.userInfo["socketId"]
-                  }
-                })
-
-                // Define Stomp Client
-                this.stompClient = Stomp.over(this.socket)
-
-                // Disable Stomp Logging
-                this.stompClient.debug = () => {
-                  //
-                }
-
-                // Connect Stomp
-                this.stompClient.connect({}, () =>
-                {
-
-                  // Subscribe Stomp
-                  this.stompClient.subscribe('/user/notifications/get', function (response)
-                  {
-                    // Show Notification
-                    showToast(JSON.parse(response.body).content, Types.INFO)
-
-                    t.getNotifications()
-                    t.unSeenNotification = true
-                  }, {
-                    "_csrf" : getToken() as any,
-                    "Authorization": this.getAuth
-                  })
-                })
-              }
-            })
-      }
-      else
-      {
-        if (this.layout === "dashboard")
-        {
-          this.goTo("/account/login")
-        }
-      }
-    },
-
-    // Go To Route
-    goTo(route: string)
-    {
-      this.$router.push(route)
-    },
-
-    // Logout
-    logoutUser()
-    {
-      this.$router.push("/account/login?res=logout")
-    },
-
-    // Get All Notifications
-    async getNotifications()
-    {
-
-      // Await Request
-      this.$store.commit("setNotifications", await new Promise(resolve =>
-      {
-
-        // Send Request
-        axios
-
-            // Send
-            .get("/api/rest/notifications/get", {
-              headers: {
-                "_csrf" : getToken() as any,
-                "Authorization": this.getAuth
-              }
-            })
-
-            // On Success
-            .then(value =>
-            {
-              resolve(value.data)
-            })
-
-            // On Error
-            .catch(reason => console.log(reason))
-      }))
-    },
-
-    dashboard_menu(index): any[]
-    {
-      const master = this.dm[index]
-
-      let final: any[] = []
-
-      if (index === 0)
-      {
-        final.push(master[0])
-
-        if (this.userInfo['role'] === 'COMPANY')
-        {
-          final.push(master[1])
-        }
-
-        for (let i = 2; i < master.length; i++)
-        {
-          if (!this.userInfo['access'].includes(master[i].id))
-          {
-            final.push(master[i])
-          }
-        }
-      }
-      else
-      {
-        for (let i = 0; i < master.length; i++)
-        {
-          if (!this.userInfo['access'].includes(master[i].id))
-          {
-            final.push(master[i])
-          }
-        }
-      }
-
-      return final
-    },
-
-    toggleMobileSidebar()
-    {
-      document.querySelector("#mobile_menu")!.classList.toggle("d-none")
-    },
-
-    dashboardMenuToggle()
-    {
-      if(this.dashboardMenu !== "open")
-      {
-        this.$store.commit("changeDashboardMenuState", "open")
-      }
-      else
-      {
-        this.$store.commit("changeDashboardMenuState", "close")
-      }
-    },
-
-    // Remove From Contacts
-    removeFromContacts(id: string)
-    {
-      this.$store.commit("removeFromContacts", { id : id, url : this.$route.path, promise : false })
-    },
-
-    // Add To Contacts
-    addToContacts(id: string)
-    {
-      this.$store.commit("addToContacts", { id : id, url : this.$route.path })
-    },
-
-    // Check Page
-    checkPage(ids: string[]): boolean
-    {
-      return ids.includes(this.$route.meta['id'])
-    },
-
-    submitUserStars()
-    {
-      this.$store.commit("submitUserStars", { id : this.getProfileModalData["email"], url : this.$route.path, stars : this.$store.state.profileModalStars })
-    },
-
-    setProfileModalStars(value)
-    {
-      this.$store.commit("setProfileModalStars", value)
-    }
-  },
-
-  // App Computed Variables
-  computed: {
-
-    // Get Page Layout
-    layout(): string
-    {
-      return this.$route.meta["layout"]
-    },
-
-    ...mapGetters([
-        "checkAuth",
-        "getAuth"
-    ]),
-
-    isEditProductModalDisabled()
-    {
-      /*const formDataRef = document
-          .querySelector("#WeekiNormalModal_product_edit .p_detail_part") as HTMLDivElement
-      const formDataRefInputs = formDataRef.querySelector("div > div > input") as NodeListOf<HTMLInputElement>
-      const formDataRefTextArea = formDataRef.querySelector("div > div > textarea") as HTMLTextAreaElement
-      const values = this.getProductModalEdit
-
-      if (
-          formDataRefInputs[0] == values["packing"] &&
-          formDataRefInputs[1] == values["location"] &&
-          formDataRefInputs[2] == values["amount"] &&
-          formDataRefInputs[3] == values["ppk"] &&
-          formDataRefTextArea == values["description"] &&
-          this.onlineRemovedItemsProfileEdit.length === 0 &&
-          this.files.length === 0
-      ) {
-        return true
-      }
-      else
-      {
-        false
-      }*/
-    },
-
-    getEditProductDropData()
-    {
-      const { getRootProps, getInputProps, ...rest } = useDropzone({ onDrop: this.onEditProductDrop })
-      return { rootProps: getRootProps, inputProps: getInputProps, rest: rest }
-    },
-
-    dashboardMenu()
-    {
-      return this.$store.state.d_menu
-    },
-
-    getProfileModalData()
-    {
-      return this.$store.state.profileModal
-    },
-
-    getProfileModalCompany()
-    {
-      return this.$store.state.profileModalCo
-    },
-
-    getProfileModalStars()
-    {
-      return this.$store.state.profileModalStars
-    },
-
-    getProductModalEdit()
-    {
-      return this.$store.state.productModalEdit
-    },
-
-    notifications()
-    {
-      return this.$store.state.notifications
-    },
-
-    // Get User Data
-    userInfo()
-    {
-      return this.$store.state.userData
-    },
-
-    // Get Stars
-    getStars()
-    {
-      if (this.getProfileModalData["rate"] !== null && typeof this.getProfileModalData["rate"] !== "undefined")
-      {
-        const size: any[] = Object.values(this.getProfileModalData["rate"])
-        let num = 0
-        for (let i = 0; i < size.length; i++)
-        {
-          num = num + size[i]
-        }
-        return Math.round(num / size.length)
-      }
-      else
-      {
-        return 0
-      }
-    },
-
-    // Get Stars
-    getSelfStars(): number
-    {
-      if (this.getProfileModalData["rate"] !== null && typeof this.getProfileModalData["rate"] !== "undefined")
-      {
-        if (this.getProfileModalStars == null)
-        {
-          const users = Object.keys(this.getProfileModalData["rate"])
-
-          if (users.includes(this.userInfo["email"]))
-          {
-            return this.getProfileModalData["rate"][this.userInfo["email"]]
-          }
-          else
-          {
-            return 0
-          }
-        }
-        else
-        {
-          return this.getProfileModalStars
-        }
-      }
-      else
-      {
-        return 0
-      }
-    },
+    reader.readAsDataURL(files.value[i])
   }
+  console.log(rendered)
 })
 
-export default class Layout extends Vue {}
+const toggleMobileSidebar = () => document.querySelector("#mobile_menu")!.classList.toggle("d-none")
+const logoutUser = () => router.push("/account/login?res=logout")
+
+const dashboardMenuToggle = () =>
+{
+  if(dashboardMenu.value !== "open") store.commit("changeDashboardMenuState", "open")
+  else store.commit("changeDashboardMenuState", "close")
+}
+
+const dashboard_menu = (index) =>
+{
+  const master: any[] = dm.value[index]
+
+  let final: any[] = []
+
+  if (index === 0)
+  {
+    final.push(master[0])
+
+    if (userInfo.value['role'] === 'COMPANY') final.push(master[1])
+
+    for (let i = 2; i < master.length; i++)
+      if (!userInfo.value['access'].includes(master[i].id)) final.push(master[i])
+  }
+  else
+    for (let i = 0; i < master.length; i++)
+      if (!userInfo.value['access'].includes(master[i].id)) final.push(master[i])
+
+  return final
+}
+
 </script>
+
+<template>
+
+<div class="layout d-flex flex-column">
+
+  <!-- Header -->
+  <header class="w-100 bg-white" v-if="layout !== 'account'">
+    <div class="inner gm">
+
+      <!-- Desktop -->
+      <div class="desktop d-flex justify-content-between align-items-center">
+        <div class="left d-flex align-items-center">
+          <img src="../assets/img/images/brand/logo.png" @click="$router.push('/')" alt="Weeki" class="cursor-pointer logo">
+          <div class="d-flex flex-nowrap">
+            <router-link
+                 class="text-decoration-none"
+                 v-for="item in home_menu"
+                 :key="item"
+                 :to="item.path"
+                 active-class="ac">
+              {{ item.name }}
+            </router-link>
+          </div>
+        </div>
+        <div class="right d-flex align-items-center justify-content-end">
+          <!-- ToDO -->
+          <div class="search"></div>
+          <div class="nt"></div>
+          <div class="language"></div>
+          <div class="account btn-group" v-if="checkAuth">
+            <WeekiProfile
+                class="cursor-pointer"
+                :info="userInfo"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="true"
+                aria-expanded="false"/>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown" >
+              <li><router-link class="dropdown-item d-flex align-items-center" to="/dashboard" active-class="active">
+                <span class="material-icons md-20 me-2">dashboard</span>
+                Dashboard
+              </router-link></li>
+              <li><router-link class="dropdown-item d-flex align-items-center" to="/dashboard/profile" active-class="active">
+                <span class="material-icons md-20 me-2">person</span>
+                Profile
+              </router-link></li>
+              <li><router-link class="dropdown-item d-flex align-items-center" to="/dashboard/password" active-class="active">
+                <span class="material-icons md-20 me-2">lock</span>
+                Password
+              </router-link></li>
+              <li><a class="dropdown-item d-flex align-items-center" @click="logoutUser">
+                <span class="material-icons md-20 me-2">logout</span>
+                Logout
+              </a></li>
+            </ul>
+          </div>
+          <WeekiButton text="Login / Register" @click="$router.push('/account/login?back=' + $route.path)" v-else/>
+        </div>
+      </div>
+
+      <!-- Mobile -->
+      <div class="mobile d-none row">
+        <div class="col-4 d-flex align-items-center justify-content-start">
+          <img src="../assets/img/icons/icon_menu.svg" alt="menu" @click="toggleMobileSidebar" class="cursor-pointer">
+        </div>
+        <div class="col-4 d-flex justify-content-center">
+          <img src="../assets/img/images/brand/logo.png"
+               @click="$router.push('/')" alt="Weeki"
+               class="m-auto cursor-pointer logo">
+        </div>
+        <div class="col-4 d-flex align-items-center justify-content-end">
+          <div class="account btn-group" v-if="checkAuth">
+            <WeekiProfile
+                class="cursor-pointer"
+                :info="userInfo"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="true"
+                aria-expanded="false"/>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+              <li>
+                <router-link
+                    class="dropdown-item d-flex align-items-center"
+                    to="/dashboard" active-class="active">
+                  <span class="material-icons md-20 me-2">dashboard</span>
+                  Dashboard
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                    class="dropdown-item d-flex align-items-center"
+                    to="/dashboard/profile" active-class="active">
+                  <span class="material-icons md-20 me-2">person</span>
+                  Profile
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                    class="dropdown-item d-flex align-items-center"
+                    to="/dashboard/password" active-class="active">
+                  <span class="material-icons md-20 me-2">lock</span>
+                  Password
+                </router-link>
+              </li>
+              <li>
+                <a
+                    class="dropdown-item d-flex align-items-center cursor-pointer"
+                    @click="logoutUser">
+                  <span class="material-icons md-20 me-2">logout</span>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+          <WeekiIconBtn
+              icon="icons/icon_login_white.svg"
+              @click="$router.push('/account/login?back=' + $route.path)"
+              v-else/>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <MobileMenu :dm="dm" :title="dashboard_menu_titles"/>
+
+  <section class="flex-grow-1" v-if="layout === 'surface' || layout === 'error' || layout === 'single'" data-surface>
+    <slot/>
+  </section>
+
+  <section class="flex-grow-1" v-if="layout === 'account'" data-account>
+    <div :class="{ 'log' : $route.path === '/account/login' || $route.path === '/account/forgot', 'reg' : $route.path === '/account/register' }">
+      <slot></slot>
+    </div>
+  </section>
+
+  <section class="flex-grow-1" v-if="!(['account', 'dashboard', 'single', 'surface'].includes(layout))"></section>
+
+  <section class="flex-grow-1" v-if="layout === 'dashboard'" data-dashboard>
+    <div class="inner gm flex-nowrap row">
+      <div class="sidebar col-md p-0 w3-hide-medium w3-hide-small" :class="dashboardMenu">
+        <button class="cao_btn position-relative d-flex justify-content-center align-items-center cursor-pointer" @click="dashboardMenuToggle">
+          <img src="../assets/img/icons/icon_menu_gray.svg" alt="o_a_c">
+        </button>
+
+        <div class="mb-24">
+          <div class="part mt-24" v-for="(item, index) in dashboard_menu_titles" :key="item">
+            <div class="part_title d-flex align-items-center justify-content-start">
+              <img :src="require(`@/assets/img/icons/${ item.icon }.svg`)"
+                   :alt="item.name" class="mr-16">
+              <p class="mb-0" v-if="dashboardMenu === 'open'">
+                {{ item.name }}
+              </p>
+            </div>
+
+            <div class="menu_items pl-16" v-if="typeof userInfo['access'] !== 'undefined' && userInfo['access'] != null">
+              <router-link
+                  class="d-flex align-items-center justify-content-start text-decoration-none mt-24"
+                  v-for="link in dashboard_menu(index)"
+                  :key="link"
+                  active-class="menu_item_active"
+                  :to="link.path">
+                <div class="mi_label mr-16"></div>
+
+                <div class="mi_icon d-flex align-items-center justify-content-start">
+                  <p class="mb-0 material-icons md-20">
+                    {{ link.icon }}
+                  </p>
+                </div>
+
+                <div class="mi_title d-flex align-items-center justify-content-start">
+                  <p class="mb-0">
+                    {{ link.name }}
+                  </p>
+                </div>
+              </router-link>
+              <a class="d-flex align-items-center justify-content-start text-decoration-none mt-24 cursor-pointer"
+                 v-if="index === 3"
+                 @click="logoutUser">
+                <div class="mi_label mr-16"></div>
+
+                <div class="mi_icon d-flex align-items-center justify-content-start">
+                  <p class="mb-0 material-icons md-20">logout</p>
+                </div>
+
+                <div class="mi_title d-flex align-items-center justify-content-start" v-if="dashboardMenu === 'open'">
+                  <p class="mb-0">Logout</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content col-md">
+        <slot/>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
 
 <style src="../assets/sass/layout/header.sass" lang="sass" scoped></style>
 <style src="../assets/sass/layout/footer.sass" lang="sass" scoped></style>

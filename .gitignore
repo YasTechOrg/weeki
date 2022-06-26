@@ -10,6 +10,9 @@ build/
 .classpath
 .factorypath
 *.log
+*.tar.gz
+*.zip
+*.rar
 .project
 .settings
 .springBeans

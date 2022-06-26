@@ -2,7 +2,7 @@
 
 button.weekiIconBtn.btn( :type="type" )
 
-  img( :src="require('@/assets/img/' + icon)" alt="img" )
+  //img( :src="require('@/assets/img/' + icon)" alt="img" )
 
 </template>
 

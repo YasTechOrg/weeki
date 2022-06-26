@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import store from "@/store";
+import {load} from "@/load";
 const Single = () => import(/* webpackChunkName: "home" */ "@/views/surface/Single.vue")
 const Home = () => import(/* webpackChunkName: "home" */ "@/views/surface/Home.vue")
 const Faq = () => import(/* webpackChunkName: "faq" */ "@/views/surface/Faq.vue")
@@ -202,6 +204,30 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior()
+  {
+    // always scroll to top
+    return { top: 0 }
+  },
+})
+
+router.afterEach(async (to) =>
+{
+
+  // Set Title
+  document.title = (to.meta.title || `${ to.name as string } | Weeki`) as string
+
+  // Disable All Schedule
+  store.commit("disableNotificationsSchedule")
+
+  // Load Page
+  //await load()
+
+  // Menu Element
+  const el = document.querySelector("#mobile_menu")!
+  if (el) if (!el.classList.contains("d-none")) el.classList.add("d-none")
+
+  //this.$progress.finish()
 })
 
 export default router

@@ -15,6 +15,7 @@ const store = createStore({
     d_menu: "open",
     tasks: [],
     notifications: [],
+    unSeenNotification: false,
     profileModal: {},
     profileModalCo: {},
     profileModalStars: {},
@@ -66,6 +67,11 @@ const store = createStore({
     setProfileModalStars(state, num)
     {
       state.profileModalStars = num
+    },
+
+    unSeenNotification(state, seen)
+    {
+      state.unSeenNotification = seen
     },
 
     clearProfileModal(state)

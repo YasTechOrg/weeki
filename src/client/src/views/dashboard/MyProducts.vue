@@ -1,132 +1,138 @@
-<template lang="pug">
+<template>
+<div id="myProducts">
 
-#myProducts
+  <!-- On Load -->
+  <div class="load d-flex align-items-center justify-content-center" v-if="products == null" >
+    <img src="../../assets/animations/main_loader.svg" alt="Loading...">
+  </div>
 
-  .load.d-flex.align-items-center.justify-content-center( v-if="products == null" )
+  <!-- Tab Bar -->
+  <WeekiTabBar :bottom="['For Sale', 'For Buy']" v-else>
 
-    img( src="../../assets/animations/main_loader.svg" alt="Loading..." )
+    <!-- Product Search -->
+    <WeekiSearchInput placeholder="Search" v-model:value="productsSearch"/>
 
-  WeekiTabBar( :bottom="['For Sale', 'For Buy']" v-else )
+    <!-- Buyer Tab -->
+    <WeekiTabBarTab btn="for_sale" :active="true">
+      <div class="list pt-12 row m-0">
+        <div class="col-sm-6 col-md-6 col-lg-4 pt-12 pb-12"
+             v-for="item in products" :key="item">
 
-    WeekiSearchInput( placeholder="Search" v-model:value="productsSearch" )
+          <!-- Product Card -->
+          <ProductCardComponents :product="item" global="false" @doProductReload="getProducts"/>
+        </div>
+      </div>
+    </WeekiTabBarTab>
 
-    WeekiTabBarTab( btn="for_sale" :active="true" )
+    <!-- Seller Tab -->
+    <WeekiTabBarTab btn="for_buy">
+      <div class="list pt-12 row m-0">
+        <div class="col-sm-6 col-md-6 col-lg-4 pt-12 pb-12"
+             v-for="item in products" :key="item">
 
-      .list.pt-12.row.m-0
+          <!-- Product Card -->
+          <ProductCardComponents :product="item" global="false" @doProductReload="getProducts"/>
+        </div>
+      </div>
+    </WeekiTabBarTab>
+  </WeekiTabBar><!--
 
-        .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts.filter(buyerMethod)" :key="item" )
-          ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
+  &lt;!&ndash; Tab Bar &ndash;&gt;
+  <WeekiTabBar :bottom="['For Sale', 'For Buy']" v-else>
 
-    WeekiTabBarTab( btn="for_buy" )
+    &lt;!&ndash; Product Search &ndash;&gt;
+    <WeekiSearchInput placeholder="Search" v-model:value="productsSearch"/>
 
-      .list.pt-12.row.m-0
+    &lt;!&ndash; Buyer Tab &ndash;&gt;
+    <WeekiTabBarTab btn="for_sale" :active="true">
+      <div class="list pt-12 row m-0">
+        <div class="col-sm-6 col-md-6 col-lg-4 pt-12 pb-12"
+             v-for="item in searchedProductsSwitch('buyer')" :key="item">
 
-        .col-sm-6.col-md-6.col-lg-4.pt-12.pb-12( v-for="item in filteredProducts.filter(sellerMethod)" :key="item" )
-          ProductCardComponents( :product="item" global="false" @doProductReload="getProducts" )
+          &lt;!&ndash; Product Card &ndash;&gt;
+          <ProductCardComponents :product="item" global="false" @doProductReload="getProducts"/>
+        </div>
+      </div>
+    </WeekiTabBarTab>
 
+    &lt;!&ndash; Seller Tab &ndash;&gt;
+    <WeekiTabBarTab btn="for_buy">
+      <div class="list pt-12 row m-0">
+        <div class="col-sm-6 col-md-6 col-lg-4 pt-12 pb-12"
+             v-for="item in searchedProductsSwitch('seller')" :key="item">
+
+          &lt;!&ndash; Product Card &ndash;&gt;
+          <ProductCardComponents :product="item" global="false" @doProductReload="getProducts"/>
+        </div>
+      </div>
+    </WeekiTabBarTab>
+  </WeekiTabBar>-->
+</div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+<script lang="ts" setup>
+// ToDo : BS Mode
 import { showToast, Types } from "@/toastManager"
-import WeekiSearchInput from "@/components/elements/WeekiSearchInput.vue"
-import ProductCardComponents from "@/components/components/ProductCardComponents.vue"
-import WeekiTabBar from "@/components/elements/WeekiTabBar.vue"
-import WeekiTabBarTab from "@/components/elements/WeekiTabBarTab.vue"
 import axios from "axios"
 import { getToken } from "@/csrfManager"
-import { mapGetters } from "vuex"
+import {computed, defineAsyncComponent, onMounted, ref} from "vue"
+import router from "@/router";
+import store from "@/store";
 
-@Options({
+const WeekiSearchInput = defineAsyncComponent(() => import("@/components/elements/WeekiSearchInput.vue"))
+const ProductCardComponents = defineAsyncComponent(() => import("@/components/components/ProductCardComponents.vue"))
+const WeekiTabBar = defineAsyncComponent(() => import("@/components/elements/WeekiTabBar.vue"))
+const WeekiTabBarTab = defineAsyncComponent(() => import("@/components/elements/WeekiTabBarTab.vue"))
 
-  // Page Components
-  components: {
-    WeekiSearchInput,
-    ProductCardComponents,
-    WeekiTabBar,
-    WeekiTabBarTab,
-  },
+const productsSearch = ref("")
+const products = ref(null)
 
-  // Page Variables
-  data()
-  {
-    return {
-      productsSearch: "",
-      products: null,
-    }
-  },
+const buyerMethod = (value: any) => value["bs"] === "buyer"
+const sellerMethod = (value: any) => value["bs"] === "seller"
 
-  // On Page Load
-  mounted()
-  {
-    switch (this.$route.query.res)
-    {
-      case "done":
-        showToast("System : New product added successfully!", Types.SUCCESS)
-        break
+const getProducts = () => {
+  products.value = null
 
-      case "u_done":
-        showToast("System : Product updated successfully!", Types.SUCCESS)
-        break
-    }
-
-    this.getProducts()
-  },
-
-  // Page Methods
-  methods: {
-
-    // Get Products
-    getProducts()
-    {
-      this.products = null
-
-      axios
-          .get("/api/rest/product/get", {
-            headers: {
-              "_csrf" : getToken() as any,
-              "Authorization": this.getAuth
-            }
-          })
-
-          .then(value => this.products = value.data)
-          .catch(reason => console.log(reason))
-    },
-
-    // Buyer Method
-    buyerMethod(value)
-    {
-      return value["bs"] === "buyer"
-    },
-
-    // Seller Method
-    sellerMethod(value)
-    {
-      return value["bs"] === "seller"
-    }
-  },
-
-  // Page Computed Variables
-  computed: {
-
-    // Get Store Getters
-    ...mapGetters([
-      "getAuth"
-    ]),
-
-    // Get Filtered Products
-    filteredProducts()
-    {
-      return this.products.filter((el) =>
-      {
-        const query = `${el.type} ${el.family} ${el.city} ${el.country} ${el.code} ${el.grade} ${el.amount} ${el.ppk}`
-        return (query).toLowerCase().indexOf(this.productsSearch.toLowerCase()) !== -1
+  axios
+      .get("/api/rest/product/get", {
+        headers: {
+          "_csrf" : getToken() as any,
+          "Authorization": store.getters.getAuth
+        }
       })
-    },
-  }
-})
+      .then(value => products.value = value.data)
+      .catch(reason => console.log(reason))
+}
 
-export default class MyProducts extends Vue {}
+/*
+const searchedProducts = computed(() =>
+{
+  if (products.value !== null) return (products.value as []).filter((el : any) =>
+  {
+    const query = `${el.type} ${el.family} ${el.city} ${el.country} ${el.code} ${el.grade} ${el.amount} ${el.ppk}`
+    return (query).toLowerCase().indexOf(productsSearch.value.toLowerCase()) !== -1
+  })
+  else return []
+})
+*/
+
+//const searchedProductsSwitch = (bs: string) => bs === "buyer" ? searchedProducts.value.filter(buyerMethod) : searchedProducts.value.filter(sellerMethod)
+
+onMounted(() =>
+{
+  switch (router.currentRoute.value.query.res)
+  {
+    case "done":
+      showToast("System : New product added successfully!", Types.SUCCESS)
+      break
+
+    case "u_done":
+      showToast("System : Product updated successfully!", Types.SUCCESS)
+      break
+  }
+
+  getProducts()
+})
 </script>
 
 <style scoped src="../../assets/sass/page/my_products.sass" lang="sass"></style>
