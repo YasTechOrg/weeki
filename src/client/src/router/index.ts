@@ -221,7 +221,7 @@ router.afterEach(async (to) =>
   store.commit("disableNotificationsSchedule")
 
   // Load Page
-  //await load()
+  await load()
 
   // Menu Element
   const el = document.querySelector("#mobile_menu")!

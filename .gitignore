@@ -13,6 +13,7 @@ build/
 *.tar.gz
 *.zip
 *.rar
+*.gz
 .project
 .settings
 .springBeans

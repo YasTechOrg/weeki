@@ -3,7 +3,7 @@ import {computed, defineAsyncComponent, defineProps, ref} from "vue"
 import router from "@/router"
 import store from "@/store"
 
-const WeekiIconButton = defineAsyncComponent(() => import("@/components/elements/WeekiButton.vue"))
+const WeekiIconButton = defineAsyncComponent(() => import("@/components/elements/WeekiIconButton.vue"))
 const MobileMenuItem = defineAsyncComponent(() => import("@/components/components/MobileMenuItem.vue"))
 
 const layout = ref(router.currentRoute.value.meta["layout"])

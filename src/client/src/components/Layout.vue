@@ -3,6 +3,8 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 /* eslint-disable  @typescript-eslint/no-this-alias */
 
+// ToDo : Login Process
+
 // Imports
 const WeekiButton = defineAsyncComponent(() => import("@/components/elements/WeekiButton.vue"))
 const WeekiProfile = defineAsyncComponent(() => import("@/components/elements/WeekiProfile.vue"))
@@ -293,7 +295,7 @@ const dashboard_menu = (index) =>
                   </p>
                 </div>
 
-                <div class="mi_title d-flex align-items-center justify-content-start">
+                <div class="mi_title d-flex align-items-center justify-content-start" v-if="dashboardMenu === 'open'">
                   <p class="mb-0">
                     {{ link.name }}
                   </p>
