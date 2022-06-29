@@ -323,6 +323,81 @@ const dashboard_menu = (index) =>
       </div>
     </div>
   </section>
+
+  <footer v-if="layout !== 'account'">
+    <div class="inner gm">
+      <div class="content row m-0">
+        <div class="col-md-3 p-0 d-flex flex-column justify-content-start">
+          <div class="logo">
+            <img src="../assets/img/images/brand/logo.png" @click="$router.push('/')" alt="Weeki" class="cursor-pointer">
+          </div>
+
+          <div class="language"></div>
+
+          <div class="contact mt-24 d-flex align-items-center">
+            <img src="../assets/img/icons/icon_phone.svg" alt="phone" class="mr-16">
+            <p class="m-0">+49 1514 689615</p>
+          </div>
+
+          <div class="contact mt-24 d-flex align-items-center">
+            <img src="../assets/img/icons/icon_mail.svg" alt="mail" class="mr-16">
+            <p class="m-0">info@weeki.de</p>
+          </div>
+        </div>
+        <div class="col-md-9 p-0 row m-0">
+          <div class="col-sm-6 p-0 row m-0">
+            <div class="col-6 p-0 d-flex flex-column justify-content-start">
+              <p class="mb-16 fw-bolderp mb-16 fw-bolder">
+                Company
+              </p>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/">Home</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/about">About Us</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/contact">Contact Us</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/faq">FAQ</router-link>
+            </div>
+            <div class="col-6 p-0 d-flex flex-column justify-content-start">
+              <p class="mb-16 fw-bolderp mb-16 fw-bolder">
+                Main Tools
+              </p>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/planning">Planning</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/messages">Messages</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/email">E-Mail</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/contacts">My Contacts</router-link>
+            </div>
+          </div>
+          <div class="col-sm-6 p-0 row m-0">
+            <div class="col-6 p-0 d-flex flex-column justify-content-start">
+              <p class="mb-16 fw-bolderp mb-16 fw-bolder">
+                Main Process
+              </p>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/products/add">Add Products</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/orders/send">Send Orders</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/claim">Claim</router-link>
+            </div>
+            <div class="col-6 p-0 d-flex flex-column justify-content-start">
+              <p class="mb-16 fw-bolderp mb-16 fw-bolder">
+                Playful And Functional
+              </p>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/blog">Blog</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/newspapers">News Papers</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/weather">Weather</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/traffic">Traffic</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/dob">Date Of Births</router-link>
+              <router-link class="mb-0 mt-16 text-decoration-none" to="/dashboard/game">Game</router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <div class="line w-100">
+
+        </div>
+        <p class="mt-24 mb-0 text-center">
+          © {{ new Date().getFullYear() }} Weeki All Right Reserved. | <a :href="authorUrl">{{ authorName }}</a> made this site with 💙 | version 1.1.4
+        </p>
+      </div>
+    </div>
+  </footer>
 </div>
 </template>
 
