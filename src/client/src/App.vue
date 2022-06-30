@@ -6,6 +6,8 @@ vue3-progress
   Layout
     router-view
 
+#modal
+
 </template>
 
 <script lang="ts">
