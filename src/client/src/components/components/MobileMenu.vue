@@ -7,7 +7,7 @@ const WeekiIconButton = defineAsyncComponent(() => import("@/components/elements
 const MobileMenuItem = defineAsyncComponent(() => import("@/components/components/MobileMenuItem.vue"))
 
 const layout = ref(router.currentRoute.value.meta["layout"])
-const toggleMobileSidebar = () => document.querySelector("#mobile_menu")!.classList.toggle("d-none")
+const toggleMobileSidebar = () => document.querySelector("#mobile_menu")?.classList.toggle("d-none")
 const checkAuth = ref(store.getters.checkAuth)
 const userInfo = computed(() => store.state.userData)
 
@@ -67,7 +67,8 @@ const dashboard_menu = (index) =>
     <div class="dashboard" v-if="checkAuth">
       <div class="part mt-12" v-for="(item, index) in title" :key="item">
         <div class="part_title d-flex align-items-center justify-content-start">
-
+          <img :src="require(`@/assets/img/icons/${ item.icon }.svg`)" :alt="item.name" class="mr-16">
+          <p class="mb-0">{{ item.name }}</p>
         </div>
         <div class="menu_items" v-if="typeof userInfo['access'] !== 'undefined' && userInfo['access'] != null">
           <MobileMenuItem

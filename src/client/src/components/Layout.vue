@@ -26,6 +26,7 @@ const files = ref([])
 const onlineRemovedItemsProfileEdit = ref([])
 const authorName = ref(require("../../package.json").author.name)
 const authorUrl = ref(require("../../package.json").author.url)
+const version = ref(require("../../package.json").version)
 const home_menu = ref([
   { name : "Home", path: "/" },
   { name : "About", path: "/about" },
@@ -393,7 +394,7 @@ const dashboard_menu = (index) =>
 
         </div>
         <p class="mt-24 mb-0 text-center">
-          © {{ new Date().getFullYear() }} Weeki All Right Reserved. | <a :href="authorUrl">{{ authorName }}</a> made this site with 💙 | version 1.1.4
+          © {{ new Date().getFullYear() }} Weeki All Right Reserved. | <a :href="authorUrl">{{ authorName }}</a> made this site with 💙 | version {{ version }}
         </p>
       </div>
     </div>
