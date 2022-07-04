@@ -1,8 +1,5 @@
-<style>
-img[alt="CS50x Iran"] { width: 150px; }
-</style>
+<img src="./src/client/src/assets/img/images/brand/logo.png" width="150"/>
 
-![CS50x Iran](./src/client/src/assets/img/images/brand/logo.png) <br>
 ![RELEASE](https://img.shields.io/badge/RELEASE-v2.1.0-green)
 ![Back Tech](https://img.shields.io/badge/Backend%20Tech-Kotlin,%20Spring%20Boot-orange)
 ![Front Tech](https://img.shields.io/badge/Frontend%20Tech-Vue.js%203,%20Vue%20Cli-pink)
